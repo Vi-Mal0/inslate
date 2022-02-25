@@ -71,7 +71,7 @@ class _CandidateProfileState extends State<CandidateProfile> {
                         DropdownMenuItem<String>(
                           value: item.id.toString(),
                           child: Text(
-                            item.employeeName,
+                            item.employeeName!,
                             style: const TextStyle(
                               fontSize: 14,
                             ),
@@ -89,13 +89,6 @@ class _CandidateProfileState extends State<CandidateProfile> {
                       });
                     },
                   ),
-                  // TextFormField(
-                  //   controller: empctl,
-                  //   decoration: const InputDecoration(
-                  //     icon: Icon(Icons.person),
-                  //     labelText: 'enter emp id',
-                  //   ),
-                  // ),
                 ],
               ),
             ),
@@ -115,7 +108,6 @@ class _CandidateProfileState extends State<CandidateProfile> {
 
     return SafeArea(
         child: Scaffold(
-          backgroundColor: Colors.grey[200],
           body: FutureBuilder(
             future: http.getCandidateByID(widget.id.toString()),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -160,3 +152,7 @@ class _CandidateProfileState extends State<CandidateProfile> {
     );
   }
 }
+
+
+
+

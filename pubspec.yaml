@@ -43,6 +43,13 @@ dependencies:
   email_validator:
   easy_sidemenu: ^0.1.1+1
   flutter_profile_picture:
+  page_transition:
+  flutter_icons:
+  flutter_screenutil:
+  google_fonts:
+  flutter_rating_bar:
+  flutter_login: ^3.1.0
+  marquee:
 
 dev_dependencies:
   flutter_test:

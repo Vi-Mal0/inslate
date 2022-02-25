@@ -1,6 +1,9 @@
 import 'package:easy_sidemenu/easy_sidemenu.dart';
 import 'package:flutter/material.dart';
 import 'package:insuranceprototype/Screens/LoginScreen.dart';
+import 'package:insuranceprototype/Screens/sample.dart';
+
+import 'Screens/SplashScreen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +19,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const LoginScreen(),
+      home: const SplashHome(),
     );
   }
 }
