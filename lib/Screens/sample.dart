@@ -93,7 +93,7 @@ class _LandingScreenState extends State<LandingScreen> {
               children: [
                 IconButton(
                     onPressed:(){scaffoldKey.currentState?.openDrawer();}, icon: const Icon(Icons.menu)),
-                  const Text("Management App",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+                  const Text("Management",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.end,
@@ -101,7 +101,7 @@ class _LandingScreenState extends State<LandingScreen> {
                     // IconButton(
                     //     onPressed: () {}, icon: const Icon(Icons.search)),
                     Padding(
-                      padding:EdgeInsets.fromLTRB(MediaQuery.of(context).size.width*0.433,0,0,0),
+                      padding:EdgeInsets.fromLTRB(MediaQuery.of(context).size.width*0.5,0,0,0),
                       child: PopupMenuButton(
                         color: Colors.white,
                         itemBuilder: (context) => [
@@ -132,13 +132,16 @@ class _LandingScreenState extends State<LandingScreen> {
           ],
         ),
         bottomNavigationBar: BottomNavigationBar(
+          showUnselectedLabels: false,
+          selectedItemColor: Colors.purple,
+          unselectedItemColor: Colors.deepPurple,
+          selectedFontSize: 14,
           items: const [
             BottomNavigationBarItem(icon: Icon(Icons.home_outlined),label: "Home" ),
             BottomNavigationBarItem(icon: Icon(Icons.account_circle_rounded), label: "Admin"),
             BottomNavigationBarItem(icon: Icon(Icons.stay_current_portrait_sharp), label: "Bucket"),
           ],
           currentIndex: selectedIndex,
-          fixedColor: Colors.deepPurple,
           onTap: onItemTapped,
         ),
       ),

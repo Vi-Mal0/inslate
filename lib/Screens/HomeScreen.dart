@@ -4,7 +4,6 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:insuranceprototype/HTTP/HttpService.dart';
 import 'package:insuranceprototype/Model/Candidate.dart';
 import 'package:intl/intl.dart';
-import 'package:marquee/marquee.dart';
 
 class HomeScreen extends StatefulWidget {
   String id;
@@ -17,7 +16,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   HttpService http = HttpService();
   final now = DateTime.now();
-  bool todaytask = false;
+  bool todaytask = true;
 
   List<Candidate> todays = [];
   List<Candidate> upcoming = [];
@@ -33,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
           for (var e in snapshot.data.assignedCandidates) {
 
             if (e.availableDateAndTime.toString().split(" ")[0] ==
-                DateFormat("dd-MM-yyyy").format(now) && e.currentStatus != "Passed"&& e.currentStatus != "Failed") {
+                DateFormat("dd-MM-yyyy").format(now) && e.currentStatus == "Assigned") {
               todays.add(e);
             }
             if(e.currentStatus != "Passed" && e.availableDateAndTime.toString().split(" ")[0] !=
@@ -41,110 +40,110 @@ class _HomeScreenState extends State<HomeScreen> {
               upcoming.add(e);
             }
           }
-          return Stack(
-            children: [
-              Positioned(
-                child: SizedBox(
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
                   width: MediaQuery.of(context).size.width,
                   height: 100,
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Positioned(
-                          left: 10,
-                          child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text("Hey ${
-                                           snapshot.data.employeeName
-
-                                    }" ,style : const TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
-                                Text(
-                                  DateFormat.yMMMMd('en_US').format(now),
-                                  style: const TextStyle(
-                                      fontSize: 20, color: Colors.grey),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                                "Hey ${snapshot.data.employeeName}",
+                                    style : const TextStyle(fontWeight: FontWeight.bold,
+                                        fontSize: 30)
                                 ),
-                              ],
-                            ),
-                          )
+                          Text(
+                            DateFormat.yMMMMd('en_US').format(now),
+                            style: const TextStyle(
+                                fontSize: 20, color: Colors.grey),
+                          ),
+                        ],
                       ),
+                      // const CircleAvatar(
+                      //   radius: 40,
+                      //   child: Icon(Icons.account_circle),
+                      // ),
                     ],
                   ),
                 ),
-              ),
-              const Positioned(
-                  top: 100,
-                  left: 10,
-                  child: Text(
+                Visibility(
+                  visible: todaytask,
+                  child: const Text(
                     "Today's Interview",
                     style: TextStyle(fontSize: 24),
                   ),
-              ),
-              todays.isEmpty
-                  ? Positioned(
-                  left: 10,
-                  top: 140,
-                  child: SizedBox(
-                    height: 150,
-                    width: 100,
-                    child: Card(
-                      color: Colors.grey,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Icon(Icons.exposure_zero),
-                          Text("Interview"),
-                        ],
-                      ),
-                    ),
-                  ))
-                  : Positioned(
-                  left: 10,
-                  top: 140,
-                  child: SizedBox(
-                    height: 150,
-                    width: MediaQuery.of(context).size.width,
-                    child: ListView.builder(
-                      itemCount: todays.length,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) {
-                        return SizedBox(
-                          height: 150,
-                          width: 100,
-                          child: Card(
-                            color: Colors.grey[300],
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(todays[index].id.toString()),
-                                Text(todays[index].name.toString()),
-                                Text(todays[index]
-                                    .highestQualification
-                                    .toString()),
-                              ],
+                ),
+                  Visibility(visible : todaytask,child: SizedBox(height: 8,)),
+                todays.isNotEmpty
+                    ? SizedBox(
+                  height: 150,
+                  width: MediaQuery.of(context).size.width,
+                  child: ListView.builder(
+                    itemCount: todays.length,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      return SizedBox(
+                        height: 150,
+                        width: 200,
+                        child: Card(
+                          elevation: 3,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(todays[index].id.toString()),
+                              Text(todays[index].name.toString()),
+                              Text(todays[index].highestQualification.toString()),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                )
+                    :Visibility(
+                      visible: todaytask,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(
+                            height: 150,
+                            width: 400,
+                            child: Card(
+                              elevation: 1.5,
+                              child: Row(
+                                children: const [
+                                  Icon(Icons.exposure_zero,size: 100,),
+                                  Text("Interview",style: TextStyle(fontSize: 30),),
+                                ],
+                              ),
                             ),
                           ),
-                        );
-                      },
-                    ),
-                  )),
-              const Positioned(
-                top: 340,
-                left: 10,
-                child: Text(
+                          IconButton(onPressed: (){
+                            setState(() {
+                              todaytask = false;
+                            });
+                          }, icon: const Icon(Icons.close),
+                            iconSize: 45,)
+                        ],
+                      ),
+                ),
+                const SizedBox(height: 20,),
+                const Text(
                   "Upcoming Interview",
                   style: TextStyle(fontSize: 24),
                 ),
-              ),
-              upcoming.isEmpty
-                  ? Positioned(
-                      left: 10,
-                      top: 140,
-                      child: SizedBox(
-                        height: 150,
-                        width: 100,
-                        child: Card(
+                const SizedBox(height: 8,),
+                upcoming.isEmpty
+                    ? Expanded(
+                      child: Card(
+                          elevation: 3,
                           color: Colors.grey,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -154,13 +153,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             ],
                           ),
                         ),
-                      ))
-                  : Positioned(
-                      top: 390,
-                      child: SizedBox(
-                        height: 460,
-                        width: MediaQuery.of(context).size.width,
-                        child: ListView.builder(
+                    )
+                    : Expanded(
+                      child: ListView.builder(
                           itemCount: upcoming.length,
                           itemBuilder: (context, index) {
                             retColor(){
@@ -182,27 +177,25 @@ class _HomeScreenState extends State<HomeScreen> {
                               height: 160,
                               width: 100,
                               child: Card(
+                                elevation: 3,
                                 color: (index %2 ==0 ) ? Colors.white :Colors.grey[200],
                                 child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text("name : ${upcoming[index].name}"),
-                                          Padding(
-                                            padding: const EdgeInsets.fromLTRB(230,0,0,0),
-                                            child: Container(
-                                              width: 100,
-                                              decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(10),
-                                                color: retColor(),
-                                              ),
-                                              child: Text(
-                                                upcoming[index].currentStatus,
-                                                style: const TextStyle(fontSize: 14,color: Colors.black),textAlign: TextAlign.center,
-                                              ),
+                                          Container(
+                                            width: 100,
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(10),
+                                              color: retColor(),
+                                            ),
+                                            child: Text(
+                                              upcoming[index].currentStatus,
+                                              style: const TextStyle(fontSize: 14,color: Colors.black),textAlign: TextAlign.center,
                                             ),
                                           ),
                                         ],
@@ -212,7 +205,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       padding: const EdgeInsets.all(8.0),
                                       child: Row(
                                         children: [
-                                          Container(width: 210,child: Text("email : ${upcoming[index].email}",)),
+                                          SizedBox(width: 210,child: Text("email : ${upcoming[index].email}",)),
                                           const SizedBox(width: 50,),
                                           Text("Phone : ${upcoming[index].mobileNumber}"),
                                         ],
@@ -240,8 +233,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             );
                           },
                         ),
-                      )),
-            ],
+                    ),
+              ],
+            ),
           );
         } else if (snapshot.hasError) {
           return const Center(

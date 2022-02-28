@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:insuranceprototype/Screens/LoginScreen.dart';
+import 'package:insuranceprototype/Screens/sample.dart';
 
 class SplashHome extends StatefulWidget {
   const SplashHome({Key? key}) : super(key: key);
@@ -12,6 +13,7 @@ class SplashHome extends StatefulWidget {
 }
 
 class _SplashHome extends State<SplashHome> {
+
   @override
   void initState() {
     super.initState();
@@ -22,8 +24,11 @@ class _SplashHome extends State<SplashHome> {
   }
 
   void navigateUser() async{
+      // Navigator.of(context).pushReplacement(MaterialPageRoute(
+      //     builder: (BuildContext context) => LoginScreen()));
+
       Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (BuildContext context) => LoginScreen()));
+          builder: (BuildContext context) => LandingScreen("1")));
   }
 
   @override
@@ -35,4 +40,5 @@ class _SplashHome extends State<SplashHome> {
       ),
     );
   }
+
 }
