@@ -1,7 +1,7 @@
 import 'package:easy_sidemenu/easy_sidemenu.dart';
 import 'package:flutter/material.dart';
 import 'package:insuranceprototype/Screens/LoginScreen.dart';
-import 'package:insuranceprototype/Screens/sample.dart';
+import 'package:insuranceprototype/Screens/LandingScreen.dart';
 
 import 'Screens/SplashScreen.dart';
 
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        canvasColor: Colors.white,
       ),
       home: const SplashHome(),
     );

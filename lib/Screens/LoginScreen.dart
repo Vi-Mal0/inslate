@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:insuranceprototype/HTTP/HttpService.dart';
-import 'package:insuranceprototype/Screens/sample.dart';
+import 'package:insuranceprototype/Screens/LandingScreen.dart';
 
 class LoginScreen extends StatelessWidget {
   Duration get loginTime => const Duration(milliseconds: 2250);

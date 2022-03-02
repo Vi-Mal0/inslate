@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:insuranceprototype/HTTP/HttpService.dart';
 import 'package:insuranceprototype/Model/Employee.dart';
 
-import '../../Model/Candidate.dart';
+import '../Model/Candidate.dart';
 
 class CandidateProfile extends StatefulWidget {
 
@@ -21,14 +21,9 @@ class _CandidateProfileState extends State<CandidateProfile> {
   var empselected;
   List<Employee> emplist = [];
 
-  // Candidate candidate = Candidate();
   @override
   Widget build(BuildContext context) {
-    // http.getCandidateByID(widget.id.toString()).then((value){
-    //   setState(() {
-    //     candidate =value;
-    //   });
-    // });
+
     http.getEmployee().then((value) {
         emplist = value;
     });
@@ -119,13 +114,13 @@ class _CandidateProfileState extends State<CandidateProfile> {
                       children: [
                         IconButton(onPressed: (){
                           Navigator.pop(context);
-                        },icon: Icon(Icons.arrow_back),),
+                        },icon: const Icon(Icons.arrow_back),),
                         IconButton(onPressed: (){
                           _showMyDialog();
-                        },icon: Icon(Icons.add),)
+                        },icon: const Icon(Icons.add),)
                       ],
                     ),
-                    SizedBox(height: 20,),
+                    const SizedBox(height: 20,),
                     Text(snapshot.data.name),
                     Text(snapshot.data.mobileNumber),
                     Text(snapshot.data.email),

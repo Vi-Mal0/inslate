@@ -21,6 +21,20 @@ class HttpService {
     throw Exception('Failed to load candidate');
   }
 
+
+  Future<List<Candidate>> searchCandidate(String keyword) async {
+    Response res = await get(
+        Uri.parse('http://192.168.0.104:8080/candidates/search/$keyword'));
+    if (res.statusCode == 200) {
+      List<dynamic> body = jsonDecode(res.body);
+      List<Candidate> candidates = body.map((dynamic item) =>
+          Candidate.fromJson(item))
+          .toList();
+      return candidates;
+    }
+    throw Exception('Failed to load candidate');
+  }
+
   Future<List<String>> getParam(String id) async {
     Response res = await get(
         Uri.parse('http://192.168.0.104:8080/param/' + id));

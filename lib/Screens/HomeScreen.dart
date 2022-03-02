@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:insuranceprototype/HTTP/HttpService.dart';
 import 'package:insuranceprototype/Model/Candidate.dart';
 import 'package:intl/intl.dart';
@@ -47,37 +48,119 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 SizedBox(
                   width: MediaQuery.of(context).size.width,
-                  height: 100,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                                "Hey ${snapshot.data.employeeName}",
-                                    style : const TextStyle(fontWeight: FontWeight.bold,
-                                        fontSize: 30)
-                                ),
-                          Text(
-                            DateFormat.yMMMMd('en_US').format(now),
-                            style: const TextStyle(
-                                fontSize: 20, color: Colors.grey),
+                  height: 200,
+                  child: Card(
+                    color: Colors.purple[100],
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    elevation: 10,
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.all(10.0),
+                              child: CircleAvatar(
+                                backgroundColor: Colors.purpleAccent,
+                                radius: 30,
+                              ),
+                            ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                            snapshot.data.employeeName.toString(),
+                                              style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 18),
+                                            ),
+                                      Text(
+                                        DateFormat.yMMMMd('en_US').format(now),
+                                      ),
+                                    ],
+                                  ),
+                              ),
+                          ],
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.fromLTRB(20,0,20,0),
+                          child: Divider(color: Colors.black45,),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(25,10,25,0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                children: [
+                                  Container(
+                                    height:50,
+                                    width: 50,
+                                    child: Neumorphic(
+                                      curve: Curve(Neumorphic.MAX_DEPTH),
+                                      child: Center(child: Text("876")),
+                                    ),
+                                  ),
+                                  SizedBox(height: 5,),
+                                  Text("sample#")
+                                ],
+                              ),
+                              Column(
+                                children:  [
+                                  Container(
+                                    height:50,
+                                    width: 50,
+                                    child: Neumorphic(
+                                      child: Center(child: Text("876")),
+                                    ),
+                                  ),
+                                  SizedBox(height: 5,),
+                                  Text("sample#")
+                                ],
+                              ),
+                              Column(
+                                children: [
+                                  Container(
+                                    height:50,
+                                    width: 50,
+                                    child: Neumorphic(
+                                      child: Center(child: Text("876")),
+                                    ),
+                                  ),
+                                  SizedBox(height: 5,),
+                                  Text("sample#")
+                                ],
+                              ),
+                              Column(
+                                children: [
+                                  Container(
+                                    height:50,
+                                    width: 50,
+                                    child: Neumorphic(
+                                      child: Center(child: Text("876")),
+                                    ),
+                                  ),
+                                  SizedBox(height: 5,),
+                                  Text("sample#")
+                                ],
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                      // const CircleAvatar(
-                      //   radius: 40,
-                      //   child: Icon(Icons.account_circle),
-                      // ),
-                    ],
+                        )
+                      ],
+                    ),
                   ),
                 ),
-                Visibility(
-                  visible: todaytask,
-                  child: const Text(
-                    "Today's Interview",
-                    style: TextStyle(fontSize: 24),
+                const SizedBox(height: 10,),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Visibility(
+                    visible: todaytask,
+                    child: const Text(
+                      "Today's Interview",
+                      style: TextStyle(fontSize: 24),
+                    ),
                   ),
                 ),
                   Visibility(visible : todaytask,child: SizedBox(height: 8,)),
@@ -114,7 +197,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           SizedBox(
                             height: 150,
-                            width: 400,
+                            width: 360,
                             child: Card(
                               elevation: 1.5,
                               child: Row(
@@ -130,29 +213,46 @@ class _HomeScreenState extends State<HomeScreen> {
                               todaytask = false;
                             });
                           }, icon: const Icon(Icons.close),
-                            iconSize: 45,)
+                            iconSize: 40,)
                         ],
                       ),
                 ),
                 const SizedBox(height: 20,),
-                const Text(
-                  "Upcoming Interview",
-                  style: TextStyle(fontSize: 24),
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text(
+                    "Upcoming Interview",
+                    style: TextStyle(fontSize: 24),
+                  ),
                 ),
-                const SizedBox(height: 8,),
                 upcoming.isEmpty
-                    ? Expanded(
-                      child: Card(
-                          elevation: 3,
-                          color: Colors.grey,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              Icon(Icons.exposure_zero),
-                              Text("Interview"),
-                            ],
+                    ? SizedBox(
+                  height: 200,
+                  width: MediaQuery.of(context).size.height,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(
+                            height: 150,
+                            width: 360,
+                            child: Card(
+                              elevation: 1.5,
+                              child: Row(
+                                children: const [
+                                  Icon(Icons.exposure_zero,size: 100,),
+                                  Text("Interview",style: TextStyle(fontSize: 30),),
+                                ],
+                              ),
+                            ),
                           ),
-                        ),
+                          IconButton(onPressed: (){
+                            setState(() {
+                              todaytask = false;
+                            });
+                          }, icon: const Icon(Icons.close),
+                            iconSize: 40,)
+                        ],
+                      ),
                     )
                     : Expanded(
                       child: ListView.builder(

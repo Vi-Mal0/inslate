@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:insuranceprototype/HTTP/HttpService.dart';
 import 'package:insuranceprototype/Model/Candidate.dart';
-import 'package:insuranceprototype/Screens/admin/AdminScreen.dart';
+import 'package:insuranceprototype/Screens/CandidateList.dart';
 
 import 'CandidateProfile.dart';
 
@@ -29,7 +29,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
   }
 
   void navigateAdminPage(String s) {
-    Route route = MaterialPageRoute(builder: (context) => AdminScreen(s));
+    Route route = MaterialPageRoute(builder: (context) => CandidateList(s));
     Navigator.push(context, route).then(onGoBack);
   }
 

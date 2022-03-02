@@ -4,20 +4,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_profile_picture/flutter_profile_picture.dart';
 import 'package:insuranceprototype/HTTP/HttpService.dart';
-import 'package:insuranceprototype/Screens/admin/CandidateProfile.dart';
+import 'package:insuranceprototype/Screens/CandidateProfile.dart';
 import 'package:page_transition/page_transition.dart';
 
-import '../../Model/Candidate.dart';
+import '../Model/Candidate.dart';
 
-class AdminScreen extends StatefulWidget {
+class CandidateList extends StatefulWidget {
   String ref;
-  AdminScreen(this.ref,{Key? key}) : super(key: key);
+  CandidateList(this.ref,{Key? key}) : super(key: key);
 
   @override
-  _AdminScreenState createState() => _AdminScreenState();
+  _CandidateListState createState() => _CandidateListState();
 }
 
-class _AdminScreenState extends State<AdminScreen> {
+class _CandidateListState extends State<CandidateList> {
 
   void refreshData() {
   }
@@ -44,7 +44,7 @@ class _AdminScreenState extends State<AdminScreen> {
   Widget _buildSearchBox() {
     return Row(
       children: [
-        Container(
+        SizedBox(
           width: MediaQuery.of(context).size.width-112,
           child:  TextField(
             controller: controller,
@@ -59,24 +59,13 @@ class _AdminScreenState extends State<AdminScreen> {
     );
   }
   onSearchTextChanged(String text) async {
-    _SearchResult.clear();
-    if (text.isEmpty) {
-      setState(() {
-        isSearch = false;
-      });
-      return;
-    }
-
     if(text.isNotEmpty){
-      for (var userDetail in all) {
-        String a = userDetail.name.toString();
-        String b = userDetail.email.toString();
-        String c = userDetail.currentStatus.toString();
-
-        if (a.toLowerCase().contains(text.toLowerCase()) || b.toLowerCase().contains(text.toLowerCase()) || c.toLowerCase().contains(text.toLowerCase())) {
-          _SearchResult.add(userDetail);
+      _SearchResult.clear();
+      http.searchCandidate(text).then((value){
+        for(var e in value){
+          _SearchResult.add(e);
         }
-      }
+      });
       setState(() {
         isSearch = true;
       });
@@ -103,9 +92,9 @@ class _AdminScreenState extends State<AdminScreen> {
                   PopupMenuButton(
                     color: Colors.white,
                     itemBuilder: (context) => [
-                      PopupMenuItem<int>(
+                      const PopupMenuItem<int>(
                         value: 0,
-                        child: Container(width: 100 ,child: Text("Setting ",style: TextStyle(color: Colors.black),)),
+                        child: SizedBox(width: 100 ,child: Text("Setting ",style: TextStyle(color: Colors.black),)),
                       ),
                       PopupMenuItem<int>(
                         value: 1,
@@ -222,11 +211,11 @@ class _AdminScreenState extends State<AdminScreen> {
                       }
 
                       displaylist(){
-                        if(widget.ref == "Total"){ return snapshot.data;}
-                        else if(widget.ref == "Captured"){ return CapturedList;}
+                        if(widget.ref == "Captured"){ return CapturedList;}
                         else if(widget.ref == "Assigned"){return AssignedList;}
                         else if(widget.ref == "Passed"){return PassedList;}
                         else if(widget.ref == "Failed"){return FailedList;}
+                        return snapshot.data;
                       }
                       List<Candidate>? e =displaylist();
                       if(isSearch){ e?.clear(); e = _SearchResult;}
