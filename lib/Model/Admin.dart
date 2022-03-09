@@ -19,6 +19,7 @@ class Admin {
     annualpackage = json['annualpackage'];
     openingNumber = json['openingNumber'];
   }
+
   int? id;
   String? jobName;
   String? jobDesc;

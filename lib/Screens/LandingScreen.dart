@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:insuranceprototype/Screens/Bucket.dart';
-import 'package:insuranceprototype/Screens/HomeScreen.dart';
-import 'package:insuranceprototype/Screens/AdminDashboard.dart';
+import 'package:insuranceprototype/Screens/Dashboard.dart';
 import 'package:insuranceprototype/Screens/RegistrationScreen.dart';
+
+import 'CandidateList.dart';
 
 class LandingScreen extends StatefulWidget {
   String id;
@@ -14,26 +15,43 @@ class LandingScreen extends StatefulWidget {
 }
 
 class _LandingScreenState extends State<LandingScreen> {
-  int selectedIndex = 0;
-  int currentIndex = 0;
 
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
+  int _pageIndex = 0;
+  PageController _pageController = PageController();
 
-  void onItemTapped(int index) {
-    setState(() {
-      selectedIndex = index;
-    });
+  List<Widget> tabPages = [
+    Dashboard("51"),
+    Bucket(int.parse("51")),
+  ];
+
+  @override
+  void initState(){
+    super.initState();
+    _pageController = PageController(initialPage: _pageIndex);
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+  void refreshData() {
+  }
+
+  onGoBack(dynamic value) {
+    refreshData();
+    setState(() {});
+  }
+
+  void navigateCandidateList() {
+    Route route = MaterialPageRoute(builder: (context) => CandidateList());
+    Navigator.push(context, route).then(onGoBack);
   }
 
   @override
   Widget build(BuildContext context) {
-
-    List<Widget> screens = [
-      HomeScreen(widget.id),
-      const AdminDashboard(),
-      Bucket(int.parse(widget.id)),
-    ];
 
     return Scaffold(
       key: scaffoldKey,
@@ -50,7 +68,8 @@ class _LandingScreenState extends State<LandingScreen> {
                               child: Text("User Name"),
                             )
                     ],
-                  )),
+                  ),
+                  ),
                 ),
                 Positioned(
                   top: MediaQuery.of(context).size.height*0.21,
@@ -82,61 +101,85 @@ class _LandingScreenState extends State<LandingScreen> {
             ),
     ),
       body: Padding(
-        padding: EdgeInsets.fromLTRB(0,MediaQuery.of(context).size.height* 0.04,0,0),
+        padding: EdgeInsets.fromLTRB(0,MediaQuery.of(context).size.height* 0.03,0,0),
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                    onPressed:(){scaffoldKey.currentState?.openDrawer();}, icon: const Icon(Icons.menu)),
-                  const Text("management",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    // IconButton(
-                    //     onPressed: () {}, icon: const Icon(Icons.search)),
-                    // padding:EdgeInsets.fromLTRB(MediaQuery.of(context).size.width*0.5222,0,0,0),
-                    PopupMenuButton(
-                      color: Colors.white,
-                      itemBuilder: (context) => [
-                        const PopupMenuItem<int>(
-                          value: 0,
-                          child: SizedBox(width: 100 ,child: Text("Setting ",style: TextStyle(color: Colors.black),)),
-                        ),
-                        const PopupMenuItem<int>(
-                          value: 1,
-                          child: SizedBox(width: 100 ,child: Text("About ",style: TextStyle(color: Colors.black),)),
-                        ),
-                        const PopupMenuItem<int>(
-                          value: 2,
-                          child: SizedBox(width: 100 ,child: Text("Exit ",style: TextStyle(color: Colors.black),)),
-                        ),
-                      ],
-                      onSelected: (item) => {print(item)},
-                    ),
-                  ],
-                )
-              ],
+            Container(
+              color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black : Colors.white,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                      onPressed:(){
+                        scaffoldKey.currentState?.openDrawer();
+                        }, icon: Icon(
+                      Icons.menu,
+                    color: (Theme.of(context).brightness == Brightness.dark) ? Colors.white : Colors.black
+                    ,
+                  )
+                  ),
+                  Text("management",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: (Theme.of(context).brightness == Brightness.dark) ? Colors.white : Colors.black),),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      PopupMenuButton(
+                        color: (Theme.of(context) == Brightness.dark) ? Colors.white : Colors.black,
+                        itemBuilder: (context) => [
+                          PopupMenuItem<int>(
+                            value: 0,
+                            child: SizedBox(width: 100 ,child: Text("Setting ",style: TextStyle(color: (Theme.of(context) == Brightness.dark) ? Colors.white : Colors.black),)),
+                          ),
+                          PopupMenuItem<int>(
+                            value: 1,
+                            child: SizedBox(width: 100 ,child: Text("About ",style: TextStyle(color: (Theme.of(context) == Brightness.dark) ? Colors.white : Colors.black),)),
+                          ),
+                          PopupMenuItem<int>(
+                            value: 2,
+                            child: SizedBox(width: 100 ,child: Text("Exit ",style: TextStyle(color: (Theme.of(context) == Brightness.dark) ? Colors.white : Colors.black),)),
+                          ),
+                        ],
+                        onSelected: (item) => {print(item)},
+                      ),
+                    ],
+                  )
+                ],
+              ),
             ),
-            Expanded(child: screens[selectedIndex])
+            Expanded(child:PageView(
+              children: tabPages,
+              onPageChanged: onPageChanged,
+              controller: _pageController,
+            ))
           ],
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        showUnselectedLabels: false,
-        selectedItemColor: Colors.purple,
-        unselectedItemColor: Colors.deepPurple,
-        selectedFontSize: 14,
-        items: const [
+        elevation: 0,
+        currentIndex: _pageIndex,
+        onTap: onTabTapped,
+        backgroundColor: (Theme.of(context).brightness == Brightness.dark) ? Colors.black : Colors.white,
+        items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: Icon(Icons.home_outlined),label: "Home" ),
-          BottomNavigationBarItem(icon: Icon(Icons.account_circle_rounded), label: "Admin"),
           BottomNavigationBarItem(icon: Icon(Icons.stay_current_portrait_sharp), label: "Bucket"),
         ],
-        currentIndex: selectedIndex,
-        onTap: onItemTapped,
+
+      ),
+      floatingActionButton: FloatingActionButton(onPressed: () {
+        navigateCandidateList();
+      },child: Icon(Icons.list_alt),
+
       ),
     );
+  }
+
+  void onPageChanged(int page) {
+    setState(() {
+      this._pageIndex = page;
+    });
+  }
+
+  void onTabTapped(int index) {
+    this._pageController.animateToPage(index,duration: const Duration(milliseconds: 500),curve: Curves.easeInOut);
   }
 }

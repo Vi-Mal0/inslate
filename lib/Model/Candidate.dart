@@ -29,6 +29,7 @@ class Candidate {
     currentStatus = json['currentStatus'];
     quants = json['quants'];
   }
+
   var id;
   var name;
   var mobileNumber;

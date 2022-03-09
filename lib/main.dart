@@ -1,11 +1,14 @@
-import 'package:easy_sidemenu/easy_sidemenu.dart';
 import 'package:flutter/material.dart';
-import 'package:insuranceprototype/Screens/LoginScreen.dart';
-import 'package:insuranceprototype/Screens/LandingScreen.dart';
-
+import 'package:flutter/services.dart';
 import 'Screens/SplashScreen.dart';
 
 void main() {
+  SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.white,
+        statusBarIconBrightness: Brightness.dark,
+      )
+  );
   runApp(const MyApp());
 }
 
@@ -15,11 +18,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(),
+      darkTheme: ThemeData.dark(), // standard dark theme
+      themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        canvasColor: Colors.white,
-      ),
-      home: const SplashHome(),
+      home: SplashHome(),
     );
   }
 }

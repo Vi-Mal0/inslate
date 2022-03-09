@@ -24,6 +24,7 @@ class Employee {
       });
     }
   }
+
   int? id;
   String? employeeId;
   String? employeeName;
