@@ -1,24 +1,21 @@
-import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_profile_picture/flutter_profile_picture.dart';
-import 'package:insuranceprototype/HTTP/HttpService.dart';
-import 'package:insuranceprototype/Screens/CandidateProfile.dart';
+import 'package:insuranceprototype/Model/Address.dart';
+import 'package:insuranceprototype/Screens/AddressRegistrationScreen.dart';
 import 'package:page_transition/page_transition.dart';
 
-import '../Model/Candidate.dart';
+import '../HTTP/HttpService.dart';
 
-class CandidateList extends StatefulWidget {
-  const CandidateList({Key? key}) : super(key: key);
+class AddressListScreen extends StatefulWidget {
+  const AddressListScreen({Key? key}) : super(key: key);
 
   @override
-  _CandidateListState createState() => _CandidateListState();
+  State<AddressListScreen> createState() => _AddressListScreenState();
 
 }
 
-class _CandidateListState extends State<CandidateList> {
-
+class _AddressListScreenState extends State<AddressListScreen> {
   @override
   void initState() {
     super.initState();
@@ -33,18 +30,19 @@ class _CandidateListState extends State<CandidateList> {
 
   void navigateSecondPage(id) {
     Navigator.push(
-            context,
-            PageTransition(
-                type: PageTransitionType.rightToLeft,
-                child: CandidateProfile(id)))
+        context,
+        PageTransition(
+            type: PageTransitionType.rightToLeft,
+            child: AddressRegstrationScreen()))
         .then(onGoBack);
   }
 
   HttpService http = HttpService();
-  List<Candidate> all = [];
+
+  List<Address> all = [];
   TextEditingController controller = TextEditingController();
   bool isSearch = false;
-  final List<Candidate> _SearchResult = [];
+  final List<Address> _SearchResult = [];
 
   onSearchTextChanged(String text) async {
     if (text.isNotEmpty) {
@@ -134,10 +132,10 @@ class _CandidateListState extends State<CandidateList> {
           ),
           Expanded(
             child: FutureBuilder(
-              future: http.getCandidate(),
+              future: http.getAddress(),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 if (snapshot.hasData) {
-                  List<Candidate>? e = snapshot.data;
+                  List<Address>? e = snapshot.data;
                   if (isSearch) {
                     e?.clear();
                     e = _SearchResult;

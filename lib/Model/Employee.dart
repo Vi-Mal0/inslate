@@ -47,4 +47,8 @@ class Employee {
     return map;
   }
 
+  @override
+  String toString() {
+    return 'Employee{id: $id, employeeId: $employeeId, employeeName: $employeeName, employeeEmail: $employeeEmail, employeeDesignation: $employeeDesignation, password: $password, assignedCandidates: $assignedCandidates}';
+  }
 }

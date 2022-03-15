@@ -38,21 +38,22 @@ dependencies:
   dropdown_button2: ^1.1.1
   flutter_datetime_picker: ^1.5.1
   date_time_picker:
-  fluttertoast: ^8.0.8
+  fluttertoast:
   shared_preferences:
   email_validator:
-  easy_sidemenu: ^0.1.1+1
+  easy_sidemenu:
   flutter_profile_picture:
   page_transition:
   flutter_icons:
   flutter_screenutil:
   google_fonts:
   flutter_rating_bar:
-  flutter_login: ^3.1.0
+  flutter_login:
   marquee:
   flutter_neumorphic: ^3.2.0
   get: ^4.6.1
   auto_reload: ^1.0.1
+  file_picker:
 
 dev_dependencies:
   flutter_test:
@@ -75,6 +76,7 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
   assets:
     - images/
   fonts:

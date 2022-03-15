@@ -8,14 +8,13 @@ import 'CandidateList.dart';
 
 class LandingScreen extends StatefulWidget {
   String id;
-  LandingScreen(this.id,{Key? key}) : super(key: key);
+  LandingScreen(this.id, {Key? key}) : super(key: key);
 
   @override
   _LandingScreenState createState() => _LandingScreenState();
 }
 
 class _LandingScreenState extends State<LandingScreen> {
-
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   int _pageIndex = 0;
@@ -27,7 +26,7 @@ class _LandingScreenState extends State<LandingScreen> {
   ];
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     _pageController = PageController(initialPage: _pageIndex);
   }
@@ -37,8 +36,8 @@ class _LandingScreenState extends State<LandingScreen> {
     _pageController.dispose();
     super.dispose();
   }
-  void refreshData() {
-  }
+
+  void refreshData() {}
 
   onGoBack(dynamic value) {
     refreshData();
@@ -52,91 +51,135 @@ class _LandingScreenState extends State<LandingScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       key: scaffoldKey,
-      drawer:Drawer(
-              child: Stack(
-              children: <Widget>[
-                Container(
-                  height: 200,
-                  child: DrawerHeader(child: Row(
-                    children: const [
-                            CircleAvatar(),
-                            Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Text("User Name"),
-                            )
-                    ],
-                  ),
-                  ),
+      drawer: Drawer(
+        child: Stack(
+          children: <Widget>[
+            Container(
+              height: 200,
+              child: DrawerHeader(
+                child: Row(
+                  children: const [
+                    CircleAvatar(),
+                    Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text("User Name"),
+                    )
+                  ],
                 ),
-                Positioned(
-                  top: MediaQuery.of(context).size.height*0.21,
-                  child: FlatButton(onPressed: (){
-                    Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const RegistrationScreen()));
-                    }, child: const Text("RegistrationScreen")),
-                ),
-              Expanded(
-                  child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Container(
-                      height: MediaQuery.of(context).size.height*0.04,
-                      width: MediaQuery.of(context).size.width,
-                      child: const Center(
-                        child: Text(
-                          '2022 (c) FuturaInsTech.com',
-                          style: TextStyle(
-                            fontFamily: 'Avenir',
-                            fontSize: 16,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ),
-                  ))
-              ],
+              ),
             ),
-    ),
+            Positioned(
+              top: MediaQuery.of(context).size.height * 0.21,
+              child: FlatButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const RegistrationScreen()));
+                  },
+                  child: const Text("RegistrationScreen")),
+            ),
+            Expanded(
+                child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                height: MediaQuery.of(context).size.height * 0.04,
+                width: MediaQuery.of(context).size.width,
+                child: const Center(
+                  child: Text(
+                    '2022 (c) FuturaInsTech.com',
+                    style: TextStyle(
+                      fontFamily: 'Avenir',
+                      fontSize: 16,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            ))
+          ],
+        ),
+      ),
       body: Padding(
-        padding: EdgeInsets.fromLTRB(0,MediaQuery.of(context).size.height* 0.03,0,0),
+        padding: EdgeInsets.fromLTRB(
+            0, MediaQuery.of(context).size.height * 0.03, 0, 0),
         child: Column(
           children: [
             Container(
-              color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black : Colors.white,
+              color: (Theme.of(context).brightness == Brightness.dark)
+                  ? Colors.black
+                  : Colors.white,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   IconButton(
-                      onPressed:(){
+                      onPressed: () {
                         scaffoldKey.currentState?.openDrawer();
-                        }, icon: Icon(
-                      Icons.menu,
-                    color: (Theme.of(context).brightness == Brightness.dark) ? Colors.white : Colors.black
-                    ,
-                  )
+                      },
+                      icon: Icon(
+                        Icons.menu,
+                        color: (Theme.of(context).brightness == Brightness.dark)
+                            ? Colors.white
+                            : Colors.black,
+                      )),
+                  Text(
+                    "management",
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: (Theme.of(context).brightness == Brightness.dark)
+                            ? Colors.white
+                            : Colors.black),
                   ),
-                  Text("management",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: (Theme.of(context).brightness == Brightness.dark) ? Colors.white : Colors.black),),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       PopupMenuButton(
-                        color: (Theme.of(context) == Brightness.dark) ? Colors.white : Colors.black,
+                        color: (Theme.of(context) == Brightness.dark)
+                            ? Colors.white
+                            : Colors.black,
                         itemBuilder: (context) => [
                           PopupMenuItem<int>(
                             value: 0,
-                            child: SizedBox(width: 100 ,child: Text("Setting ",style: TextStyle(color: (Theme.of(context) == Brightness.dark) ? Colors.white : Colors.black),)),
+                            child: SizedBox(
+                                width: 100,
+                                child: Text(
+                                  "Setting ",
+                                  style: TextStyle(
+                                      color:
+                                          (Theme.of(context) == Brightness.dark)
+                                              ? Colors.white
+                                              : Colors.black),
+                                )),
                           ),
                           PopupMenuItem<int>(
                             value: 1,
-                            child: SizedBox(width: 100 ,child: Text("About ",style: TextStyle(color: (Theme.of(context) == Brightness.dark) ? Colors.white : Colors.black),)),
+                            child: SizedBox(
+                                width: 100,
+                                child: Text(
+                                  "About ",
+                                  style: TextStyle(
+                                      color:
+                                          (Theme.of(context) == Brightness.dark)
+                                              ? Colors.white
+                                              : Colors.black),
+                                )),
                           ),
                           PopupMenuItem<int>(
                             value: 2,
-                            child: SizedBox(width: 100 ,child: Text("Exit ",style: TextStyle(color: (Theme.of(context) == Brightness.dark) ? Colors.white : Colors.black),)),
+                            child: SizedBox(
+                                width: 100,
+                                child: Text(
+                                  "Exit ",
+                                  style: TextStyle(
+                                      color:
+                                          (Theme.of(context) == Brightness.dark)
+                                              ? Colors.white
+                                              : Colors.black),
+                                )),
                           ),
                         ],
                         onSelected: (item) => {print(item)},
@@ -146,7 +189,8 @@ class _LandingScreenState extends State<LandingScreen> {
                 ],
               ),
             ),
-            Expanded(child:PageView(
+            Expanded(
+                child: PageView(
               children: tabPages,
               onPageChanged: onPageChanged,
               controller: _pageController,
@@ -155,20 +199,26 @@ class _LandingScreenState extends State<LandingScreen> {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        fixedColor: const Color(0xffbe61565),
         elevation: 0,
         currentIndex: _pageIndex,
         onTap: onTabTapped,
-        backgroundColor: (Theme.of(context).brightness == Brightness.dark) ? Colors.black : Colors.white,
+        backgroundColor: (Theme.of(context).brightness == Brightness.dark)
+            ? Colors.black
+            : Colors.white,
         items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.home_outlined),label: "Home" ),
-          BottomNavigationBarItem(icon: Icon(Icons.stay_current_portrait_sharp), label: "Bucket"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.home_outlined), label: "Home"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.stay_current_portrait_sharp), label: "Bucket"),
         ],
-
       ),
-      floatingActionButton: FloatingActionButton(onPressed: () {
-        navigateCandidateList();
-      },child: Icon(Icons.list_alt),
-
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: const Color(0xffbe61565),
+        onPressed: () {
+          navigateCandidateList();
+        },
+        child: Icon(Icons.list_alt),
       ),
     );
   }
@@ -180,6 +230,7 @@ class _LandingScreenState extends State<LandingScreen> {
   }
 
   void onTabTapped(int index) {
-    this._pageController.animateToPage(index,duration: const Duration(milliseconds: 500),curve: Curves.easeInOut);
+    this._pageController.animateToPage(index,
+        duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
   }
 }

@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:insuranceprototype/HTTP/HttpService.dart';
 import 'package:insuranceprototype/Model/Candidate.dart';
 import 'package:intl/intl.dart';
+import 'package:file_picker/file_picker.dart';
+
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({Key? key}) : super(key: key);
@@ -15,7 +17,7 @@ class RegistrationScreen extends StatefulWidget {
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
   HttpService http = HttpService();
-  final _formKey = GlobalKey<FormState>();
+
 
   var avdatectl;var proof;var contactMode;  var modeSelected;var proofSelected;
 
@@ -26,6 +28,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   TextEditingController qualificaitionctl =TextEditingController();
   TextEditingController emailctl =TextEditingController();
   TextEditingController datectl =TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
@@ -159,7 +162,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 'Select Your proof',
                                 style: TextStyle(fontSize: 14),
                               ),
-                              icon: const   Icon(
+                              icon: const Icon(
                                 Icons.arrow_drop_down,
                                 color: Colors.black45,
                               ),

@@ -54,7 +54,7 @@ class _DashboardState extends State<Dashboard> {
                   width: MediaQuery.of(context).size.width,
                   height: 200,
                   child: Card(
-                    color: Colors.purple[100],
+                    color: const Color(0xffbe61565),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20.0),
                     ),
@@ -69,7 +69,6 @@ class _DashboardState extends State<Dashboard> {
                                 name: snapshot.data.employeeName,
                                 radius: 31,
                                 fontsize: 35,
-                                random: true,
                               ),
                             ),
                             Padding(
@@ -85,7 +84,7 @@ class _DashboardState extends State<Dashboard> {
                                             fontWeight: FontWeight.bold,
                                             fontSize: 20),
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         width: 130,
                                       ),
                                       Text(
@@ -95,7 +94,7 @@ class _DashboardState extends State<Dashboard> {
                                       )
                                     ],
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 5,
                                   ),
                                   Text(

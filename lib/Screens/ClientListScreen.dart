@@ -1,24 +1,18 @@
-import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_profile_picture/flutter_profile_picture.dart';
-import 'package:insuranceprototype/HTTP/HttpService.dart';
-import 'package:insuranceprototype/Screens/CandidateProfile.dart';
 import 'package:page_transition/page_transition.dart';
 
-import '../Model/Candidate.dart';
+import '../HTTP/HttpService.dart';
+import 'CandidateProfile.dart';
 
-class CandidateList extends StatefulWidget {
-  const CandidateList({Key? key}) : super(key: key);
+class ClientListScreen extends StatefulWidget {
+  const ClientListScreen({Key? key}) : super(key: key);
 
   @override
-  _CandidateListState createState() => _CandidateListState();
-
+  State<ClientListScreen> createState() => _ClientListScreenState();
 }
 
-class _CandidateListState extends State<CandidateList> {
-
+class _ClientListScreenState extends State<ClientListScreen> {
   @override
   void initState() {
     super.initState();
@@ -33,10 +27,10 @@ class _CandidateListState extends State<CandidateList> {
 
   void navigateSecondPage(id) {
     Navigator.push(
-            context,
-            PageTransition(
-                type: PageTransitionType.rightToLeft,
-                child: CandidateProfile(id)))
+        context,
+        PageTransition(
+            type: PageTransitionType.rightToLeft,
+            child: CandidateProfile(id)))
         .then(onGoBack);
   }
 
@@ -102,18 +96,18 @@ class _CandidateListState extends State<CandidateList> {
                             style: TextStyle(color: Colors.black),
                           )),
                     ),
-                    PopupMenuItem<int>(
+                    const PopupMenuItem<int>(
                       value: 1,
-                      child: Container(
+                      child: SizedBox(
                           width: 100,
                           child: Text(
                             "About ",
                             style: TextStyle(color: Colors.black),
                           )),
                     ),
-                    PopupMenuItem<int>(
+                    const PopupMenuItem<int>(
                       value: 2,
-                      child: Container(
+                      child: SizedBox(
                           width: 100,
                           child: Text(
                             "Exit ",

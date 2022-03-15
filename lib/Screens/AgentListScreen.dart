@@ -1,24 +1,13 @@
-import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_profile_picture/flutter_profile_picture.dart';
-import 'package:insuranceprototype/HTTP/HttpService.dart';
-import 'package:insuranceprototype/Screens/CandidateProfile.dart';
-import 'package:page_transition/page_transition.dart';
 
-import '../Model/Candidate.dart';
-
-class CandidateList extends StatefulWidget {
-  const CandidateList({Key? key}) : super(key: key);
+class AgentListScreen extends StatefulWidget {
+  const AgentListScreen({Key? key}) : super(key: key);
 
   @override
-  _CandidateListState createState() => _CandidateListState();
-
+  State<AgentListScreen> createState() => _AgentListScreenState();
 }
 
-class _CandidateListState extends State<CandidateList> {
-
+class _AgentListScreenState extends State<AgentListScreen> {
   @override
   void initState() {
     super.initState();
@@ -33,10 +22,10 @@ class _CandidateListState extends State<CandidateList> {
 
   void navigateSecondPage(id) {
     Navigator.push(
-            context,
-            PageTransition(
-                type: PageTransitionType.rightToLeft,
-                child: CandidateProfile(id)))
+        context,
+        PageTransition(
+            type: PageTransitionType.rightToLeft,
+            child: CandidateProfile(id)))
         .then(onGoBack);
   }
 

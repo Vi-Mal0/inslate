@@ -25,6 +25,7 @@ class Quans {
     overallRating = json['overallRating'];
     result = json['result'];
   }
+
   var id;
   var numericalAbility;
   var numericalAbilityComments;

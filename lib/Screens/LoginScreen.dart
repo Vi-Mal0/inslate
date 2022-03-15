@@ -5,6 +5,7 @@ import 'package:insuranceprototype/HTTP/HttpService.dart';
 import 'package:insuranceprototype/Screens/LandingScreen.dart';
 
 class LoginScreen extends StatelessWidget {
+
   Duration get loginTime => const Duration(milliseconds: 2250);
 
   @override
