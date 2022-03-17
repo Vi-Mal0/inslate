@@ -10,11 +10,9 @@ class SplashHome extends StatefulWidget {
 
   @override
   State<SplashHome> createState() => _SplashHome();
-
 }
 
 class _SplashHome extends State<SplashHome> {
-
   @override
   void initState() {
     super.initState();
@@ -24,13 +22,12 @@ class _SplashHome extends State<SplashHome> {
     );
   }
 
-  void navigateUser() async{
+  void navigateUser() async {
+    // Navigator.of(context).pushReplacement(MaterialPageRoute(
+    //     builder: (BuildContext context) => LoginScreen()));
 
-      // Navigator.of(context).pushReplacement(MaterialPageRoute(
-      //     builder: (BuildContext context) => LoginScreen()));
-
-      Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (BuildContext context) => LandingScreen("51")));
+    Navigator.of(context).pushReplacement(MaterialPageRoute(
+        builder: (BuildContext context) => LandingScreen("51")));
   }
 
   @override
@@ -42,5 +39,4 @@ class _SplashHome extends State<SplashHome> {
       ),
     );
   }
-
 }

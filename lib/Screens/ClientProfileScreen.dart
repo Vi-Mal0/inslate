@@ -14,13 +14,11 @@ class ClientProfileScreen extends StatefulWidget {
 }
 
 class _ClientProfileScreenState extends State<ClientProfileScreen> {
-
   HttpService http = HttpService();
   List<ClientData> all = [];
   TextEditingController controller = TextEditingController();
   bool isSearch = false;
   final List<Candidate> _SearchResult = [];
-
 
   onSearchTextChanged(String text) async {
     if (text.isNotEmpty) {
@@ -43,7 +41,7 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
         child: FutureBuilder(
           future: http.getClientbyId(widget.id),
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-            ClientData client= snapshot.data;
+            ClientData client = snapshot.data;
             return Column(
               children: [
                 SizedBox(
@@ -115,38 +113,38 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
                 ),
                 Expanded(
                     child: ListView(
-                      children: [
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Center(
-                          child: CircleAvatar(
-                            radius: 45,
-                            backgroundColor: Colors.grey[200],
-                            child: const Text(";)"),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Center(
-                          child: Text(
-                            client.givenName.toString() + " " + client.surName.toString(),
-                            style:
-                            const TextStyle(fontSize: 24, letterSpacing: 2),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Text(client.birthDate.toString()),
-
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Text(client.address.toString()),
-                      ],
-                    ))
+                  children: [
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Center(
+                      child: CircleAvatar(
+                        radius: 45,
+                        backgroundColor: Colors.grey[200],
+                        child: const Text(";)"),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Center(
+                      child: Text(
+                        client.givenName.toString() +
+                            " " +
+                            client.surName.toString(),
+                        style: const TextStyle(fontSize: 24, letterSpacing: 2),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text(client.birthDate.toString()),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text(client.address.toString()),
+                  ],
+                ))
               ],
             );
           },

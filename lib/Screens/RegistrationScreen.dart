@@ -7,7 +7,6 @@ import 'package:insuranceprototype/Model/Candidate.dart';
 import 'package:intl/intl.dart';
 import 'package:file_picker/file_picker.dart';
 
-
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({Key? key}) : super(key: key);
 
@@ -18,17 +17,18 @@ class RegistrationScreen extends StatefulWidget {
 class _RegistrationScreenState extends State<RegistrationScreen> {
   HttpService http = HttpService();
 
+  var avdatectl;
+  var proof;
+  var contactMode;
+  var modeSelected;
+  var proofSelected;
 
-  var avdatectl;var proof;var contactMode;  var modeSelected;var proofSelected;
-
-
-  TextEditingController namectl =TextEditingController();
-  TextEditingController pid =TextEditingController();
-  TextEditingController phonectl =TextEditingController();
-  TextEditingController qualificaitionctl =TextEditingController();
-  TextEditingController emailctl =TextEditingController();
-  TextEditingController datectl =TextEditingController();
-
+  TextEditingController namectl = TextEditingController();
+  TextEditingController pid = TextEditingController();
+  TextEditingController phonectl = TextEditingController();
+  TextEditingController qualificaitionctl = TextEditingController();
+  TextEditingController emailctl = TextEditingController();
+  TextEditingController datectl = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -37,21 +37,25 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children:[
+            children: [
               Row(
                 children: [
-                  IconButton(onPressed: (){
-                    Navigator.pop(context);
-                  }, icon: const Icon(Icons.arrow_back))
+                  IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: const Icon(Icons.arrow_back))
                 ],
               ),
               const Padding(
-                padding: EdgeInsets.fromLTRB(20,20,0,10),
-                child: Text("Personal Details",
+                padding: EdgeInsets.fromLTRB(20, 20, 0, 10),
+                child: Text(
+                  "Personal Details",
                   style: TextStyle(
                       fontSize: 24,
                       fontFamily: 'Poppins-Medium',
-                      fontWeight: FontWeight.w400),),
+                      fontWeight: FontWeight.w400),
+                ),
               ),
               TextFormField(
                 controller: namectl,
@@ -68,14 +72,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 icon: const Icon(Icons.event),
                 dateLabelText: 'Date',
                 timeLabelText: "Hour",
-                onChanged: (val){
+                onChanged: (val) {
                   setState(() {
-                    datectl.text = DateFormat("dd-MM-yyyy").format(DateTime.parse(val));
+                    datectl.text =
+                        DateFormat("dd-MM-yyyy").format(DateTime.parse(val));
                   });
                 },
-                onSaved: (val){
+                onSaved: (val) {
                   setState(() {
-                    datectl.text = DateFormat("dd-MM-yyyy").format(DateTime.parse(val!));
+                    datectl.text =
+                        DateFormat("dd-MM-yyyy").format(DateTime.parse(val!));
                   });
                 },
               ),
@@ -94,15 +100,17 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 ),
               ),
               const Padding(
-                padding: EdgeInsets.fromLTRB(20,40,0,10),
-                child: Text("Qualification",
+                padding: EdgeInsets.fromLTRB(20, 40, 0, 10),
+                child: Text(
+                  "Qualification",
                   style: TextStyle(
                       fontSize: 24,
                       fontFamily: 'Poppins-Medium',
-                      fontWeight: FontWeight.w400),),
+                      fontWeight: FontWeight.w400),
+                ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(40,0,0,0),
+                padding: const EdgeInsets.fromLTRB(40, 0, 0, 0),
                 child: TextFormField(
                   controller: qualificaitionctl,
                   decoration: const InputDecoration(
@@ -111,7 +119,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(40,0,0,0),
+                padding: const EdgeInsets.fromLTRB(40, 0, 0, 0),
                 child: TextFormField(
                   controller: qualificaitionctl,
                   decoration: const InputDecoration(
@@ -120,7 +128,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(40,0,0,0),
+                padding: const EdgeInsets.fromLTRB(40, 0, 0, 0),
                 child: TextFormField(
                   controller: qualificaitionctl,
                   decoration: const InputDecoration(
@@ -129,15 +137,17 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 ),
               ),
               const Padding(
-                padding: EdgeInsets.fromLTRB(20,40,0,10),
-                child: Text("Proof",
+                padding: EdgeInsets.fromLTRB(20, 40, 0, 10),
+                child: Text(
+                  "Proof",
                   style: TextStyle(
                       fontSize: 24,
                       fontFamily: 'Poppins-Medium',
-                      fontWeight: FontWeight.w400),),
+                      fontWeight: FontWeight.w400),
+                ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(20,0,0,0),
+                padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -145,18 +155,17 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       builder: (BuildContext context, AsyncSnapshot snapshot) {
                         List<String> s;
 
-                        if(snapshot.hasData){
-                          s=snapshot.data;
-                        }
-                        else{
-                          s=["api errror"];
+                        if (snapshot.hasData) {
+                          s = snapshot.data;
+                        } else {
+                          s = ["api errror"];
                         }
                         return SizedBox(
                           width: 150,
                           height: 70,
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child:   DropdownButtonFormField2(
+                            child: DropdownButtonFormField2(
                               isExpanded: true,
                               hint: const Text(
                                 'Select Your proof',
@@ -168,27 +177,28 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               ),
                               iconSize: 30,
                               buttonHeight: 60,
-                              buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                              buttonPadding:
+                                  const EdgeInsets.only(left: 20, right: 10),
                               dropdownDecoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(15),
                               ),
-                              items: s.map((item) =>
-                                  DropdownMenuItem(
-                                    value: item,
-                                    child: Text(
-                                      item,
-                                      style: const TextStyle(
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                  ))
+                              items: s
+                                  .map((item) => DropdownMenuItem(
+                                        value: item,
+                                        child: Text(
+                                          item,
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ))
                                   .toList(),
                               onChanged: (value) {
                                 setState(() {
                                   proofSelected = value.toString();
                                 });
                               },
-                              onSaved: (value){
+                              onSaved: (value) {
                                 setState(() {
                                   proofSelected = value.toString();
                                 });
@@ -199,13 +209,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       },
                       future: http.getParam('P001'),
                     ),
-                    const SizedBox(width: 20,),
-                    SizedBox(width: 259,
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    SizedBox(
+                      width: 259,
                       child: Padding(
-                        padding:  const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(8.0),
                         child: TextFormField(
                           controller: pid,
-                          decoration:   const InputDecoration(
+                          decoration: const InputDecoration(
                             labelText: 'ProofId',
                           ),
                         ),
@@ -215,77 +228,82 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 ),
               ),
               const Padding(
-                padding: EdgeInsets.fromLTRB(20,40,0,10),
-                child: Text("Availability",
+                padding: EdgeInsets.fromLTRB(20, 40, 0, 10),
+                child: Text(
+                  "Availability",
                   style: TextStyle(
                       fontSize: 24,
                       fontFamily: 'Poppins-Medium',
-                      fontWeight: FontWeight.w400),),
+                      fontWeight: FontWeight.w400),
+                ),
               ),
               FutureBuilder(
-                builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                builder:
+                    (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                   List<String> a;
 
-                  if(snapshot.hasData){
-                    a=snapshot.data;
+                  if (snapshot.hasData) {
+                    a = snapshot.data;
+                  } else {
+                    a = ["api errror"];
                   }
-                  else{
-                    a=["api errror"];
-                  }                  return Padding(
-                  padding: const EdgeInsets.fromLTRB(20,0,0,0),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: 70,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child:   DropdownButtonFormField2(
-                        decoration: InputDecoration(
-                          isDense: true,
-                          contentPadding: EdgeInsets.zero,
-                          border: OutlineInputBorder(
+                  return Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 70,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: DropdownButtonFormField2(
+                          decoration: InputDecoration(
+                            isDense: true,
+                            contentPadding: EdgeInsets.zero,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                          ),
+                          isExpanded: true,
+                          hint: const Text(
+                            'Mode of Contact',
+                            style: TextStyle(fontSize: 14),
+                          ),
+                          icon: const Icon(
+                            Icons.arrow_drop_down,
+                            color: Colors.black45,
+                          ),
+                          iconSize: 30,
+                          buttonHeight: 60,
+                          buttonPadding:
+                              const EdgeInsets.only(left: 20, right: 10),
+                          dropdownDecoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),
                           ),
+                          items: a
+                              .map((item) => DropdownMenuItem<String>(
+                                    value: item,
+                                    child: Text(
+                                      item,
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ))
+                              .toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              modeSelected = value.toString();
+                            });
+                          },
+                          onSaved: (value) {
+                            setState(() {
+                              modeSelected = value.toString();
+                            });
+                          },
                         ),
-                        isExpanded: true,
-                        hint: const Text(
-                          'Mode of Contact',
-                          style: TextStyle(fontSize: 14),
-                        ),
-                        icon: const Icon(
-                          Icons.arrow_drop_down,
-                          color: Colors.black45,
-                        ),
-                        iconSize: 30,
-                        buttonHeight: 60,
-                        buttonPadding: const EdgeInsets.only(left: 20, right: 10),
-                        dropdownDecoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        items: a.map((item) =>
-                            DropdownMenuItem<String>(
-                              value: item,
-                              child: Text(
-                                item,
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ))
-                            .toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            modeSelected = value.toString();
-                          });
-                        },
-                        onSaved: (value) {
-                          setState(() {
-                            modeSelected = value.toString();
-                          });
-                        },
                       ),
                     ),
-                  ),
-                ); },
+                  );
+                },
                 future: http.getParam('C001'),
               ),
               DateTimePicker(
@@ -296,14 +314,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 icon: const Icon(Icons.event),
                 dateLabelText: 'Date',
                 timeLabelText: "Hour",
-                onChanged: (val){
+                onChanged: (val) {
                   setState(() {
-                    avdatectl = DateFormat("dd-MM-yyyy HH:MM").format(DateTime.parse(val));
+                    avdatectl = DateFormat("dd-MM-yyyy HH:MM")
+                        .format(DateTime.parse(val));
                   });
                 },
-                onSaved: (val){
+                onSaved: (val) {
                   setState(() {
-                    avdatectl = DateFormat("dd-MM-yyyy HH:MM").format(DateTime.parse(val!));
+                    avdatectl = DateFormat("dd-MM-yyyy HH:MM")
+                        .format(DateTime.parse(val!));
                   });
                   print(avdatectl);
                 },
@@ -312,21 +332,23 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(onPressed: () {
-        Navigator.pop(context);
-        http.createCandidate(
-            Candidate(
-                name: namectl.text,
-                proofId:pid.text,
-                mobileNumber: phonectl.text,
-                proof: proofSelected,
-                dateOfBirth: datectl.text,
-                highestQualification: qualificaitionctl.text,
-                email: emailctl.text,
-                communication: modeSelected,
-                availableDateAndTime:avdatectl
-            )
-        ); },child: const Icon(Icons.done),backgroundColor: Colors.teal,),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pop(context);
+          http.createCandidate(Candidate(
+              name: namectl.text,
+              proofId: pid.text,
+              mobileNumber: phonectl.text,
+              proof: proofSelected,
+              dateOfBirth: datectl.text,
+              highestQualification: qualificaitionctl.text,
+              email: emailctl.text,
+              communication: modeSelected,
+              availableDateAndTime: avdatectl));
+        },
+        child: const Icon(Icons.done),
+        backgroundColor: Colors.teal,
+      ),
     );
   }
 }

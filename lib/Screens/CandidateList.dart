@@ -14,7 +14,6 @@ class CandidateList extends StatefulWidget {
 
   @override
   _CandidateListState createState() => _CandidateListState();
-
 }
 
 class _CandidateListState extends State<CandidateList> {
@@ -48,8 +47,7 @@ class _CandidateListState extends State<CandidateList> {
   }
 
   Future<void> _refreshData() async {
-    setState(() {
-    });
+    setState(() {});
   }
 
   @override
@@ -199,7 +197,8 @@ class _CandidateListState extends State<CandidateList> {
                                     textAlign: TextAlign.center,
                                   ),
                                 )
-                              ] else if (e?[index].currentStatus == "Passed") ...[
+                              ] else if (e?[index].currentStatus ==
+                                  "Passed") ...[
                                 Container(
                                   width: 100,
                                   decoration: BoxDecoration(
@@ -213,7 +212,8 @@ class _CandidateListState extends State<CandidateList> {
                                     textAlign: TextAlign.center,
                                   ),
                                 )
-                              ] else if (e?[index].currentStatus == "Failed") ...[
+                              ] else if (e?[index].currentStatus ==
+                                  "Failed") ...[
                                 Container(
                                   width: 100,
                                   decoration: BoxDecoration(

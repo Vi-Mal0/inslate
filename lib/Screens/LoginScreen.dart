@@ -5,7 +5,6 @@ import 'package:insuranceprototype/HTTP/HttpService.dart';
 import 'package:insuranceprototype/Screens/LandingScreen.dart';
 
 class LoginScreen extends StatelessWidget {
-
   Duration get loginTime => const Duration(milliseconds: 2250);
 
   @override
@@ -27,21 +26,40 @@ class LoginScreen extends StatelessWidget {
                     child: ListView.builder(
                       itemCount: snapshot.data.length,
                       itemBuilder: (context, index) {
-                        return Container(color:Colors.grey,height: 70,child: Center(child: InkWell(onTap: (){
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (BuildContext context) => LandingScreen("51"),
-                            ),
-                          );
-                        },child: Card(child: Center(child: Text(snapshot.data[index].employeeName,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),))))),);
+                        return Container(
+                          color: Colors.grey,
+                          height: 70,
+                          child: Center(
+                              child: InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            LandingScreen("51"),
+                                      ),
+                                    );
+                                  },
+                                  child: Card(
+                                      child: Center(
+                                          child: Text(
+                                    snapshot.data[index].employeeName,
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold),
+                                  ))))),
+                        );
                       },
                     ),
                   );
                 } else if (snapshot.hasError) {
-                  return Center(child: Icon(Icons.error),);
+                  return Center(
+                    child: Icon(Icons.error),
+                  );
                 } else {
-                  return Center(child: const CircularProgressIndicator(),);
+                  return Center(
+                    child: const CircularProgressIndicator(),
+                  );
                 }
               },
             ),
@@ -50,12 +68,18 @@ class LoginScreen extends StatelessWidget {
       );
     }
 
-
     return FlutterLogin(
-      theme: LoginTheme(primaryColor: Colors.white,accentColor: Colors.black,buttonTheme: const LoginButtonTheme(backgroundColor: Colors.purpleAccent),),
+      theme: LoginTheme(
+        primaryColor: Colors.white,
+        accentColor: Colors.black,
+        buttonTheme:
+            const LoginButtonTheme(backgroundColor: Colors.purpleAccent),
+      ),
       title: 'FuturaInsTech',
-      onLogin: (LoginData){_showMyDialog();},
-      onRecoverPassword: (String) {  },
+      onLogin: (LoginData) {
+        _showMyDialog();
+      },
+      onRecoverPassword: (String) {},
       footer: "2022 (c) FuturaInsTech.com",
       loginAfterSignUp: true,
       savedEmail: "rainavimal454@gmail.com",
@@ -63,4 +87,3 @@ class LoginScreen extends StatelessWidget {
     );
   }
 }
-

@@ -70,7 +70,7 @@ class _ClientRegistrationScreenState extends State<ClientRegistrationScreen> {
                         size: 30,
                       ),
                     ),
-                    title: Text(
+                    title: const Text(
                       "Client Registration",
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
@@ -79,7 +79,7 @@ class _ClientRegistrationScreenState extends State<ClientRegistrationScreen> {
               Expanded(
                 child: ListView(
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Row(
@@ -87,8 +87,10 @@ class _ClientRegistrationScreenState extends State<ClientRegistrationScreen> {
                         FutureBuilder(
                           builder: (BuildContext context,
                               AsyncSnapshot<dynamic> snapshot) {
+                            List<String> a = ["cannot load.."];
                             if (snapshot.hasData) {
-                              List<String> a = snapshot.data;
+                              a.clear();
+                              a = snapshot.data;
                               return Padding(
                                 padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
                                 child: SizedBox(
@@ -144,7 +146,57 @@ class _ClientRegistrationScreenState extends State<ClientRegistrationScreen> {
                                 ),
                               );
                             }
-                            return Center(child: CircularProgressIndicator(),);
+                            return Padding(
+                              padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+                              child: SizedBox(
+                                width: 140,
+                                height: 70,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: DropdownButtonFormField2(
+                                    decoration: InputDecoration(
+                                      isDense: true,
+                                      contentPadding: EdgeInsets.zero,
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                    ),
+                                    isExpanded: true,
+                                    hint: const Text(
+                                      'Salutation',
+                                      style: TextStyle(fontSize: 14),
+                                    ),
+                                    icon: const Icon(
+                                      Icons.arrow_drop_down,
+                                      color: Colors.black45,
+                                    ),
+                                    iconSize: 30,
+                                    buttonHeight: 60,
+                                    buttonPadding: const EdgeInsets.only(
+                                        left: 20, right: 10),
+                                    dropdownDecoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    items: a
+                                        .map((item) => DropdownMenuItem<String>(
+                                              value: item,
+                                              child: Text(
+                                                item,
+                                                style: const TextStyle(
+                                                  fontSize: 14,
+                                                ),
+                                              ),
+                                            ))
+                                        .toList(),
+                                    onChanged: (value) {
+                                      setState(() {});
+                                    },
+                                    validator: (value) =>
+                                        value == null ? 'please select' : null,
+                                  ),
+                                ),
+                              ),
+                            );
                           },
                           future: api.getParam('G0002'),
                         ),
@@ -175,8 +227,10 @@ class _ClientRegistrationScreenState extends State<ClientRegistrationScreen> {
                         FutureBuilder(
                           builder: (BuildContext context,
                               AsyncSnapshot<dynamic> snapshot) {
+                            List<String> a = ["cannot load.."];
                             if (snapshot.hasData) {
-                              List<String> a = snapshot.data;
+                              a.clear();
+                              a = snapshot.data;
                               return Padding(
                                 padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
                                 child: SizedBox(
@@ -232,7 +286,57 @@ class _ClientRegistrationScreenState extends State<ClientRegistrationScreen> {
                                 ),
                               );
                             }
-                            return Center(child: CircularProgressIndicator(),);
+                            return Padding(
+                              padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+                              child: SizedBox(
+                                width: 140,
+                                height: 70,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: DropdownButtonFormField2(
+                                    decoration: InputDecoration(
+                                      isDense: true,
+                                      contentPadding: EdgeInsets.zero,
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                    ),
+                                    isExpanded: true,
+                                    hint: const Text(
+                                      'gender',
+                                      style: TextStyle(fontSize: 14),
+                                    ),
+                                    icon: const Icon(
+                                      Icons.arrow_drop_down,
+                                      color: Colors.black45,
+                                    ),
+                                    iconSize: 30,
+                                    buttonHeight: 60,
+                                    buttonPadding: const EdgeInsets.only(
+                                        left: 20, right: 10),
+                                    dropdownDecoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    items: a
+                                        .map((item) => DropdownMenuItem<String>(
+                                              value: item,
+                                              child: Text(
+                                                item,
+                                                style: const TextStyle(
+                                                  fontSize: 14,
+                                                ),
+                                              ),
+                                            ))
+                                        .toList(),
+                                    onChanged: (value) {
+                                      setState(() {});
+                                    },
+                                    validator: (value) =>
+                                        value == null ? 'please select' : null,
+                                  ),
+                                ),
+                              ),
+                            );
                           },
                           future: api.getParam('G0001'),
                         ),
@@ -263,9 +367,10 @@ class _ClientRegistrationScreenState extends State<ClientRegistrationScreen> {
                       child: FutureBuilder(
                         builder: (BuildContext context,
                             AsyncSnapshot<dynamic> snapshot) {
-                          print(snapshot.hasData);
+                          List<String> a = ["cannot load.."];
                           if (snapshot.hasData) {
-                            List<String> a = snapshot.data;
+                            a.clear();
+                            a = snapshot.data;
                             return DropdownButtonFormField2(
                               decoration: InputDecoration(
                                 isDense: true,
@@ -308,7 +413,47 @@ class _ClientRegistrationScreenState extends State<ClientRegistrationScreen> {
                                   value == null ? 'please select' : null,
                             );
                           }
-                          return Center(child: CircularProgressIndicator(),);
+                          return DropdownButtonFormField2(
+                            decoration: InputDecoration(
+                              isDense: true,
+                              contentPadding: EdgeInsets.zero,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                            ),
+                            isExpanded: true,
+                            hint: const Text(
+                              'maritial status',
+                              style: TextStyle(fontSize: 14),
+                            ),
+                            icon: const Icon(
+                              Icons.arrow_drop_down,
+                              color: Colors.black45,
+                            ),
+                            iconSize: 30,
+                            buttonHeight: 60,
+                            buttonPadding:
+                                const EdgeInsets.only(left: 20, right: 10),
+                            dropdownDecoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            items: a
+                                .map((item) => DropdownMenuItem<String>(
+                                      value: item,
+                                      child: Text(
+                                        item,
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    ))
+                                .toList(),
+                            onChanged: (value) {
+                              setState(() {});
+                            },
+                            validator: (value) =>
+                                value == null ? 'please select' : null,
+                          );
                         },
                         future: api.getParam('R0001'),
                       ),
@@ -318,8 +463,10 @@ class _ClientRegistrationScreenState extends State<ClientRegistrationScreen> {
                       child: FutureBuilder(
                         builder: (BuildContext context,
                             AsyncSnapshot<dynamic> snapshot) {
+                          List<String> a = ["cannot load.."];
                           if (snapshot.hasData) {
-                            List<String> a = snapshot.data;
+                            a.clear();
+                            a = snapshot.data;
                             return DropdownButtonFormField2(
                               decoration: InputDecoration(
                                 isDense: true,
@@ -362,8 +509,47 @@ class _ClientRegistrationScreenState extends State<ClientRegistrationScreen> {
                                   value == null ? 'please select' : null,
                             );
                           }
-                          return Center(child: CircularProgressIndicator(),);
-
+                          return DropdownButtonFormField2(
+                            decoration: InputDecoration(
+                              isDense: true,
+                              contentPadding: EdgeInsets.zero,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                            ),
+                            isExpanded: true,
+                            hint: const Text(
+                              'occupation',
+                              style: TextStyle(fontSize: 14),
+                            ),
+                            icon: const Icon(
+                              Icons.arrow_drop_down,
+                              color: Colors.black45,
+                            ),
+                            iconSize: 30,
+                            buttonHeight: 60,
+                            buttonPadding:
+                                const EdgeInsets.only(left: 20, right: 10),
+                            dropdownDecoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            items: a
+                                .map((item) => DropdownMenuItem<String>(
+                                      value: item,
+                                      child: Text(
+                                        item,
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    ))
+                                .toList(),
+                            onChanged: (value) {
+                              setState(() {});
+                            },
+                            validator: (value) =>
+                                value == null ? 'please select' : null,
+                          );
                         },
                         future: api.getParam('W0001'),
                       ),
@@ -518,7 +704,7 @@ class _ClientRegistrationScreenState extends State<ClientRegistrationScreen> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(30, 10, 30, 0),
+                      padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
                       child: TextFormField(
                         controller: category,
                         decoration: InputDecoration(
@@ -537,8 +723,10 @@ class _ClientRegistrationScreenState extends State<ClientRegistrationScreen> {
                     FutureBuilder(
                       builder: (BuildContext context,
                           AsyncSnapshot<dynamic> snapshot) {
+                        List<Address> addressList = [];
                         if (snapshot.hasData) {
-                          List<Address> addressList = snapshot.data;
+                          addressList.clear();
+                          addressList = snapshot.data;
                           return Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
@@ -607,25 +795,107 @@ class _ClientRegistrationScreenState extends State<ClientRegistrationScreen> {
                                         Navigator.push(
                                             context,
                                             PageTransition(
-                                                type: PageTransitionType.leftToRight,
-                                                child: const AddressRegistrationScreen()));                                      },
-                                      icon: const Icon(Icons.add,color: Colors.white,)))
+                                                type: PageTransitionType
+                                                    .leftToRight,
+                                                child:
+                                                    const AddressRegistrationScreen()));
+                                      },
+                                      icon: const Icon(
+                                        Icons.add,
+                                        color: Colors.white,
+                                      )))
                             ],
                           );
                         }
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Center(child: CircularProgressIndicator(),),
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            SizedBox(
+                              width: 300,
+                              height: 70,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: DropdownButtonFormField2(
+                                  decoration: InputDecoration(
+                                    isDense: true,
+                                    contentPadding: EdgeInsets.zero,
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                  ),
+                                  isExpanded: true,
+                                  hint: const Text(
+                                    'address',
+                                    style: TextStyle(fontSize: 14),
+                                  ),
+                                  icon: const Icon(
+                                    Icons.arrow_drop_down,
+                                    color: Colors.black45,
+                                  ),
+                                  iconSize: 30,
+                                  buttonHeight: 60,
+                                  buttonPadding: const EdgeInsets.only(
+                                      left: 20, right: 10),
+                                  dropdownDecoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  items: addressList
+                                      .map((item) => DropdownMenuItem(
+                                            value: item,
+                                            child: Text(
+                                              item.toAddress.toString() +
+                                                  " - " +
+                                                  item.id.toString(),
+                                              style: const TextStyle(
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                          ))
+                                      .toList(),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      address = value;
+                                    });
+                                  },
+                                  validator: (value) =>
+                                      value == null ? 'please select' : null,
+                                ),
+                              ),
+                            ),
+                            Container(
+                                decoration: BoxDecoration(
+                                    color: const Color(0xffbe61565),
+                                    border: Border.all(
+                                      color: Colors.black,
+                                    ),
+                                    borderRadius: BorderRadius.all(
+                                        const Radius.circular(20))),
+                                child: IconButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          PageTransition(
+                                              type: PageTransitionType
+                                                  .leftToRight,
+                                              child:
+                                                  const AddressRegistrationScreen()));
+                                    },
+                                    icon: const Icon(
+                                      Icons.add,
+                                      color: Colors.white,
+                                    )))
+                          ],
                         );
-
                       },
                       future: api.getAddress(),
                     ),
                     FutureBuilder(
                       builder: (BuildContext context,
                           AsyncSnapshot<dynamic> snapshot) {
+                        List<BankAccount> bankList = [];
                         if (snapshot.hasData) {
-                          List<BankAccount> bankList = snapshot.data;
+                          bankList.clear();
+                          bankList = snapshot.data;
                           return Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
@@ -695,15 +965,98 @@ class _ClientRegistrationScreenState extends State<ClientRegistrationScreen> {
                                         Navigator.push(
                                             context,
                                             PageTransition(
-                                                type: PageTransitionType.leftToRight,
-                                                child: const BankRegistrationScreen()));
+                                                type: PageTransitionType
+                                                    .leftToRight,
+                                                child:
+                                                    const BankRegistrationScreen()));
                                       },
-                                      icon: const Icon(Icons.add,color: Colors.white,)))
+                                      icon: const Icon(
+                                        Icons.add,
+                                        color: Colors.white,
+                                      )))
                             ],
                           );
                         }
-                        return const Center(child: CircularProgressIndicator(),);
-
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            SizedBox(
+                              width: 300,
+                              height: 70,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: DropdownButtonFormField2(
+                                  decoration: InputDecoration(
+                                    isDense: true,
+                                    contentPadding: EdgeInsets.zero,
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                  ),
+                                  isExpanded: true,
+                                  hint: const Text(
+                                    'bank account',
+                                    style: TextStyle(fontSize: 14),
+                                  ),
+                                  icon: const Icon(
+                                    Icons.arrow_drop_down,
+                                    color: Colors.black45,
+                                  ),
+                                  iconSize: 30,
+                                  buttonHeight: 60,
+                                  buttonPadding: const EdgeInsets.only(
+                                      left: 20, right: 10),
+                                  dropdownDecoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  items: bankList
+                                      .map((item) => DropdownMenuItem(
+                                            value: item,
+                                            child: Text(
+                                              item.accountHolderName
+                                                      .toString() +
+                                                  " - " +
+                                                  item.id.toString(),
+                                              style: const TextStyle(
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                          ))
+                                      .toList(),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      address = value;
+                                    });
+                                  },
+                                  validator: (value) =>
+                                      value == null ? 'please select' : null,
+                                ),
+                              ),
+                            ),
+                            Container(
+                                decoration: BoxDecoration(
+                                    color: const Color(0xffbe61565),
+                                    border: Border.all(
+                                      color: Colors.black,
+                                    ),
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(20))),
+                                child: IconButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          PageTransition(
+                                              type: PageTransitionType
+                                                  .leftToRight,
+                                              child:
+                                                  const BankRegistrationScreen()));
+                                    },
+                                    icon: const Icon(
+                                      Icons.add,
+                                      color: Colors.white,
+                                    )))
+                          ],
+                        );
                       },
                       future: api.getBank(),
                     ),

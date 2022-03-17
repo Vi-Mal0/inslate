@@ -9,7 +9,7 @@ import 'CandidateProfile.dart';
 
 class UpcomingInterview extends StatefulWidget {
   int id;
-  UpcomingInterview({Key? key,required this.id}) : super(key: key);
+  UpcomingInterview({Key? key, required this.id}) : super(key: key);
 
   @override
   State<UpcomingInterview> createState() => _UpcomingInterviewState();
@@ -20,7 +20,6 @@ class _UpcomingInterviewState extends State<UpcomingInterview> {
   final List<Candidate> _SearchResult = [];
   bool isSearch = false;
   HttpService api = HttpService();
-
 
   onSearchTextChanged(String text) async {
     if (text.isNotEmpty) {
@@ -37,8 +36,7 @@ class _UpcomingInterviewState extends State<UpcomingInterview> {
   }
 
   Future<void> _refreshData() async {
-    setState(() {
-    });
+    setState(() {});
   }
 
   @override
@@ -129,16 +127,18 @@ class _UpcomingInterviewState extends State<UpcomingInterview> {
                           return InkWell(
                             onTap: () {
                               Navigator.push(
-                                  context,
-                                  PageTransition(
-                                      type: PageTransitionType.rightToLeft,
-                                      child: CandidateProfile(e?[index].id)))
+                                      context,
+                                      PageTransition(
+                                          type: PageTransitionType.rightToLeft,
+                                          child:
+                                              CandidateProfile(e?[index].id)))
                                   .then((_) => _refreshData());
                             },
                             child: SizedBox(
                               height: 100,
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
                                 children: [
                                   ProfilePicture(
                                     name: e?[index].name,
@@ -146,7 +146,8 @@ class _UpcomingInterviewState extends State<UpcomingInterview> {
                                     fontsize: 21,
                                   ),
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
@@ -162,7 +163,8 @@ class _UpcomingInterviewState extends State<UpcomingInterview> {
                                       ),
                                     ],
                                   ),
-                                  if (e?[index].currentStatus == "Assigned") ...[
+                                  if (e?[index].currentStatus ==
+                                      "Assigned") ...[
                                     Container(
                                       width: 100,
                                       decoration: BoxDecoration(
@@ -191,7 +193,8 @@ class _UpcomingInterviewState extends State<UpcomingInterview> {
                                         textAlign: TextAlign.center,
                                       ),
                                     )
-                                  ] else if (e?[index].currentStatus == "Passed") ...[
+                                  ] else if (e?[index].currentStatus ==
+                                      "Passed") ...[
                                     Container(
                                       width: 100,
                                       decoration: BoxDecoration(
@@ -205,7 +208,8 @@ class _UpcomingInterviewState extends State<UpcomingInterview> {
                                         textAlign: TextAlign.center,
                                       ),
                                     )
-                                  ] else if (e?[index].currentStatus == "Failed") ...[
+                                  ] else if (e?[index].currentStatus ==
+                                      "Failed") ...[
                                     Container(
                                       width: 100,
                                       decoration: BoxDecoration(
@@ -240,7 +244,6 @@ class _UpcomingInterviewState extends State<UpcomingInterview> {
               ),
             ],
           ),
-        )
-    );
+        ));
   }
 }

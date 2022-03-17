@@ -9,7 +9,7 @@ import 'CandidateProfile.dart';
 
 class Todaysinterview extends StatefulWidget {
   int id;
-  Todaysinterview({Key? key,required this.id}) : super(key: key);
+  Todaysinterview({Key? key, required this.id}) : super(key: key);
 
   @override
   State<Todaysinterview> createState() => _TodaysinterviewState();
@@ -20,7 +20,6 @@ class _TodaysinterviewState extends State<Todaysinterview> {
   final List<Candidate> _SearchResult = [];
   bool isSearch = false;
   HttpService api = HttpService();
-
 
   onSearchTextChanged(String text) async {
     if (text.isNotEmpty) {
@@ -37,206 +36,209 @@ class _TodaysinterviewState extends State<Todaysinterview> {
   }
 
   Future<void> _refreshData() async {
-    setState(() {
-    });
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Column(
-          children: [
-            SizedBox(
-              height: 50,
-              child: Row(
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: const Icon(
-                      Icons.arrow_back,
-                    ),
-                  ),
-                  Expanded(
-                    child: TextField(
-                      controller: controller,
-                      decoration: const InputDecoration(
-                        hintText: "Search",
-                        border: InputBorder.none,
-                      ),
-                      onChanged: onSearchTextChanged,
-                    ),
-                  ),
-                  PopupMenuButton(
-                    color: Colors.white,
-                    itemBuilder: (context) => [
-                      const PopupMenuItem<int>(
-                        value: 0,
-                        child: SizedBox(
-                            width: 100,
-                            child: Text(
-                              "Setting ",
-                              style: TextStyle(color: Colors.black),
-                            )),
-                      ),
-                      PopupMenuItem<int>(
-                        value: 1,
-                        child: Container(
-                            width: 100,
-                            child: Text(
-                              "About ",
-                              style: TextStyle(color: Colors.black),
-                            )),
-                      ),
-                      PopupMenuItem<int>(
-                        value: 2,
-                        child: Container(
-                            width: 100,
-                            child: Text(
-                              "Exit ",
-                              style: TextStyle(color: Colors.black),
-                            )),
-                      ),
-                    ],
-                    onSelected: (item) => {print(item)},
-                  ),
-                ],
-              ),
-            ),
-            const Divider(
-              color: Colors.black38,
-              thickness: 1,
-              indent: 10,
-              endIndent: 10,
-            ),
-            Expanded(
-              child: FutureBuilder(
-                future: api.gettoday(widget.id),
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  if (snapshot.hasData) {
-                    List<Candidate>? e = snapshot.data;
-                    if (isSearch) {
-                      e?.clear();
-                      e = _SearchResult;
-                    }
-                    return ListView.builder(
-                      padding: const EdgeInsets.only(top: 0.0),
-                      itemCount: e?.length,
-                      itemBuilder: (context, index) {
-                        return InkWell(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                PageTransition(
-                                    type: PageTransitionType.rightToLeft,
-                                    child: CandidateProfile(e?[index].id)))
-                                .then((_) => _refreshData());
-                          },
-                          child: SizedBox(
-                            height: 100,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                ProfilePicture(
-                                  name: e?[index].name,
-                                  radius: 31,
-                                  fontsize: 21,
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "${e?[index].name}",
-                                      style: const TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Text(
-                                      "${e?[index].email}",
-                                      style: const TextStyle(fontSize: 16),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ],
-                                ),
-                                if (e?[index].currentStatus == "Assigned") ...[
-                                  Container(
-                                    width: 100,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: Colors.cyan,
-                                    ),
-                                    child: Text(
-                                      e?[index].currentStatus,
-                                      style: const TextStyle(
-                                          fontSize: 14, color: Colors.black),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  )
-                                ] else if (e?[index].currentStatus ==
-                                    "Captured") ...[
-                                  Container(
-                                    width: 100,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: Colors.yellow,
-                                    ),
-                                    child: Text(
-                                      e?[index].currentStatus,
-                                      style: const TextStyle(
-                                          fontSize: 14, color: Colors.black),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  )
-                                ] else if (e?[index].currentStatus == "Passed") ...[
-                                  Container(
-                                    width: 100,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: Colors.green,
-                                    ),
-                                    child: Text(
-                                      e?[index].currentStatus,
-                                      style: const TextStyle(
-                                          fontSize: 14, color: Colors.black),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  )
-                                ] else if (e?[index].currentStatus == "Failed") ...[
-                                  Container(
-                                    width: 100,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: Colors.red,
-                                    ),
-                                    child: Text(
-                                      e?[index].currentStatus,
-                                      style: const TextStyle(
-                                          fontSize: 14, color: Colors.black),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  )
-                                ]
-                              ],
-                            ),
-                          ),
-                        );
+        backgroundColor: Colors.white,
+        body: SafeArea(
+          child: Column(
+            children: [
+              SizedBox(
+                height: 50,
+                child: Row(
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
                       },
-                    );
-                  }
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                },
+                      icon: const Icon(
+                        Icons.arrow_back,
+                      ),
+                    ),
+                    Expanded(
+                      child: TextField(
+                        controller: controller,
+                        decoration: const InputDecoration(
+                          hintText: "Search",
+                          border: InputBorder.none,
+                        ),
+                        onChanged: onSearchTextChanged,
+                      ),
+                    ),
+                    PopupMenuButton(
+                      color: Colors.white,
+                      itemBuilder: (context) => [
+                        const PopupMenuItem<int>(
+                          value: 0,
+                          child: SizedBox(
+                              width: 100,
+                              child: Text(
+                                "Setting ",
+                                style: TextStyle(color: Colors.black),
+                              )),
+                        ),
+                        PopupMenuItem<int>(
+                          value: 1,
+                          child: Container(
+                              width: 100,
+                              child: Text(
+                                "About ",
+                                style: TextStyle(color: Colors.black),
+                              )),
+                        ),
+                        PopupMenuItem<int>(
+                          value: 2,
+                          child: Container(
+                              width: 100,
+                              child: Text(
+                                "Exit ",
+                                style: TextStyle(color: Colors.black),
+                              )),
+                        ),
+                      ],
+                      onSelected: (item) => {print(item)},
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
-        ),
-      )
-    );
+              const Divider(
+                color: Colors.black38,
+                thickness: 1,
+                indent: 10,
+                endIndent: 10,
+              ),
+              Expanded(
+                child: FutureBuilder(
+                  future: api.gettoday(widget.id),
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    if (snapshot.hasData) {
+                      List<Candidate>? e = snapshot.data;
+                      if (isSearch) {
+                        e?.clear();
+                        e = _SearchResult;
+                      }
+                      return ListView.builder(
+                        padding: const EdgeInsets.only(top: 0.0),
+                        itemCount: e?.length,
+                        itemBuilder: (context, index) {
+                          return InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                      context,
+                                      PageTransition(
+                                          type: PageTransitionType.rightToLeft,
+                                          child:
+                                              CandidateProfile(e?[index].id)))
+                                  .then((_) => _refreshData());
+                            },
+                            child: SizedBox(
+                              height: 100,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  ProfilePicture(
+                                    name: e?[index].name,
+                                    radius: 31,
+                                    fontsize: 21,
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "${e?[index].name}",
+                                        style: const TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(
+                                        "${e?[index].email}",
+                                        style: const TextStyle(fontSize: 16),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ],
+                                  ),
+                                  if (e?[index].currentStatus ==
+                                      "Assigned") ...[
+                                    Container(
+                                      width: 100,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: Colors.cyan,
+                                      ),
+                                      child: Text(
+                                        e?[index].currentStatus,
+                                        style: const TextStyle(
+                                            fontSize: 14, color: Colors.black),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    )
+                                  ] else if (e?[index].currentStatus ==
+                                      "Captured") ...[
+                                    Container(
+                                      width: 100,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: Colors.yellow,
+                                      ),
+                                      child: Text(
+                                        e?[index].currentStatus,
+                                        style: const TextStyle(
+                                            fontSize: 14, color: Colors.black),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    )
+                                  ] else if (e?[index].currentStatus ==
+                                      "Passed") ...[
+                                    Container(
+                                      width: 100,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: Colors.green,
+                                      ),
+                                      child: Text(
+                                        e?[index].currentStatus,
+                                        style: const TextStyle(
+                                            fontSize: 14, color: Colors.black),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    )
+                                  ] else if (e?[index].currentStatus ==
+                                      "Failed") ...[
+                                    Container(
+                                      width: 100,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: Colors.red,
+                                      ),
+                                      child: Text(
+                                        e?[index].currentStatus,
+                                        style: const TextStyle(
+                                            fontSize: 14, color: Colors.black),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    )
+                                  ]
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    }
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ));
   }
 }
-

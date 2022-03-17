@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_profile_picture/flutter_profile_picture.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:insuranceprototype/Screens/AgentListScreen.dart';
 import 'package:insuranceprototype/Screens/AgentRegistrationScreen.dart';
 import 'package:insuranceprototype/Screens/Bucket.dart';
+import 'package:insuranceprototype/Screens/ClientListScreen.dart';
 import 'package:insuranceprototype/Screens/ClientRegistrationScreen.dart';
 import 'package:insuranceprototype/Screens/Dashboard.dart';
 import 'package:insuranceprototype/Screens/EventLogList.dart';
@@ -41,124 +44,178 @@ class _LandingScreenState extends State<LandingScreen> {
     _pageController.dispose();
     super.dispose();
   }
+
   bool homePop = false;
   int backCount = 0;
 
   Future<bool> showExitPopup() async {
     return await showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Exit App'),
-        content: const Text('Do you want to exit an App?'),
-        actions:[
-          ElevatedButton(
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(const Color(0xffbe61565)),
-            ),
-            onPressed: () => Navigator.of(context).pop(false),
-            child:const Text('No'),
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Exit App'),
+            content: const Text('Do you want to exit an App?'),
+            actions: [
+              ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all(const Color(0xffbe61565)),
+                ),
+                onPressed: () => Navigator.of(context).pop(false),
+                child: const Text('No'),
+              ),
+              ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all(const Color(0xffbe61565)),
+                ),
+                onPressed: () => Navigator.of(context).pop(true),
+                child: const Text('Yes'),
+              ),
+            ],
           ),
-
-          ElevatedButton(
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(const Color(0xffbe61565)),
-            ),
-            onPressed: () => Navigator.of(context).pop(true),
-            child:const Text('Yes'),
-          ),
-
-        ],
-      ),
-    )??false;
+        ) ??
+        false;
   }
-
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop:showExitPopup,
+      onWillPop: showExitPopup,
       child: Scaffold(
         key: scaffoldKey,
         drawer: Drawer(
           child: SafeArea(
-            child: Column(
-              children: [
-                InkWell(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        PageTransition(
-                            type: PageTransitionType.leftToRight,
-                            child: EventLogList(id: int.parse(widget.id))));
-                  },
-                  child: SizedBox(
-                    height: 70,
-                    child: Card(
-                      child: Center(
-                        child: Row(
-                          children: const [
-                            Icon(Icons.info_outline_rounded),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text("Event Logs"),
-                          ],
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          PageTransition(
+                              type: PageTransitionType.leftToRight,
+                              child: EventLogList(id: int.parse(widget.id))));
+                    },
+                    child: SizedBox(
+                      height: 70,
+                      child: Card(
+                        child: Center(
+                          child: Row(
+                            children: const [
+                              Icon(Icons.info_outline_rounded),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text("Event Logs"),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                InkWell(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        PageTransition(
-                            type: PageTransitionType.rightToLeft,
-                            child: const ClientRegistrationScreen()));
-                  },
-                  child: SizedBox(
-                    height: 70,
-                    child: Card(
-                      child: Center(
-                        child: Row(
-                          children: const [
-                            Icon(Icons.info_outline_rounded),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text("Client Registration"),
-                          ],
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          PageTransition(
+                              type: PageTransitionType.rightToLeft,
+                              child: const ClientRegistrationScreen()));
+                    },
+                    child: SizedBox(
+                      height: 70,
+                      child: Card(
+                        child: Center(
+                          child: Row(
+                            children: const [
+                              Icon(Icons.info_outline_rounded),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text("Client Registration"),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                InkWell(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        PageTransition(
-                            type: PageTransitionType.rightToLeft,
-                            child: const AgentRegistrationScreen()));
-                  },
-                  child: SizedBox(
-                    height: 70,
-                    child: Card(
-                      child: Center(
-                        child: Row(
-                          children: const [
-                            Icon(Icons.people),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text("Agent Registration"),
-                          ],
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          PageTransition(
+                              type: PageTransitionType.rightToLeft,
+                              child: const ClientListScreen()));
+                    },
+                    child: SizedBox(
+                      height: 70,
+                      child: Card(
+                        child: Center(
+                          child: Row(
+                            children: const [
+                              Icon(Icons.people),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text("Client List"),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          PageTransition(
+                              type: PageTransitionType.rightToLeft,
+                              child: const AgentRegistrationScreen()));
+                    },
+                    child: SizedBox(
+                      height: 70,
+                      child: Card(
+                        child: Center(
+                          child: Row(
+                            children: const [
+                              Icon(Icons.people),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text("Agent Registration"),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          PageTransition(
+                              type: PageTransitionType.rightToLeft,
+                              child: const AgentListScreen()));
+                    },
+                    child: SizedBox(
+                      height: 70,
+                      child: Card(
+                        child: Center(
+                          child: Row(
+                            children: const [
+                              Icon(Icons.people),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text("Agent List"),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -168,34 +225,35 @@ class _LandingScreenState extends State<LandingScreen> {
           child: Column(
             children: [
               Container(
-                color: (Theme.of(context).brightness == Brightness.dark)
-                    ? Colors.black
-                    : Colors.white,
-                child: ListTile(
-                  leading: IconButton(
-                      onPressed: () {
-                        scaffoldKey.currentState?.openDrawer();
-                      },
-                      icon: Icon(
-                        Icons.menu,
-                        color: (Theme.of(context).brightness == Brightness.dark)
-                            ? Colors.white
-                            : Colors.black,
-                      )),
-                  title: Padding(
-                    padding: const EdgeInsets.fromLTRB(90,0,0,0),
-                    child: Text(
-                      "Management",
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: (Theme.of(context).brightness == Brightness.dark)
-                              ? Colors.white
-                              : Colors.black),
+                  color: (Theme.of(context).brightness == Brightness.dark)
+                      ? Colors.black
+                      : Colors.white,
+                  child: ListTile(
+                    leading: IconButton(
+                        onPressed: () {
+                          scaffoldKey.currentState?.openDrawer();
+                        },
+                        icon: Icon(
+                          Icons.menu,
+                          color:
+                              (Theme.of(context).brightness == Brightness.dark)
+                                  ? Colors.white
+                                  : Colors.black,
+                        )),
+                    title: Padding(
+                      padding: const EdgeInsets.fromLTRB(90, 0, 0, 0),
+                      child: Text(
+                        "Management",
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: (Theme.of(context).brightness ==
+                                    Brightness.dark)
+                                ? Colors.white
+                                : Colors.black),
+                      ),
                     ),
-                  ),
-                )
-              ),
+                  )),
               Expanded(
                   child: PageView(
                 children: tabPages,
