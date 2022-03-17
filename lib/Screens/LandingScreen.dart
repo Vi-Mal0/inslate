@@ -1,8 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:insuranceprototype/Screens/AgentRegistrationScreen.dart';
 import 'package:insuranceprototype/Screens/Bucket.dart';
+import 'package:insuranceprototype/Screens/ClientRegistrationScreen.dart';
 import 'package:insuranceprototype/Screens/Dashboard.dart';
+import 'package:insuranceprototype/Screens/EventLogList.dart';
 import 'package:insuranceprototype/Screens/RegistrationScreen.dart';
+import 'package:page_transition/page_transition.dart';
 
 import 'CandidateList.dart';
 
@@ -36,85 +41,138 @@ class _LandingScreenState extends State<LandingScreen> {
     _pageController.dispose();
     super.dispose();
   }
+  bool homePop = false;
+  int backCount = 0;
 
-  void refreshData() {}
+  Future<bool> showExitPopup() async {
+    return await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Exit App'),
+        content: const Text('Do you want to exit an App?'),
+        actions:[
+          ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(const Color(0xffbe61565)),
+            ),
+            onPressed: () => Navigator.of(context).pop(false),
+            child:const Text('No'),
+          ),
 
-  onGoBack(dynamic value) {
-    refreshData();
-    setState(() {});
+          ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(const Color(0xffbe61565)),
+            ),
+            onPressed: () => Navigator.of(context).pop(true),
+            child:const Text('Yes'),
+          ),
+
+        ],
+      ),
+    )??false;
   }
 
-  void navigateCandidateList() {
-    Route route = MaterialPageRoute(builder: (context) => CandidateList());
-    Navigator.push(context, route).then(onGoBack);
-  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: scaffoldKey,
-      drawer: Drawer(
-        child: Stack(
-          children: <Widget>[
-            Container(
-              height: 200,
-              child: DrawerHeader(
-                child: Row(
-                  children: const [
-                    CircleAvatar(),
-                    Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text("User Name"),
-                    )
-                  ],
-                ),
-              ),
-            ),
-            Positioned(
-              top: MediaQuery.of(context).size.height * 0.21,
-              child: FlatButton(
-                  onPressed: () {
+    return WillPopScope(
+      onWillPop:showExitPopup,
+      child: Scaffold(
+        key: scaffoldKey,
+        drawer: Drawer(
+          child: SafeArea(
+            child: Column(
+              children: [
+                InkWell(
+                  onTap: () {
                     Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => const RegistrationScreen()));
+                        PageTransition(
+                            type: PageTransitionType.leftToRight,
+                            child: EventLogList(id: int.parse(widget.id))));
                   },
-                  child: const Text("RegistrationScreen")),
-            ),
-            Expanded(
-                child: Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                height: MediaQuery.of(context).size.height * 0.04,
-                width: MediaQuery.of(context).size.width,
-                child: const Center(
-                  child: Text(
-                    '2022 (c) FuturaInsTech.com',
-                    style: TextStyle(
-                      fontFamily: 'Avenir',
-                      fontSize: 16,
+                  child: SizedBox(
+                    height: 70,
+                    child: Card(
+                      child: Center(
+                        child: Row(
+                          children: const [
+                            Icon(Icons.info_outline_rounded),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text("Event Logs"),
+                          ],
+                        ),
+                      ),
                     ),
-                    textAlign: TextAlign.center,
                   ),
                 ),
-              ),
-            ))
-          ],
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        PageTransition(
+                            type: PageTransitionType.rightToLeft,
+                            child: const ClientRegistrationScreen()));
+                  },
+                  child: SizedBox(
+                    height: 70,
+                    child: Card(
+                      child: Center(
+                        child: Row(
+                          children: const [
+                            Icon(Icons.info_outline_rounded),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text("Client Registration"),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        PageTransition(
+                            type: PageTransitionType.rightToLeft,
+                            child: const AgentRegistrationScreen()));
+                  },
+                  child: SizedBox(
+                    height: 70,
+                    child: Card(
+                      child: Center(
+                        child: Row(
+                          children: const [
+                            Icon(Icons.people),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text("Agent Registration"),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
-      ),
-      body: Padding(
-        padding: EdgeInsets.fromLTRB(
-            0, MediaQuery.of(context).size.height * 0.03, 0, 0),
-        child: Column(
-          children: [
-            Container(
-              color: (Theme.of(context).brightness == Brightness.dark)
-                  ? Colors.black
-                  : Colors.white,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton(
+        body: Padding(
+          padding: EdgeInsets.fromLTRB(
+              0, MediaQuery.of(context).size.height * 0.03, 0, 0),
+          child: Column(
+            children: [
+              Container(
+                color: (Theme.of(context).brightness == Brightness.dark)
+                    ? Colors.black
+                    : Colors.white,
+                child: ListTile(
+                  leading: IconButton(
                       onPressed: () {
                         scaffoldKey.currentState?.openDrawer();
                       },
@@ -124,101 +182,58 @@ class _LandingScreenState extends State<LandingScreen> {
                             ? Colors.white
                             : Colors.black,
                       )),
-                  Text(
-                    "management",
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: (Theme.of(context).brightness == Brightness.dark)
-                            ? Colors.white
-                            : Colors.black),
+                  title: Padding(
+                    padding: const EdgeInsets.fromLTRB(90,0,0,0),
+                    child: Text(
+                      "Management",
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: (Theme.of(context).brightness == Brightness.dark)
+                              ? Colors.white
+                              : Colors.black),
+                    ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      PopupMenuButton(
-                        color: (Theme.of(context) == Brightness.dark)
-                            ? Colors.white
-                            : Colors.black,
-                        itemBuilder: (context) => [
-                          PopupMenuItem<int>(
-                            value: 0,
-                            child: SizedBox(
-                                width: 100,
-                                child: Text(
-                                  "Setting ",
-                                  style: TextStyle(
-                                      color:
-                                          (Theme.of(context) == Brightness.dark)
-                                              ? Colors.white
-                                              : Colors.black),
-                                )),
-                          ),
-                          PopupMenuItem<int>(
-                            value: 1,
-                            child: SizedBox(
-                                width: 100,
-                                child: Text(
-                                  "About ",
-                                  style: TextStyle(
-                                      color:
-                                          (Theme.of(context) == Brightness.dark)
-                                              ? Colors.white
-                                              : Colors.black),
-                                )),
-                          ),
-                          PopupMenuItem<int>(
-                            value: 2,
-                            child: SizedBox(
-                                width: 100,
-                                child: Text(
-                                  "Exit ",
-                                  style: TextStyle(
-                                      color:
-                                          (Theme.of(context) == Brightness.dark)
-                                              ? Colors.white
-                                              : Colors.black),
-                                )),
-                          ),
-                        ],
-                        onSelected: (item) => {print(item)},
-                      ),
-                    ],
-                  )
-                ],
+                )
               ),
-            ),
-            Expanded(
-                child: PageView(
-              children: tabPages,
-              onPageChanged: onPageChanged,
-              controller: _pageController,
-            ))
+              Expanded(
+                  child: PageView(
+                children: tabPages,
+                onPageChanged: onPageChanged,
+                controller: _pageController,
+              ))
+            ],
+          ),
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          fixedColor: const Color(0xffbe61565),
+          elevation: 0,
+          currentIndex: _pageIndex,
+          onTap: onTabTapped,
+          backgroundColor: (Theme.of(context).brightness == Brightness.dark)
+              ? Colors.black
+              : Colors.white,
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+                icon: Icon(Icons.home_outlined), label: "Home"),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.stay_current_portrait_sharp), label: "Bucket"),
           ],
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        fixedColor: const Color(0xffbe61565),
-        elevation: 0,
-        currentIndex: _pageIndex,
-        onTap: onTabTapped,
-        backgroundColor: (Theme.of(context).brightness == Brightness.dark)
-            ? Colors.black
-            : Colors.white,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-              icon: Icon(Icons.home_outlined), label: "Home"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.stay_current_portrait_sharp), label: "Bucket"),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: const Color(0xffbe61565),
-        onPressed: () {
-          navigateCandidateList();
-        },
-        child: Icon(Icons.list_alt),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: const Color(0xffbe61565),
+          onPressed: () {
+            Navigator.push(
+                    context,
+                    PageTransition(
+                        type: PageTransitionType.bottomToTop,
+                        child: const CandidateList()))
+                .then((value) {
+              setState(() {});
+            });
+          },
+          child: Icon(Icons.list_alt),
+        ),
       ),
     );
   }

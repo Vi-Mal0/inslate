@@ -1,14 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class AddressRegstrationScreen extends StatefulWidget {
-  const AddressRegstrationScreen({Key? key}) : super(key: key);
+class AddressRegistrationScreen extends StatefulWidget {
+  const AddressRegistrationScreen({Key? key}) : super(key: key);
 
   @override
-  State<AddressRegstrationScreen> createState() => _AddressRegstrationScreenState();
+  State<AddressRegistrationScreen> createState() => _AddressRegistrationScreenState();
 }
 
-class _AddressRegstrationScreenState extends State<AddressRegstrationScreen> {
+class _AddressRegistrationScreenState extends State<AddressRegistrationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

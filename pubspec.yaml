@@ -54,6 +54,7 @@ dependencies:
   get: ^4.6.1
   auto_reload: ^1.0.1
   file_picker:
+  flutter_slidable:
 
 dev_dependencies:
   flutter_test:

@@ -18,33 +18,20 @@ class CandidateList extends StatefulWidget {
 }
 
 class _CandidateListState extends State<CandidateList> {
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  void refreshData() {}
-
-  onGoBack(dynamic value) {
-    refreshData();
-    setState(() {});
-  }
-
-  void navigateSecondPage(id) {
-    Navigator.push(
-            context,
-            PageTransition(
-                type: PageTransitionType.rightToLeft,
-                child: CandidateProfile(id)))
-        .then(onGoBack);
-  }
-
   HttpService http = HttpService();
   List<Candidate> all = [];
   TextEditingController controller = TextEditingController();
   bool isSearch = false;
   final List<Candidate> _SearchResult = [];
+
+  navigatorPush(id) {
+    Navigator.push(
+            context,
+            PageTransition(
+                type: PageTransitionType.rightToLeft,
+                child: CandidateProfile(id)))
+        .then((_) => _refreshData());
+  }
 
   onSearchTextChanged(String text) async {
     if (text.isNotEmpty) {
@@ -60,9 +47,15 @@ class _CandidateListState extends State<CandidateList> {
     }
   }
 
+  Future<void> _refreshData() async {
+    setState(() {
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Column(
         children: [
           SizedBox(
@@ -77,7 +70,7 @@ class _CandidateListState extends State<CandidateList> {
                     Navigator.pop(context);
                   },
                   icon: const Icon(
-                    Icons.arrow_back,
+                    Icons.arrow_downward_rounded,
                   ),
                 ),
                 Expanded(
@@ -148,7 +141,7 @@ class _CandidateListState extends State<CandidateList> {
                     itemBuilder: (context, index) {
                       return InkWell(
                         onTap: () {
-                          navigateSecondPage(e?[index].id);
+                          navigatorPush(e?[index].id);
                         },
                         child: SizedBox(
                           height: 100,

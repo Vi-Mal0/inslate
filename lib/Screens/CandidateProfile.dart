@@ -7,7 +7,6 @@ import 'package:insuranceprototype/Model/Employee.dart';
 import '../Model/Candidate.dart';
 
 class CandidateProfile extends StatefulWidget {
-
   int id;
   CandidateProfile(this.id, {Key? key}) : super(key: key);
 
@@ -17,18 +16,17 @@ class CandidateProfile extends StatefulWidget {
 
 class _CandidateProfileState extends State<CandidateProfile> {
   HttpService http = HttpService();
-  TextEditingController empctl =TextEditingController();
+  TextEditingController empctl = TextEditingController();
   var empselected;
   List<Employee> emplist = [];
 
   @override
   Widget build(BuildContext context) {
-
     http.getEmployee().then((value) {
-        emplist = value;
+      emplist = value;
     });
 
-    _showMyDialog()  {
+    _showMyDialog() {
       return showDialog<void>(
         context: context,
         barrierDismissible: false, // user must tap button!
@@ -48,7 +46,7 @@ class _CandidateProfileState extends State<CandidateProfile> {
                     ),
                     isExpanded: true,
                     hint: const Text(
-                      'Select Your proof',
+                      'Assign the interviewer',
                       style: TextStyle(fontSize: 14),
                     ),
                     icon: const Icon(
@@ -62,23 +60,22 @@ class _CandidateProfileState extends State<CandidateProfile> {
                       borderRadius: BorderRadius.circular(15),
                     ),
                     items: emplist
-                        .map((item) =>
-                        DropdownMenuItem<String>(
-                          value: item.id.toString(),
-                          child: Text(
-                            item.employeeName!,
-                            style: const TextStyle(
-                              fontSize: 14,
-                            ),
-                          ),
-                        ))
+                        .map((item) => DropdownMenuItem<String>(
+                              value: item.id.toString(),
+                              child: Text(
+                                item.employeeName!,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ))
                         .toList(),
                     onChanged: (value) {
                       setState(() {
                         empselected = value.toString();
                       });
                     },
-                    onSaved: (value){
+                    onSaved: (value) {
                       setState(() {
                         empselected = value;
                       });
@@ -92,7 +89,8 @@ class _CandidateProfileState extends State<CandidateProfile> {
                 child: const Text('Approve'),
                 onPressed: () {
                   Navigator.of(context).pop();
-                  http.updateCandidate(widget.id.toString(),Candidate(employee:empselected));
+                  http.updateCandidate(
+                      widget.id.toString(), Candidate(employee: empselected));
                 },
               ),
             ],
@@ -101,53 +99,117 @@ class _CandidateProfileState extends State<CandidateProfile> {
       );
     }
 
-    return SafeArea(
-        child: Scaffold(
-          body: FutureBuilder(
+    return Scaffold(
+        backgroundColor: Colors.white,
+        body: SafeArea(
+          child: FutureBuilder(
             future: http.getCandidateByID(widget.id.toString()),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
-              if(snapshot.hasData){
+              if (snapshot.hasData) {
                 return Column(
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        IconButton(onPressed: (){
+                    ListTile(
+                      leading: IconButton(
+                        onPressed: () {
                           Navigator.pop(context);
-                        },icon: const Icon(Icons.arrow_back),),
-                        IconButton(onPressed: (){
+                        },
+                        icon: const Icon(Icons.arrow_back),
+                      ),
+                      trailing: IconButton(
+                        onPressed: () {
                           _showMyDialog();
-                        },icon: const Icon(Icons.add),)
-                      ],
+                        },
+                        icon: const Icon(Icons.add),
+                      ),
+                      title: Center(
+                        child: const Text("Candidate Profile"),
+                      ),
                     ),
-                    const SizedBox(height: 20,),
-                    Text(snapshot.data.name),
-                    Text(snapshot.data.mobileNumber),
-                    Text(snapshot.data.email),
-                    Text(snapshot.data.dateOfBirth),
-                    Text(snapshot.data.highestQualification),
-                    Text(snapshot.data.proof),
-                    Text(snapshot.data.proofId),
-                    Text(snapshot.data.communication),
-                    Text(snapshot.data.availableDateAndTime),
-                    Text(snapshot.data.currentStatus),
+                    Expanded(
+                        child: ListView(
+                      children: [
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Center(
+                          child: CircleAvatar(
+                            radius: 45,
+                            backgroundColor: Colors.grey[200],
+                            child: const Text(";)"),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Center(
+                          child: Text(
+                            snapshot.data.name,
+                            style:
+                                const TextStyle(fontSize: 24, letterSpacing: 2),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Row(children: [
+                          Icon(Icons.email_outlined),
+                          Text(" : "),
+                          Text(snapshot.data.email),
+                        ]),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Row(children: [
+                          Icon(Icons.phone),
+                          Text(" : "),
+                          Text(snapshot.data.mobileNumber),
+                        ]),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text("Birthdate : ${snapshot.data.dateOfBirth}"),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                            "Qualification : ${snapshot.data.highestQualification}"),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text("Proof : ${snapshot.data.proof}"),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text("Proofnumber : ${snapshot.data.proofId}"),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                            "Preffered mode for communication : ${snapshot.data.communication}"),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                            "Available date and time : ${snapshot.data.availableDateAndTime}"),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text("Crrentstatus : ${snapshot.data.currentStatus}"),
+                      ],
+                    ))
                   ],
                 );
-              }
-              else if(snapshot.hasError){
-                return const Center(child: Icon(Icons.error),);
-              }else{
+              } else if (snapshot.hasError) {
+                return const Center(
+                  child: Icon(Icons.error),
+                );
+              } else {
                 return const Center(
                   child: CircularProgressIndicator(),
                 );
               }
             },
           ),
-        )
-    );
+        ));
   }
 }
-
-
-
-

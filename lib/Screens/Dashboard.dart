@@ -1,11 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/physics.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_profile_picture/flutter_profile_picture.dart';
 import 'package:insuranceprototype/HTTP/HttpService.dart';
 import 'package:insuranceprototype/Model/Candidate.dart';
+import 'package:insuranceprototype/Screens/TodaysInterview.dart';
+import 'package:insuranceprototype/Screens/UpcomingInterview.dart';
 import 'package:intl/intl.dart';
+import 'package:page_transition/page_transition.dart';
 
 class Dashboard extends StatefulWidget {
   String id;
@@ -27,7 +29,9 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black : Colors.white,
+      color: (Theme.of(context).brightness == Brightness.dark)
+          ? Colors.black
+          : Colors.white,
       child: FutureBuilder(
         future: http.getEmployeeByID(widget.id),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -50,285 +54,351 @@ class _DashboardState extends State<Dashboard> {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  height: 200,
-                  child: Card(
-                    color: const Color(0xffbe61565),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
-                    elevation: 10,
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: ProfilePicture(
-                                name: snapshot.data.employeeName,
-                                radius: 31,
-                                fontsize: 35,
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        snapshot.data.employeeName.toString(),
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 20),
-                                      ),
-                                      const SizedBox(
-                                        width: 130,
-                                      ),
-                                      Text(
-                                        "Date : ${DateFormat.yMMMMd('en_US').format(now)}",
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.w300),
-                                      )
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  Text(
-                                    snapshot.data.employeeDesignation,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                          child: Divider(
-                            color: Colors.black45,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(25, 10, 25, 0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(15,0,10,0),
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: 200,
+                    child: Card(
+                      color: const Color(0xffbe61565),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                      elevation: 10,
+                      child: Column(
+                        children: [
+                          Row(
                             children: [
-                              Column(
-                                children: [
-                                  SizedBox(
-                                    height: 50,
-                                    width: 50,
-                                    child: Neumorphic(
-                                      style: NeumorphicStyle(
-                                          border: const NeumorphicBorder(
-                                            isEnabled: true,
-                                            color: Color(0x33000000),
-                                            width: 0.8,
-                                          ),
-                                          shape: NeumorphicShape.flat,
-                                          lightSource: LightSource.top,
-                                          color:(Theme.of(context).brightness == Brightness.dark) ? Colors.black : Colors.white,
-          ),
-                                      child: Center(
-                                          child: Text(
-                                        snapshot.data.assignedCandidates.length
-                                            .toString(),
-                                        style: TextStyle(
-                                            color: (Theme.of(context).brightness == Brightness.dark) ? Colors.white : Colors.black,
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.bold),
-                                      )),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  Text(
-                                    "BUCKET",
-                                    style: TextStyle(
-                                      color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black : Colors.white,
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.w400),
-                                  )
-                                ],
+                              Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: ProfilePicture(
+                                  name: snapshot.data.employeeName,
+                                  radius: 31,
+                                  fontsize: 35,
+                                ),
                               ),
-                              Column(
-                                children: [
-                                  SizedBox(
-                                    height: 50,
-                                    width: 50,
-                                    child: Neumorphic(
-                                      style: NeumorphicStyle(
-                                          border: const NeumorphicBorder(
-                                            isEnabled: true,
-                                            color: Color(0x33000000),
-                                            width: 0.8,
-                                          ),
-                                          shape: NeumorphicShape.flat,
-                                          lightSource: LightSource.top,
-                                          color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black : Colors.white),
-                                      child: Center(
-                                          child: Text(
-                                        "10",
-                                        style: TextStyle(
-                                            color: (Theme.of(context).brightness == Brightness.dark) ? Colors.white : Colors.black,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 15),
-                                      )),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text(
+                                          snapshot.data.employeeName.toString(),
+                                          style: const TextStyle(
+                                            letterSpacing: 1,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 20),
+                                        ),
+                                        const SizedBox(
+                                          width: 100,
+                                        ),
+                                        Text(
+                                          "Date : ${DateFormat.yMMMMd('en_US').format(now)}",
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                              fontWeight: FontWeight.w300),
+                                        )
+                                      ],
                                     ),
-                                  ),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  Text(
-                                    "PASSED",
-                                    style:  TextStyle(
-                                        color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black : Colors.white,
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.w400),
-                                  )
-                                ],
-                              ),
-                              Column(
-                                children: [
-                                  Container(
-                                    height: 50,
-                                    width: 50,
-                                    child: Neumorphic(
-                                      style:  NeumorphicStyle(
-                                          border: const NeumorphicBorder(
-                                            isEnabled: true,
-                                            color: Color(0x33000000),
-                                            width: 0.8,
-                                          ),
-                                          shape: NeumorphicShape.flat,
-                                          lightSource: LightSource.top,
-                                          color:(Theme.of(context).brightness == Brightness.dark) ? Colors.black : Colors.white),
-                                      child: Center(
-                                          child: Text(
-                                        "3",
-                                        style: TextStyle(
-                                            color: (Theme.of(context).brightness == Brightness.dark) ? Colors.white : Colors.black,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 15),
-                                      )),
+                                    const SizedBox(
+                                      height: 5,
                                     ),
-                                  ),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
-                                  Text(
-                                    "FAILED",
-                                    style: TextStyle(
-                                        color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black : Colors.white,
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.w400),
-                                  )
-                                ],
-                              ),
-                              Column(
-                                children: [
-                                  Container(
-                                    height: 50,
-                                    width: 50,
-                                    child: Neumorphic(
-                                      style:  NeumorphicStyle(
-                                          border: const NeumorphicBorder(
-                                            isEnabled: true,
-                                            color: Color(0x33000000),
-                                            width: 0.8,
-                                          ),
-                                          shape: NeumorphicShape.flat,
-                                          lightSource: LightSource.top,
-                                          color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black : Colors.white),
-                                      child: Center(
-                                          child: Text(
-                                        "0",
-                                        style: TextStyle(
-                                            color: (Theme.of(context).brightness == Brightness.dark) ? Colors.white : Colors.black,
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.bold),
-                                      )),
+                                    Text(
+                                      snapshot.data.employeeDesignation,
                                     ),
-                                  ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                   Text(
-                                    "HOLD",
-                                    style: TextStyle(
-                                        color: (Theme.of(context).brightness == Brightness.dark) ? Colors.black : Colors.white,
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.w400),
-                                  )
-                                ],
+                                  ],
+                                ),
                               ),
                             ],
                           ),
-                        )
-                      ],
+                          const Padding(
+                            padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                            child: Divider(
+                              color: Colors.black45,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(25, 10, 25, 0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  children: [
+                                    SizedBox(
+                                      height: 50,
+                                      width: 50,
+                                      child: Neumorphic(
+                                        style: NeumorphicStyle(
+                                          border: const NeumorphicBorder(
+                                            isEnabled: true,
+                                            color: Color(0x33000000),
+                                            width: 0.8,
+                                          ),
+                                          shape: NeumorphicShape.flat,
+                                          lightSource: LightSource.top,
+                                          color: (Theme.of(context).brightness ==
+                                                  Brightness.dark)
+                                              ? Colors.black
+                                              : Colors.white,
+                                        ),
+                                        child: Center(
+                                            child: Text(
+                                          snapshot.data.assignedCandidates.length
+                                              .toString(),
+                                          style: TextStyle(
+                                              color:
+                                                  (Theme.of(context).brightness ==
+                                                          Brightness.dark)
+                                                      ? Colors.white
+                                                      : Colors.black,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold),
+                                        )),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      "BUCKET",
+                                      style: TextStyle(
+                                          color: (Theme.of(context).brightness ==
+                                                  Brightness.dark)
+                                              ? Colors.black
+                                              : Colors.white,
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w400),
+                                    )
+                                  ],
+                                ),
+                                Column(
+                                  children: [
+                                    SizedBox(
+                                      height: 50,
+                                      width: 50,
+                                      child: Neumorphic(
+                                        style: NeumorphicStyle(
+                                            border: const NeumorphicBorder(
+                                              isEnabled: true,
+                                              color: Color(0x33000000),
+                                              width: 0.8,
+                                            ),
+                                            shape: NeumorphicShape.flat,
+                                            lightSource: LightSource.top,
+                                            color:
+                                                (Theme.of(context).brightness ==
+                                                        Brightness.dark)
+                                                    ? Colors.black
+                                                    : Colors.white),
+                                        child: Center(
+                                            child: Text("3",
+                                          style: TextStyle(
+                                              color:
+                                                  (Theme.of(context).brightness ==
+                                                          Brightness.dark)
+                                                      ? Colors.white
+                                                      : Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 15),
+                                        )),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      "PASSED",
+                                      style: TextStyle(
+                                          color: (Theme.of(context).brightness ==
+                                                  Brightness.dark)
+                                              ? Colors.black
+                                              : Colors.white,
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w400),
+                                    )
+                                  ],
+                                ),
+                                Column(
+                                  children: [
+                                    SizedBox(
+                                      height: 50,
+                                      width: 50,
+                                      child: Neumorphic(
+                                        style: NeumorphicStyle(
+                                            border: const NeumorphicBorder(
+                                              isEnabled: true,
+                                              color: Color(0x33000000),
+                                              width: 0.8,
+                                            ),
+                                            shape: NeumorphicShape.flat,
+                                            lightSource: LightSource.top,
+                                            color:
+                                                (Theme.of(context).brightness ==
+                                                        Brightness.dark)
+                                                    ? Colors.black
+                                                    : Colors.white),
+                                        child: Center(
+                                            child: Text(
+                                          "3",
+                                          style: TextStyle(
+                                              color:
+                                                  (Theme.of(context).brightness ==
+                                                          Brightness.dark)
+                                                      ? Colors.white
+                                                      : Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 15),
+                                        )),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      "FAILED",
+                                      style: TextStyle(
+                                          color: (Theme.of(context).brightness ==
+                                                  Brightness.dark)
+                                              ? Colors.black
+                                              : Colors.white,
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w400),
+                                    )
+                                  ],
+                                ),
+                                Column(
+                                  children: [
+                                    SizedBox(
+                                      height: 50,
+                                      width: 50,
+                                      child: Neumorphic(
+                                        style: NeumorphicStyle(
+                                            border: const NeumorphicBorder(
+                                              isEnabled: true,
+                                              color: Color(0x33000000),
+                                              width: 0.8,
+                                            ),
+                                            shape: NeumorphicShape.flat,
+                                            lightSource: LightSource.top,
+                                            color:
+                                                (Theme.of(context).brightness ==
+                                                        Brightness.dark)
+                                                    ? Colors.black
+                                                    : Colors.white),
+                                        child: Center(
+                                            child: Text(
+                                          "0",
+                                          style: TextStyle(
+                                              color:
+                                                  (Theme.of(context).brightness ==
+                                                          Brightness.dark)
+                                                      ? Colors.white
+                                                      : Colors.black,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold),
+                                        )),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      "HOLD",
+                                      style: TextStyle(
+                                          color: (Theme.of(context).brightness ==
+                                                  Brightness.dark)
+                                              ? Colors.black
+                                              : Colors.white,
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w400),
+                                    )
+                                  ],
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),
                 const SizedBox(
                   height: 10,
                 ),
-                const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text(
-                    "Today's Interview",
-                    style: TextStyle(fontSize: 24),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ListTile(
+                    leading: const Text(
+                      "Today's Interview",
+                      style: TextStyle(fontSize: 24),
+                    ),
+                    trailing: TextButton(onPressed: (){
+                      Navigator.push(
+                          context,
+                          PageTransition(
+                              type: PageTransitionType.rightToLeft,
+                              child: Todaysinterview(id: int.parse(widget.id),)));
+                    }, child: const Text("See All")),
+
                   ),
                 ),
-                Visibility(
-                    visible: todaytask,
-                    child: SizedBox(
-                      height: 8,
-                    )),
                 if (todays.isNotEmpty)
-                  SizedBox(
-                    height: 150,
-                    width: MediaQuery.of(context).size.width,
-                    child: ListView.builder(
-                      itemCount: todays.length,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) {
-                        return SizedBox(
-                          height: 150,
-                          width: 200,
-                          child: Card(
-                            elevation: 3,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(todays[index].id.toString()),
-                                Text(todays[index].name.toString()),
-                                Text(todays[index]
-                                    .highestQualification
-                                    .toString()),
-                              ],
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(15,0,10,0),
+                    child: SizedBox(
+                      height: 150,
+                      width: MediaQuery.of(context).size.width,
+                      child: ListView.builder(
+                        itemCount: todays.length,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          return SizedBox(
+                            height: 150,
+                            width: 200,
+                            child: Card(
+                              elevation: 3,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(todays[index].id.toString()),
+                                  Text(todays[index].name.toString()),
+                                  Text(todays[index]
+                                      .highestQualification
+                                      .toString()),
+                                ],
+                              ),
                             ),
-                          ),
-                        );
-                      },
+                          );
+                        },
+                      ),
                     ),
                   ),
                 const SizedBox(
                   height: 20,
                 ),
-                const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text(
-                    "Upcoming Interview",
-                    style: TextStyle(fontSize: 24),
-                  ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ListTile(
+                    leading: const Text(
+                      "Upcoming Interview",
+                      style: TextStyle(fontSize: 24),
+                    ),
+                    trailing: TextButton(onPressed: (){
+                      Navigator.push(
+                          context,
+                          PageTransition(
+                              type: PageTransitionType.rightToLeft,
+                              child: UpcomingInterview(id: int.parse(widget.id),)));
+                    }, child: const Text("See All")),
+
+                  )
                 ),
                 if (upcoming.isNotEmpty)
                   Expanded(
                     child: ListView.builder(
+                  padding: const EdgeInsets.only(top: 0.0),
                       itemCount: upcoming.length,
                       itemBuilder: (context, index) {
                         retColor() {
@@ -346,76 +416,81 @@ class _DashboardState extends State<Dashboard> {
                             return Colors.red;
                           }
                         }
-
                         return SizedBox(
                           height: 160,
                           width: 100,
-                          child: Card(
-                            elevation: 3,
-                            color: (Theme.of(context).brightness == Brightness.dark) ? Colors.grey[700] : Colors.white,
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text("name : ${upcoming[index].name}"),
-                                      Container(
-                                        width: 100,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          color: retColor(),
-                                        ),
-                                        child: Text(
-                                          upcoming[index].currentStatus,
-                                          style: const TextStyle(
-                                              fontSize: 14,
-                                              color: Colors.black),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    children: [
-                                      SizedBox(
-                                          width: 210,
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(15,0,10,0),
+                            child: Card(
+                              elevation: 3,
+                              color: (Theme.of(context).brightness ==
+                                      Brightness.dark)
+                                  ? Colors.grey[700]
+                                  : Colors.white,
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text("name : ${upcoming[index].name}"),
+                                        Container(
+                                          width: 100,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            color: retColor(),
+                                          ),
                                           child: Text(
-                                            "email : ${upcoming[index].email}",
-                                          )),
-                                      const SizedBox(
-                                        width: 50,
-                                      ),
-                                      Text(
-                                          "Phone : ${upcoming[index].mobileNumber}"),
-                                    ],
+                                            upcoming[index].currentStatus,
+                                            style: const TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.black),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                          "Qualification : ${upcoming[index].highestQualification}"),
-                                    ],
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Row(
+                                      children: [
+                                        SizedBox(
+                                            width: 210,
+                                            child: Text(
+                                              "email : ${upcoming[index].email}",
+                                            )),
+                                        const SizedBox(
+                                          width: 50,
+                                        ),
+                                        Text(
+                                            "Phone : ${upcoming[index].mobileNumber}"),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                          "Interview Schedule : ${upcoming[index].availableDateAndTime}"),
-                                    ],
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                            "Qualification : ${upcoming[index].highestQualification}"),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                            "Interview Schedule : ${upcoming[index].availableDateAndTime}"),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         );

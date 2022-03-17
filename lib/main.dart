@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:insuranceprototype/Screens/ClientRegistrationScreen.dart';
 import 'Screens/SplashScreen.dart';
 
 void main() {
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
       darkTheme: ThemeData.dark(), // standard dark theme
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
-      home: const SplashHome(),
+      home: SplashHome(),
     );
   }
 }
