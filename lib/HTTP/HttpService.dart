@@ -233,8 +233,9 @@ class HttpService {
         'givenName': client.givenName,
         'salutation': client.salutation,
         'gender': client.gender,
+        'addressid':client.addressid,
+        'bankId':client.bankId,
         'marritalStatus': client.marritalStatus,
-        'address': client.address,
         'mobileNumber': client.mobileNumber,
         'postalCode': client.postalCode,
         'country': client.country,
@@ -246,7 +247,6 @@ class HttpService {
         'language': client.language,
         'category': client.category,
         'occupation': client.occupation,
-        'bankAccount': client.bankAccount,
         'validFlag': client.validFlag,
         'proofList': client.proofList,
       }),
@@ -291,6 +291,7 @@ class HttpService {
   Future<List<Agent>> getAgent() async {
     Response res =
         await get(Uri.parse('http://192.168.0.104:8080/agent/getall'));
+    print(res.statusCode);
     if (res.statusCode == 200) {
       List<dynamic> body = jsonDecode(res.body);
       List<Agent> candidates =
@@ -307,7 +308,6 @@ class HttpService {
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode({
-        'id': agent.id,
         'client': agent.client,
         'dateAppointed': agent.dateAppointed,
         'exclusive': agent.exclusive,
@@ -328,8 +328,6 @@ class HttpService {
         'servicingCommission': agent.servicingCommission,
         'commissionClass': agent.commissionClass,
         'validFlag': agent.validFlag,
-        'createdDate': agent.createdDate,
-        'modifiedDate': agent.modifiedDate,
       }),
     );
     return Agent.fromJson(jsonDecode(response.body));
@@ -342,7 +340,6 @@ class HttpService {
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode({
-        'id': agent.id,
         'client': agent.client,
         'dateAppointed': agent.dateAppointed,
         'exclusive': agent.exclusive,
@@ -363,8 +360,6 @@ class HttpService {
         'servicingCommission': agent.servicingCommission,
         'commissionClass': agent.commissionClass,
         'validFlag': agent.validFlag,
-        'createdDate': agent.createdDate,
-        'modifiedDate': agent.modifiedDate,
       }),
     );
     return Agent.fromJson(jsonDecode(response.body));
@@ -391,13 +386,11 @@ class HttpService {
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode({
-        'id': proof.id,
         'proofName': proof.proofName,
         'proofID': proof.proofID,
         'proofPurpose': proof.proofPurpose,
         'proofFile': proof.proofFile,
-        'createdTime': proof.createdTime,
-        'modifiedTime': proof.modifiedTime,
+        'clientID': proof.clientID,
       }),
     );
     return Proof.fromJson(jsonDecode(response.body));
@@ -410,13 +403,11 @@ class HttpService {
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode({
-        'id': proof.id,
         'proofName': proof.proofName,
         'proofID': proof.proofID,
         'proofPurpose': proof.proofPurpose,
         'proofFile': proof.proofFile,
-        'createdTime': proof.createdTime,
-        'modifiedTime': proof.modifiedTime,
+        'clientID' : proof.clientID
       }),
     );
     return Proof.fromJson(jsonDecode(response.body));
@@ -443,7 +434,6 @@ class HttpService {
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode({
-        'id': address.id,
         'toAddress': address.toAddress,
         'addressLine1': address.addressLine1,
         'addressLine2': address.addressLine2,
@@ -453,9 +443,6 @@ class HttpService {
         'pincode': address.pincode,
         'addressType': address.addressType,
         'isPresentAddress': address.isPresentAddress,
-        'validFlag': address.validFlag,
-        'createdDate': address.createdDate,
-        'modifiedDate': address.modifiedDate,
       }),
     );
     return Address.fromJson(jsonDecode(response.body));
@@ -468,7 +455,6 @@ class HttpService {
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode({
-        'id': address.id,
         'toAddress': address.toAddress,
         'addressLine1': address.addressLine1,
         'addressLine2': address.addressLine2,
@@ -478,9 +464,6 @@ class HttpService {
         'pincode': address.pincode,
         'addressType': address.addressType,
         'isPresentAddress': address.isPresentAddress,
-        'validFlag': address.validFlag,
-        'createdDate': address.createdDate,
-        'modifiedDate': address.modifiedDate,
       }),
     );
     return Address.fromJson(jsonDecode(response.body));
@@ -507,15 +490,12 @@ class HttpService {
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode({
-        'id': bankAccount.id,
         'accountNumber': bankAccount.accountNumber,
         'accountHolderName': bankAccount.accountHolderName,
         'ifscCode': bankAccount.ifscCode,
         'bankName': bankAccount.bankName,
         'bankBranch': bankAccount.bankBranch,
         'isActive': bankAccount.isActive,
-        'createdDate': bankAccount.createdDate,
-        'modifiedDate': bankAccount.modifiedDate,
       }),
     );
     return BankAccount.fromJson(jsonDecode(response.body));
@@ -528,15 +508,11 @@ class HttpService {
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode({
-        'id': bankAccount.id,
         'accountNumber': bankAccount.accountNumber,
         'accountHolderName': bankAccount.accountHolderName,
         'ifscCode': bankAccount.ifscCode,
         'bankName': bankAccount.bankName,
         'bankBranch': bankAccount.bankBranch,
-        'isActive': bankAccount.isActive,
-        'createdDate': bankAccount.createdDate,
-        'modifiedDate': bankAccount.modifiedDate,
       }),
     );
     return BankAccount.fromJson(jsonDecode(response.body));

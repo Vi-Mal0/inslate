@@ -257,194 +257,197 @@ class _BucketState extends State<Bucket> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        color: (Theme.of(context).brightness == Brightness.dark)
-            ? Colors.black
-            : Colors.white,
-        child: FutureBuilder(
-          future: http.getEmployeeByID(widget.id.toString()),
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            if (snapshot.hasData) {
-              return Column(
-                children: [
-                  Expanded(
-                    child: ListView.builder(
-                        itemCount: snapshot.data.assignedCandidates.length,
-                        padding: const EdgeInsets.only(top: 0.0),
-                        itemBuilder: (context, index) {
-                          e = snapshot.data.assignedCandidates;
+      body: RefreshIndicator(
+        onRefresh: _refreshData,
+        child: Container(
+          color: (Theme.of(context).brightness == Brightness.dark)
+              ? Colors.black
+              : Colors.white,
+          child: FutureBuilder(
+            future: http.getEmployeeByID(widget.id.toString()),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.hasData) {
+                return Column(
+                  children: [
+                    Expanded(
+                      child: ListView.builder(
+                          itemCount: snapshot.data.assignedCandidates.length,
+                          padding: const EdgeInsets.only(top: 0.0),
+                          itemBuilder: (context, index) {
+                            e = snapshot.data.assignedCandidates;
 
-                          retColor() {
-                            var clr = snapshot
-                                .data.assignedCandidates[index].currentStatus;
-                            if (clr == "Assigned") return Colors.cyan;
-                            if (clr == "Captured") return Colors.yellow;
-                            if (clr == "Passed") return Colors.green;
-                            if (clr == "Failed") return Colors.red;
-                          }
+                            retColor() {
+                              var clr = snapshot
+                                  .data.assignedCandidates[index].currentStatus;
+                              if (clr == "Assigned") return Colors.cyan;
+                              if (clr == "Captured") return Colors.yellow;
+                              if (clr == "Passed") return Colors.green;
+                              if (clr == "Failed") return Colors.red;
+                            }
 
-                          return Slidable(
-                            key: UniqueKey(),
-                            endActionPane: ActionPane(
-                              dismissible: DismissiblePane(
-                                onDismissed: () {
-                                  _openBottomSheet(
-                                      snapshot.data.assignedCandidates[index]);
-
-                                  setState(() {
-                                    studid = snapshot
-                                        .data.assignedCandidates[index].id;
-                                    res = snapshot
-                                        .data.assignedCandidates[index].quants;
-                                  });
-                                },
-                              ),
-                              motion: const DrawerMotion(),
-                              children: [
-                                CustomSlidableAction(
-                                  onPressed: (_) {
-                                    _openBottomSheet(snapshot
-                                        .data.assignedCandidates[index]);
+                            return Slidable(
+                              key: UniqueKey(),
+                              endActionPane: ActionPane(
+                                dismissible: DismissiblePane(
+                                  onDismissed: () {
+                                    _openBottomSheet(
+                                        snapshot.data.assignedCandidates[index]);
 
                                     setState(() {
                                       studid = snapshot
                                           .data.assignedCandidates[index].id;
-                                      res = snapshot.data
-                                          .assignedCandidates[index].quants;
+                                      res = snapshot
+                                          .data.assignedCandidates[index].quants;
                                     });
                                   },
-                                  child: const SingleChildScrollView(
-                                    scrollDirection: Axis.horizontal,
-                                    child: SizedBox(
-                                      height: 150,
-                                      width: 200,
-                                      child: Card(
-                                          color: Color(0xffbe61565),
-                                          child: Center(
-                                            child: ListTile(
-                                              leading: Icon(
-                                                Icons.rate_review_rounded,
-                                                color: Colors.white,
-                                                size: 35,
+                                ),
+                                motion: const DrawerMotion(),
+                                children: [
+                                  CustomSlidableAction(
+                                    onPressed: (_) {
+                                      _openBottomSheet(snapshot
+                                          .data.assignedCandidates[index]);
+
+                                      setState(() {
+                                        studid = snapshot
+                                            .data.assignedCandidates[index].id;
+                                        res = snapshot.data
+                                            .assignedCandidates[index].quants;
+                                      });
+                                    },
+                                    child: const SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: SizedBox(
+                                        height: 150,
+                                        width: 200,
+                                        child: Card(
+                                            color: Color(0xffbe61565),
+                                            child: Center(
+                                              child: ListTile(
+                                                leading: Icon(
+                                                  Icons.rate_review_rounded,
+                                                  color: Colors.white,
+                                                  size: 35,
+                                                ),
+                                                title: Text(
+                                                  "Add Rating",
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 18),
+                                                ),
                                               ),
-                                              title: Text(
-                                                "Add Rating",
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 18),
-                                              ),
-                                            ),
-                                          )),
+                                            )),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
-                            child: GestureDetector(
-                              onTap: (){
-                                Navigator.push(
-                                    context,
-                                    PageTransition(
-                                        type: PageTransitionType.rightToLeft,
-                                        child: CandidateProfile(snapshot.data.assignedCandidates[index].id)));
-                              },
-                              child: Container(
-                                height: 120,
-                                padding: const EdgeInsets.fromLTRB(15, 0, 10, 0),
-                                child: Card(
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                ],
+                              ),
+                              child: GestureDetector(
+                                onTap: (){
+                                  Navigator.push(
+                                      context,
+                                      PageTransition(
+                                          type: PageTransitionType.rightToLeft,
+                                          child: CandidateProfile(snapshot.data.assignedCandidates[index].id)));
+                                },
+                                child: Container(
+                                  height: 120,
+                                  padding: const EdgeInsets.fromLTRB(15, 0, 10, 0),
+                                  child: Card(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                  "Name :  ${snapshot.data.assignedCandidates[index].name}"),
+                                              Container(
+                                                width: 100,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  color: retColor(),
+                                                ),
+                                                child: Text(
+                                                  e?[index].currentStatus,
+                                                  style: const TextStyle(
+                                                      fontSize: 14,
+                                                      color: Colors.black),
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Row(
                                           children: [
+                                            const Icon(Icons.email_outlined),
+                                            const SizedBox(
+                                              width: 2,
+                                            ),
                                             Text(
-                                                "Name :  ${snapshot.data.assignedCandidates[index].name}"),
-                                            Container(
-                                              width: 100,
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                color: retColor(),
-                                              ),
-                                              child: Text(
-                                                e?[index].currentStatus,
-                                                style: const TextStyle(
-                                                    fontSize: 14,
-                                                    color: Colors.black),
-                                                textAlign: TextAlign.center,
-                                              ),
+                                              "  ${snapshot.data.assignedCandidates[index].email}",
+                                              overflow: TextOverflow.ellipsis,
                                             ),
                                           ],
                                         ),
-                                      ),
-                                      Row(
-                                        children: [
-                                          const Icon(Icons.email_outlined),
-                                          const SizedBox(
-                                            width: 2,
-                                          ),
-                                          Text(
-                                            "  ${snapshot.data.assignedCandidates[index].email}",
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          const Icon(Icons.phone),
-                                          const SizedBox(
-                                            width: 5,
-                                          ),
-                                          Text(
-                                            "  ${snapshot.data.assignedCandidates[index].mobileNumber}",
-                                          ),
-                                        ],
-                                      ),
-                                      // Padding(
-                                      //   padding: const EdgeInsets.all(8.0),
-                                      //   child: Row(
-                                      //     children: [
-                                      //       Text(
-                                      //           "Qualification : ${snapshot.data.assignedCandidates[index].highestQualification}"),
-                                      //     ],
-                                      //   ),
-                                      // ),
-                                      // Padding(
-                                      //   padding: const EdgeInsets.all(8.0),
-                                      //   child: Row(
-                                      //     children: [
-                                      //       Text(
-                                      //           "Interview Schedule : ${snapshot.data.assignedCandidates[index].availableDateAndTime}"),
-                                      //     ],
-                                      //   ),
-                                      // ),
-                                    ],
+                                        Row(
+                                          children: [
+                                            const Icon(Icons.phone),
+                                            const SizedBox(
+                                              width: 5,
+                                            ),
+                                            Text(
+                                              "  ${snapshot.data.assignedCandidates[index].mobileNumber}",
+                                            ),
+                                          ],
+                                        ),
+                                        // Padding(
+                                        //   padding: const EdgeInsets.all(8.0),
+                                        //   child: Row(
+                                        //     children: [
+                                        //       Text(
+                                        //           "Qualification : ${snapshot.data.assignedCandidates[index].highestQualification}"),
+                                        //     ],
+                                        //   ),
+                                        // ),
+                                        // Padding(
+                                        //   padding: const EdgeInsets.all(8.0),
+                                        //   child: Row(
+                                        //     children: [
+                                        //       Text(
+                                        //           "Interview Schedule : ${snapshot.data.assignedCandidates[index].availableDateAndTime}"),
+                                        //     ],
+                                        //   ),
+                                        // ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          );
-                        }),
+                            );
+                          }),
+                    ),
+                  ],
+                );
+              } else if (snapshot.hasError) {
+                return const Center(
+                  child: Icon(Icons.error),
+                );
+              } else {
+                return const Center(
+                  child: CircularProgressIndicator(
+                    color: Color(0xffbe61565),
                   ),
-                ],
-              );
-            } else if (snapshot.hasError) {
-              return const Center(
-                child: Icon(Icons.error),
-              );
-            } else {
-              return const Center(
-                child: CircularProgressIndicator(
-                  color: Color(0xffbe61565),
-                ),
-              );
-            }
-          },
+                );
+              }
+            },
+          ),
         ),
       ),
     );

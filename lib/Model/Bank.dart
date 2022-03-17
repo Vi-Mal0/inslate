@@ -45,4 +45,9 @@ class BankAccount {
     data['modifiedDate'] = modifiedDate;
     return data;
   }
+
+  @override
+  String toString() {
+    return 'BankAccount{id: $id, accountNumber: $accountNumber, accountHolderName: $accountHolderName, ifscCode: $ifscCode, bankName: $bankName, bankBranch: $bankBranch, isActive: $isActive, createdDate: $createdDate, modifiedDate: $modifiedDate}';
+  }
 }

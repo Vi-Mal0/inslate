@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 import 'Address.dart';
 import 'Bank.dart';
 import 'Proof.dart';
@@ -21,6 +23,8 @@ class ClientData {
   String? language;
   String? category;
   String? occupation;
+  int? addressid;
+  int? bankId;
   BankAccount? bankAccount;
   int? validFlag;
   List<Proof>? proofList;
@@ -32,6 +36,8 @@ class ClientData {
         this.surName,
         this.givenName,
         this.salutation,
+        this.addressid,
+        this.bankId,
         this.gender,
         this.marritalStatus,
         this.address,
@@ -52,6 +58,11 @@ class ClientData {
         this.createdDate,
         this.modifiedDate});
 
+  @override
+  String toString() {
+    return 'ClientData{id: $id, surName: $surName, givenName: $givenName, salutation: $salutation, gender: $gender, marritalStatus: $marritalStatus, address: $address, mobileNumber: $mobileNumber, postalCode: $postalCode, country: $country, nationality: $nationality, nameFormat: $nameFormat, companyDoctor: $companyDoctor, birthDate: $birthDate, birthPlace: $birthPlace, language: $language, category: $category, occupation: $occupation, addressid: $addressid, bankId: $bankId, bankAccount: $bankAccount, validFlag: $validFlag, proofList: $proofList, createdDate: $createdDate, modifiedDate: $modifiedDate}';
+  }
+
   ClientData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     surName = json['surName'];
@@ -70,6 +81,8 @@ class ClientData {
     birthDate = json['birthDate'];
     birthPlace = json['birthPlace'];
     language = json['language'];
+    bankId = json['bankId'];
+    addressid = json['addressid'];
     category = json['category'];
     occupation = json['occupation'];
     bankAccount = json['bankAccount'] != null
@@ -106,6 +119,8 @@ class ClientData {
     data['birthDate'] = birthDate;
     data['birthPlace'] = birthPlace;
     data['language'] = language;
+    data['addressid'] = addressid;
+    data['bankId']= bankId;
     data['category'] = category;
     data['occupation'] = occupation;
     if (bankAccount != null) {

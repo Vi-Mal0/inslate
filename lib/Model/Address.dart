@@ -11,6 +11,12 @@ class Address {
   bool? isPresentAddress;
   int? validFlag;
   String? createdDate;
+
+  @override
+  String toString() {
+    return 'Address{id: $id, toAddress: $toAddress, addressLine1: $addressLine1, addressLine2: $addressLine2, city: $city, state: $state, country: $country, pincode: $pincode, addressType: $addressType, isPresentAddress: $isPresentAddress, validFlag: $validFlag, createdDate: $createdDate, modifiedDate: $modifiedDate}';
+  }
+
   String? modifiedDate;
 
   Address(

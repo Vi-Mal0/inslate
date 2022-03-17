@@ -82,8 +82,7 @@ class LoginScreen extends StatelessWidget {
       onRecoverPassword: (String) {},
       footer: "2022 (c) FuturaInsTech.com",
       loginAfterSignUp: true,
-      savedEmail: "rainavimal454@gmail.com",
-      savedPassword: "test1234",
+      onSignup: (LoginData ) {  },
     );
   }
 }

@@ -2,7 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AgentProfileScreen extends StatefulWidget {
-  const AgentProfileScreen({Key? key}) : super(key: key);
+  int id;
+  AgentProfileScreen({Key? key,required this.id}) : super(key: key);
 
   @override
   State<AgentProfileScreen> createState() => _AgentProfileScreenState();

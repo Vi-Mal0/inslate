@@ -19,6 +19,7 @@ class Agent {
   String? bonusAllocation;
   String? basicCommission;
   String? renewalCommission;
+  int? clientId;
   String? servicingCommission;
   String? commissionClass;
   int? validFlag;
@@ -35,6 +36,7 @@ class Agent {
         this.distributionChannel,
         this.branch,
         this.areaCode,
+        this.clientId,
         this.agentType,
         this.reportingTo,
         this.payMethod,
@@ -56,6 +58,7 @@ class Agent {
     dateAppointed = json['dateAppointed'];
     exclusive = json['exclusive'];
     previousAgent = json['previousAgent'];
+    clientId = json['clientId'];
     prevDateOfTermination = json['prevDateOfTermination'];
     distributionChannel = json['distributionChannel'];
     branch = json['branch'];
@@ -74,6 +77,11 @@ class Agent {
     validFlag = json['validFlag'];
     createdDate = json['createdDate'];
     modifiedDate = json['modifiedDate'];
+  }
+
+  @override
+  String toString() {
+    return 'Agent{id: $id, client: $client, dateAppointed: $dateAppointed, exclusive: $exclusive, previousAgent: $previousAgent, prevDateOfTermination: $prevDateOfTermination, distributionChannel: $distributionChannel, branch: $branch, areaCode: $areaCode, agentType: $agentType, reportingTo: $reportingTo, payMethod: $payMethod, payFrequency: $payFrequency, currencyType: $currencyType, minimumAmount: $minimumAmount, bonusAllocation: $bonusAllocation, basicCommission: $basicCommission, renewalCommission: $renewalCommission, clientId: $clientId, servicingCommission: $servicingCommission, commissionClass: $commissionClass, validFlag: $validFlag, createdDate: $createdDate, modifiedDate: $modifiedDate}';
   }
 
   Map<String, dynamic> toJson() {
@@ -97,6 +105,7 @@ class Agent {
     data['minimumAmount'] = minimumAmount;
     data['bonusAllocation'] = bonusAllocation;
     data['basicCommission'] = basicCommission;
+    data['clientId'] = clientId;
     data['renewalCommission'] = renewalCommission;
     data['servicingCommission'] = servicingCommission;
     data['commissionClass'] = commissionClass;

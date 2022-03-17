@@ -2,7 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AgentEdit extends StatefulWidget {
-  const AgentEdit({Key? key}) : super(key: key);
+  int? id;
+  AgentEdit({Key? key,required this.id}) : super(key: key);
 
   @override
   State<AgentEdit> createState() => _AgentEditState();
