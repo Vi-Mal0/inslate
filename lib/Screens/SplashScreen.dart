@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:insuranceprototype/Screens/LandingScreen.dart';
 
-import 'LoginScreen.dart';
 
 class SplashHome extends StatefulWidget {
   const SplashHome({Key? key}) : super(key: key);

@@ -81,12 +81,14 @@ class _DashboardState extends State<Dashboard> {
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Row(
                                         children: [
                                           Text(
-                                            snapshot.data.employeeName.toString(),
+                                            snapshot.data.employeeName
+                                                .toString(),
                                             style: const TextStyle(
                                                 letterSpacing: 1,
                                                 fontWeight: FontWeight.bold,
@@ -123,7 +125,8 @@ class _DashboardState extends State<Dashboard> {
                             Padding(
                               padding: const EdgeInsets.fromLTRB(25, 10, 25, 0),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Column(
                                     children: [
@@ -191,11 +194,11 @@ class _DashboardState extends State<Dashboard> {
                                               ),
                                               shape: NeumorphicShape.flat,
                                               lightSource: LightSource.top,
-                                              color:
-                                                  (Theme.of(context).brightness ==
-                                                          Brightness.dark)
-                                                      ? Colors.black
-                                                      : Colors.white),
+                                              color: (Theme.of(context)
+                                                          .brightness ==
+                                                      Brightness.dark)
+                                                  ? Colors.black
+                                                  : Colors.white),
                                           child: Center(
                                               child: Text(
                                             "3",
@@ -240,11 +243,11 @@ class _DashboardState extends State<Dashboard> {
                                               ),
                                               shape: NeumorphicShape.flat,
                                               lightSource: LightSource.top,
-                                              color:
-                                                  (Theme.of(context).brightness ==
-                                                          Brightness.dark)
-                                                      ? Colors.black
-                                                      : Colors.white),
+                                              color: (Theme.of(context)
+                                                          .brightness ==
+                                                      Brightness.dark)
+                                                  ? Colors.black
+                                                  : Colors.white),
                                           child: Center(
                                               child: Text(
                                             "3",
@@ -289,11 +292,11 @@ class _DashboardState extends State<Dashboard> {
                                               ),
                                               shape: NeumorphicShape.flat,
                                               lightSource: LightSource.top,
-                                              color:
-                                                  (Theme.of(context).brightness ==
-                                                          Brightness.dark)
-                                                      ? Colors.black
-                                                      : Colors.white),
+                                              color: (Theme.of(context)
+                                                          .brightness ==
+                                                      Brightness.dark)
+                                                  ? Colors.black
+                                                  : Colors.white),
                                           child: Center(
                                               child: Text(
                                             "0",
@@ -408,106 +411,114 @@ class _DashboardState extends State<Dashboard> {
                             },
                             child: const Text("See All")),
                       )),
-                  if (upcoming.isNotEmpty)
                     Expanded(
-                      child: ListView.builder(
-                        padding: const EdgeInsets.only(top: 0.0),
-                        itemCount: upcoming.length,
-                        itemBuilder: (context, index) {
-                          retColor() {
-                            var clr = upcoming[index].currentStatus;
-                            if (clr == "Assigned") {
-                              return Colors.cyan;
-                            }
-                            if (clr == "Captured") {
-                              return Colors.yellow;
-                            }
-                            if (clr == "Passed") {
-                              return Colors.green;
-                            }
-                            if (clr == "Failed") {
-                              return Colors.red;
-                            }
-                          }
+                      child: FutureBuilder(
+                        future: http.getupcoming(widget.id),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<dynamic> upcom) {
+                          if(upcom.hasData){
+                            return ListView.builder(
+                              padding: const EdgeInsets.only(top: 0.0),
+                              itemCount: upcom.data.length,
+                              itemBuilder: (context, index) {
+                                retColor() {
+                                  var clr = upcom.data[index].currentStatus;
+                                  if (clr == "Assigned") {
+                                    return Colors.cyan;
+                                  }
+                                  if (clr == "Captured") {
+                                    return Colors.yellow;
+                                  }
+                                  if (clr == "Passed") {
+                                    return Colors.green;
+                                  }
+                                  if (clr == "Failed") {
+                                    return Colors.red;
+                                  }
+                                }
 
-                          return SizedBox(
-                            height: 160,
-                            width: 100,
-                            child: Padding(
-                              padding: const EdgeInsets.fromLTRB(15, 0, 10, 0),
-                              child: Card(
-                                elevation: 3,
-                                color: (Theme.of(context).brightness ==
-                                        Brightness.dark)
-                                    ? Colors.grey[700]
-                                    : Colors.white,
-                                child: Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                return SizedBox(
+                                  height: 160,
+                                  width: 100,
+                                  child: Padding(
+                                    padding: const EdgeInsets.fromLTRB(15, 0, 10, 0),
+                                    child: Card(
+                                      elevation: 3,
+                                      color: (Theme.of(context).brightness ==
+                                          Brightness.dark)
+                                          ? Colors.grey[700]
+                                          : Colors.white,
+                                      child: Column(
                                         children: [
-                                          Text("name : ${upcoming[index].name}"),
-                                          Container(
-                                            width: 100,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              color: retColor(),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Text("name : ${upcom.data[index].name}"),
+                                                Container(
+                                                  width: 100,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                    BorderRadius.circular(10),
+                                                    color: retColor(),
+                                                  ),
+                                                  child: Text(
+                                                    upcom.data[index].currentStatus,
+                                                    style: const TextStyle(
+                                                        fontSize: 14,
+                                                        color: Colors.black),
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                            child: Text(
-                                              upcoming[index].currentStatus,
-                                              style: const TextStyle(
-                                                  fontSize: 14,
-                                                  color: Colors.black),
-                                              textAlign: TextAlign.center,
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Row(
+                                              children: [
+                                                SizedBox(
+                                                    width: 210,
+                                                    child: Text(
+                                                      "email : ${upcom.data[index].email}",
+                                                    )),
+                                                const SizedBox(
+                                                  width: 50,
+                                                ),
+                                                Text(
+                                                    "Phone : ${upcom.data[index].mobileNumber}"),
+                                              ],
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Row(
+                                              children: [
+                                                Text(
+                                                    "Qualification : ${upcom.data[index].highestQualification}"),
+                                              ],
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Row(
+                                              children: [
+                                                Text(
+                                                    "Interview Schedule : ${upcom.data[index].availableDateAndTime}"),
+                                              ],
                                             ),
                                           ),
                                         ],
                                       ),
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Row(
-                                        children: [
-                                          SizedBox(
-                                              width: 210,
-                                              child: Text(
-                                                "email : ${upcoming[index].email}",
-                                              )),
-                                          const SizedBox(
-                                            width: 50,
-                                          ),
-                                          Text(
-                                              "Phone : ${upcoming[index].mobileNumber}"),
-                                        ],
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Row(
-                                        children: [
-                                          Text(
-                                              "Qualification : ${upcoming[index].highestQualification}"),
-                                        ],
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Row(
-                                        children: [
-                                          Text(
-                                              "Interview Schedule : ${upcoming[index].availableDateAndTime}"),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          );
+                                  ),
+                                );
+                              },
+                            );
+                          }
+                          return Center(child: CircularProgressIndicator());
                         },
                       ),
                     ),

@@ -19,28 +19,32 @@ class ProofAdd extends StatefulWidget {
 }
 
 class _ProofAddState extends State<ProofAdd> {
+
+  // var local_images;
+  // PickedFile? file;
+  // var path;
+  // Future getImageFromGallery() async {
+  //   var image = await ImagePicker().pickImage(source: ImageSource.gallery);
+  //   setState(() {
+  //     file = image;
+  //
+  //     // String p = "${image?.path}";
+  //     // path = basename(p);
+  //     //
+  //     // final encode = base64Encode(file?.readAsBytes());
+  //     // local_images = "data:image/jpeg;base64,$encode";
+  //   });
+  // }
+
+  final ImagePicker _picker = ImagePicker();
+  XFile? image;
+
   HttpService serviceApi = HttpService();
   TextEditingController controller = TextEditingController();
   TextEditingController proofCode = TextEditingController();
   TextEditingController proofId = TextEditingController();
   TextEditingController proofName = TextEditingController();
   TextEditingController proof = TextEditingController();
-
-  String images = "";
-  File? local_images;
-  ImagePicker imagePicker = ImagePicker();
-
-  Future getImageFromGallery() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      local_images = image;
-
-      images = basename(image.path);
-
-      final encode = base64Encode(local_images!.readAsBytesSync());
-      images = "data:image/jpeg;base64,$encode";
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -119,13 +123,31 @@ class _ProofAddState extends State<ProofAdd> {
                   const SizedBox(
                     height: 10,
                   ),
-                  TextFormField(
-                    controller: proof,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
+                  Container(
+                    margin: const EdgeInsets.all(15.0),
+                    padding: const EdgeInsets.all(3.0),
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black),
+                        borderRadius: BorderRadius.all(Radius.circular(5))
+                    ),
+                    child: Column(
+                      children: [
+                        if(image != null) Container(
+                          height: 100,
+                          width: 100,
+                          child: Image.file(File(image!.path)),
                         ),
-                        labelText: "Proof File"),
+                        RaisedButton(child: const Text("Pick image"), onPressed: () async {   image = await _picker.pickImage(
+                            source: ImageSource.gallery);
+                        setState(() {
+
+                          final bytes = File(image!.path).readAsBytesSync();
+                          String base64Image =  "data:image/png;base64,"+base64Encode(bytes);
+                          proof.text = base64Image;
+                        }); },),
+
+                      ],
+                    ),
                   ),
                   const SizedBox(
                     height: 10,
@@ -139,3 +161,46 @@ class _ProofAddState extends State<ProofAdd> {
     );
   }
 }
+
+
+
+
+// GestureDetector(
+//   onTap: () {
+//     getImageFromGallery();
+//   },
+//   child: Container(
+//     height: 400,
+//     width: MediaQuery.of(context).size.width/2 * 1.9,
+//     decoration: BoxDecoration(
+//       border: Border.all(
+//           color: Colors.purple,
+//           width: 2
+//       ),
+//       // borderRadius: BorderRadius.circular(25.0),
+//     ), //             <--- BoxDecoration here
+//     child: local_images == null
+//         ? Row(
+//       children: const [
+//         Icon(Icons.image),
+//         Text("Click to select image")
+//       ],
+//       mainAxisAlignment: MainAxisAlignment.center,
+//     )
+//         : Image.file(
+//       local_images,
+//       width: MediaQuery.of(context).size.width/2 * 1.5,
+//       fit: BoxFit.cover,
+//     ),
+//   ),
+// ),
+
+
+// TextFormField(
+//   controller: proof,
+//   decoration: InputDecoration(
+//       border: OutlineInputBorder(
+//         borderRadius: BorderRadius.circular(15),
+//       ),
+//       labelText: "Proof File"),
+// ),

@@ -11,6 +11,7 @@ import 'package:insuranceprototype/Screens/ClientListScreen.dart';
 import 'package:insuranceprototype/Screens/ClientRegistrationScreen.dart';
 import 'package:insuranceprototype/Screens/Dashboard.dart';
 import 'package:insuranceprototype/Screens/EventLogList.dart';
+import 'package:insuranceprototype/Screens/ProofAdd.dart';
 import 'package:insuranceprototype/Screens/ProofList.dart';
 import 'package:insuranceprototype/Screens/RegistrationScreen.dart';
 import 'package:page_transition/page_transition.dart';

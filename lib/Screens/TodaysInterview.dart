@@ -80,18 +80,18 @@ class _TodaysinterviewState extends State<Todaysinterview> {
                                 style: TextStyle(color: Colors.black),
                               )),
                         ),
-                        PopupMenuItem<int>(
+                        const PopupMenuItem<int>(
                           value: 1,
-                          child: Container(
+                          child: SizedBox(
                               width: 100,
                               child: Text(
                                 "About ",
                                 style: TextStyle(color: Colors.black),
                               )),
                         ),
-                        PopupMenuItem<int>(
+                        const PopupMenuItem<int>(
                           value: 2,
-                          child: Container(
+                          child: SizedBox(
                               width: 100,
                               child: Text(
                                 "Exit ",

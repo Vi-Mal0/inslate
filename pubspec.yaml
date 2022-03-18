@@ -44,6 +44,7 @@ dependencies:
   easy_sidemenu:
   flutter_profile_picture:
   page_transition:
+  image_picker: ^0.8.4+11
   flutter_icons:
   flutter_screenutil:
   google_fonts:
@@ -56,7 +57,6 @@ dependencies:
   file_picker:
   flutter_slidable:
   animated_textformfields: ^1.0.1
-  image_picker: ^0.6.6+5
 
 
 dev_dependencies:

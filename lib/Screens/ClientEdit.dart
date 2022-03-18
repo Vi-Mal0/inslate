@@ -2,7 +2,6 @@ import 'package:date_time_picker/date_time_picker.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 import 'package:insuranceprototype/Screens/AddressRegistrationScreen.dart';
 import 'package:intl/intl.dart';
 import 'package:insuranceprototype/HTTP/HttpService.dart';
@@ -31,7 +30,8 @@ class _ClientEditState extends State<ClientEdit> {
     setState(() {});
   }
 
-  bool companyDoctor = false;
+
+  bool? companyDoctor;
   var address,
       bank,
       birthDate,
@@ -41,23 +41,10 @@ class _ClientEditState extends State<ClientEdit> {
       addressid,
       occupation,
       bankId,
-      proofList;
+      proofList,selectedBank,selectedAddress;
 
   @override
   Widget build(BuildContext context) {
-
-
-    Color getColor(Set<MaterialState> states) {
-      const Set<MaterialState> interactiveStates = <MaterialState>{
-        MaterialState.pressed,
-        MaterialState.hovered,
-        MaterialState.focused,
-      };
-      if (states.any(interactiveStates.contains)) {
-        return Colors.blue;
-      }
-      return Colors.red;
-    }
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -68,12 +55,13 @@ class _ClientEditState extends State<ClientEdit> {
             if(snapshot.hasData){
               ClientData? clientData = snapshot.data;
 
-              String? selectedBank = clientData?.bankAccount?.accountHolderName;
-              String? selectedAddress =clientData?.address?.toAddress;
+              selectedBank = clientData?.bankAccount?.accountHolderName;
+              selectedAddress =clientData?.address?.toAddress;
               salutation = clientData?.salutation;
               gender = clientData?.gender;
               marritalStatus = clientData?.marritalStatus;
               occupation = clientData?.occupation;
+              companyDoctor = clientData?.companyDoctor;
 
               TextEditingController surName = TextEditingController(text: clientData?.surName);
               TextEditingController givenName = TextEditingController(text: clientData?.givenName);
@@ -85,6 +73,7 @@ class _ClientEditState extends State<ClientEdit> {
               TextEditingController language = TextEditingController(text: clientData?.language);
               TextEditingController category = TextEditingController(text: clientData?.category);
               TextEditingController datectl = TextEditingController(text: clientData?.birthDate);
+
               return Form(
                 key: _formKey,
                 child: Column(
@@ -199,14 +188,7 @@ class _ClientEditState extends State<ClientEdit> {
                                                 ))
                                                 .toList(),
                                             onChanged: (value) {
-                                              setState(() {
                                                 salutation = value.toString();
-                                              });
-                                            },
-                                            onSaved: (value) {
-                                              setState(() {
-                                                salutation = value.toString();
-                                              });
                                             },
                                             validator: (value) => value == null
                                                 ? 'please select'
@@ -351,14 +333,7 @@ class _ClientEditState extends State<ClientEdit> {
                                                 ))
                                                 .toList(),
                                             onChanged: (value) {
-                                              setState(() {
                                                 gender = value.toString();
-                                              });
-                                            },
-                                            onSaved: (value) {
-                                              setState(() {
-                                                gender = value.toString();
-                                              });
                                             },
                                             validator: (value) => value == null
                                                 ? 'please select'
@@ -492,14 +467,7 @@ class _ClientEditState extends State<ClientEdit> {
                                     ))
                                         .toList(),
                                     onChanged: (value) {
-                                      setState(() {
                                         marritalStatus = value.toString();
-                                      });
-                                    },
-                                    onSaved: (value) {
-                                      setState(() {
-                                        marritalStatus = value.toString();
-                                      });
                                     },
                                     validator: (value) =>
                                     value == null ? 'please select' : null,
@@ -596,12 +564,7 @@ class _ClientEditState extends State<ClientEdit> {
                                     ))
                                         .toList(),
                                     onChanged: (value) {
-                                      setState(() {
                                         occupation = value.toString();
-                                      });
-                                    },
-                                    onSaved: (value) {
-                                      occupation = value.toString();
                                     },
                                     validator: (value) =>
                                     value == null ? 'please select' : null,
@@ -689,22 +652,29 @@ class _ClientEditState extends State<ClientEdit> {
                                     },
                                   ),
                                 ),
-                                Row(
-                                  children: [
-                                    Checkbox(
-                                      checkColor: Colors.white,
-                                      fillColor: MaterialStateProperty.resolveWith(
-                                          getColor),
-                                      value: clientData?.companyDoctor as bool,
-                                      onChanged: (bool? value) {
-                                        setState(() {
-                                          companyDoctor = value!;
-                                        });
-                                      },
-                                    ),
-                                    const Text("Company Doctor")
-                                  ],
-                                ),
+                                // Row(
+                                //   children: [
+                                //     Checkbox(
+                                //       checkColor: Theme.of(context).primaryColor,
+                                //       value:companyDoctor,
+                                //       onChanged: (value) {
+                                //         setState(() {
+                                //           companyDoctor = value;
+                                //         });
+                                //       },
+                                //     ),
+                                //     // Checkbox(
+                                //     //   checkColor: Colors.white,
+                                //     //   value: companyDoctor,
+                                //     //   onChanged: (bool? value) {
+                                //     //     setState(() {
+                                //     //       companyDoctor = value;
+                                //     //     });
+                                //     //   },
+                                //     // ),
+                                //     const Text("Company Doctor")
+                                //   ],
+                                // ),
                               ],
                             ),
                           ),
@@ -754,16 +724,8 @@ class _ClientEditState extends State<ClientEdit> {
                               dateLabelText: 'Date',
                               timeLabelText: "Hour",
                               onChanged: (val) {
-                                setState(() {
                                   datectl.text = DateFormat("MM-dd-yyyy")
                                       .format(DateTime.parse(val));
-                                });
-                              },
-                              onSaved: (val) {
-                                setState(() {
-                                  datectl.text = DateFormat("MM-dd-yyyy")
-                                      .format(DateTime.parse(val!));
-                                });
                               },
                             ),
                           ),
@@ -838,7 +800,7 @@ class _ClientEditState extends State<ClientEdit> {
                                       height: 70,
                                       child: Padding(
                                         padding: const EdgeInsets.all(8.0),
-                                        child: DropdownButton(
+                                        child: DropdownButtonFormField2(
                                           value: selectedAddress,
                                           isExpanded: true,
                                           hint: const Text(
@@ -862,12 +824,12 @@ class _ClientEditState extends State<ClientEdit> {
                                               ))
                                               .toList(),
                                           onChanged: (value) {
-                                            int idx = bankli.indexOf(value.toString());
                                             setState(() {
                                               selectedAddress = value.toString();
+                                              int idx = bankli.indexOf(value.toString());
                                               address = indx[idx];
                                             });
-                                            print(address.toString());
+
                                           },
                                         ),
                                       ),
@@ -922,7 +884,7 @@ class _ClientEditState extends State<ClientEdit> {
                                       height: 70,
                                       child: Padding(
                                         padding: const EdgeInsets.all(8.0),
-                                        child: DropdownButton(
+                                        child: DropdownButtonFormField2(
                                           value: selectedBank,
                                           isExpanded: true,
                                           hint: const Text(
@@ -946,12 +908,9 @@ class _ClientEditState extends State<ClientEdit> {
                                               ))
                                               .toList(),
                                           onChanged: (value) {
+                                            selectedBank = value.toString();
                                             int idx = bankli.indexOf(value.toString());
-                                            setState(() {
-                                              selectedBank = value.toString();
-                                              bank = indx[idx];
-                                            });
-                                            print(bank.toString());
+                                            bank = indx[idx];
                                           },
                                         ),
                                       ),

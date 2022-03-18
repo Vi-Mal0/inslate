@@ -24,59 +24,87 @@ class _DisplayState extends State<Display> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          backgroundColor: Colors.blue,
-          title: const Text("Agent BankAccount"),
-          actions: [
-            IconButton(onPressed: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => BankRegistrationScreen())).then((_) => _refreshData());
-            }, icon: const Icon(Icons.add))
-          ]
-      ),
-      body: FutureBuilder(builder: (
-          BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-        if(snapshot.hasData){
-          return ListView.builder(
-            itemCount: snapshot.data.length,
-            itemBuilder: (BuildContext context, int index) {
-              BankAccount bankAccount = snapshot.data[index];
-              return InkWell(
-                child: Card(
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            children: [
-                              Text("Account Name: ${bankAccount.accountHolderName}"),
-                              Text("Account No: ${bankAccount.accountNumber}"),
-                              Text("Bank Name: ${bankAccount.bankName}"),
-                              Text("IFSC code: ${bankAccount.ifscCode}"),
-                              Text("Bank Branch: ${bankAccount.bankBranch}"),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              IconButton(onPressed: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => EditPage(id: snapshot.data[index].id)));
-                              }, icon: Icon(Icons.edit)
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Column(
+          children: [
+            Container(
+                color: Colors.white,
+                height: 50,
+                child: ListTile(
+                  leading: IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: const Icon(
+                      Icons.arrow_back,
+                      color: Colors.black,
+                      size: 30,
+                    ),
+                  ),
+                  title: const Text(
+                    "Bank Account",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  ),
+                  trailing:     IconButton(onPressed: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => BankRegistrationScreen())).then((_) => _refreshData());
+                  }, icon: const Icon(Icons.add)),
+                )),
+            Expanded(
+              child: RefreshIndicator(
+                onRefresh: _refreshData,
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: FutureBuilder(builder: (
+                      BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                    if(snapshot.hasData){
+                      return ListView.builder(
+                        itemCount: snapshot.data.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          BankAccount bankAccount = snapshot.data[index];
+                          return InkWell(
+                            child: Card(
+                              child: Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Column(
+                                        children: [
+                                          Text("Account Name: ${bankAccount.accountHolderName}"),
+                                          Text("Account No: ${bankAccount.accountNumber}"),
+                                          Text("Bank Name: ${bankAccount.bankName}"),
+                                          Text("IFSC code: ${bankAccount.ifscCode}"),
+                                          Text("Bank Branch: ${bankAccount.bankBranch}"),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          IconButton(onPressed: () {
+                                            Navigator.push(context, MaterialPageRoute(builder: (context) => EditPage(id: snapshot.data[index].id)));
+                                          }, icon: Icon(Icons.edit)
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
 
-                    ],
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    }
+                    return const Center(child: CircularProgressIndicator(),);
+                  },
+                    future: serviceApi.getBank(),
                   ),
                 ),
-              );
-            },
-          );
-        }
-        return const Center(child: CircularProgressIndicator(),);
-      },
-        future: serviceApi.getBank(),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

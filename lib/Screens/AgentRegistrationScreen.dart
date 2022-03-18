@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:animated_textformfields/animated_textformfield/animated_textformfield.dart';
 import 'package:date_time_picker/date_time_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -63,34 +64,6 @@ class _AgentRegistrationScreenState extends State<AgentRegistrationScreen> {
   DateTime selectedDate2 = DateTime.now();
   TextEditingController date = TextEditingController();
   TextEditingController date2 = TextEditingController();
-
-  _selectDate(BuildContext context) async {
-    final DateTime? selected = await showDatePicker(
-      context: context,
-      firstDate: DateTime(2010),
-      lastDate: DateTime(2025),
-      initialDate: selectedDate,
-    );
-    if (selected != null && selected != selectedDate)
-      setState(() {
-        selectedDate = selected;
-        date.text = selectedDate.toString().substring(0, 10);
-      });
-  }
-
-  _selectDate2(BuildContext context) async {
-    final DateTime? selected = await showDatePicker(
-      context: context,
-      firstDate: DateTime(2010),
-      lastDate: DateTime(2025),
-      initialDate: selectedDate,
-    );
-    if (selected != null && selected != selectedDate)
-      setState(() {
-        selectedDate2 = selected;
-        date2.text = selectedDate2.toString().substring(0, 10);
-      });
-  }
 
   Future<void> _refreshData() async {
     setState(() {});
@@ -179,18 +152,110 @@ class _AgentRegistrationScreenState extends State<AgentRegistrationScreen> {
                             http.StreamedResponse response = await request.send();
 
                             if (response.statusCode == 200) {
-                              print("Success");
+                              if (kDebugMode) {
+                                print("Success");
+                              }
                             } else {
-                              print(response.reasonPhrase);
+                              if (kDebugMode) {
+                                print(response.reasonPhrase);
+                              }
                             }
                           }
                         },
-                        icon: Icon(Icons.done),
+                        icon: const Icon(Icons.done),
                       ),
                     )),
                 Expanded(
                     child: ListView(
                   children: [
+                    FutureBuilder(
+                      builder: (BuildContext context,
+                          AsyncSnapshot<dynamic> snapshot) {
+                        if (snapshot.hasData) {
+                          List<ClientData> clientList = snapshot.data;
+                          List<String> clName = [];
+                          List<int> indx = [];
+                          for(var e in clientList){
+                            clName.add(e.givenName.toString()+ " " +e.surName.toString());
+                            indx.add(int.parse(e.id.toString()));
+                          }
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              SizedBox(
+                                width: 300,
+                                height: 70,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: DropdownButton(
+                                    value: selectedClient,
+                                    isExpanded: true,
+                                    hint: const Text(
+                                      'Client',
+                                      style: TextStyle(fontSize: 14),
+                                    ),
+                                    icon: const Icon(
+                                      Icons.arrow_drop_down,
+                                      color: Colors.black45,
+                                    ),
+                                    items: clName
+                                        .map(( value) =>
+                                        DropdownMenuItem(
+                                          value: value,
+                                          child: Text(
+                                            value
+                                                .toString(),
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                        ))
+                                        .toList(),
+                                    onChanged: (value) {
+                                      int idx = clName.indexOf(value.toString());
+                                      setState(() {
+                                        selectedClient = value.toString();
+                                        clientID = indx[idx];
+                                      });
+                                      if (kDebugMode) {
+                                        print(clientID.toString());
+                                      }
+                                    },
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                  decoration: BoxDecoration(
+                                      color: const Color(0xffbe61565),
+                                      border: Border.all(
+                                        color: Colors.black,
+                                      ),
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(20))),
+                                  child: IconButton(
+                                      onPressed: () {
+                                        Navigator.push(
+                                            context,
+                                            PageTransition(
+                                                type: PageTransitionType
+                                                    .leftToRight,
+                                                child:
+                                                const ClientRegistrationScreen()));
+                                      },
+                                      icon: const Icon(
+                                        Icons.add,
+                                        color: Colors.white,
+                                      )))
+                            ],
+                          );
+                        }
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      },
+                      future: api.getClient(),
+                    ),
+
                     Padding(
                       padding: const EdgeInsets.fromLTRB(30, 10, 30, 0),
                       child: DateTimePicker(
@@ -248,19 +313,6 @@ class _AgentRegistrationScreenState extends State<AgentRegistrationScreen> {
                               const Text("Previous Agent")
                             ],
                           ),
-                          // AnimatedTextFormField(
-                          //   width: 180,
-                          //   height: 48.0,
-                          //   inputType: TextInputType.text,
-                          //   hintText: "Previous Agent",
-                          //   controller: previous,
-                          //   textStyle: TextStyle(
-                          //     color: Colors.black,
-                          //     fontSize: 16.0,
-                          //   ),
-                          //   focusNode: myFocusNode1,
-                          //   cornerRadius: BorderRadius.circular(14.0),
-                          // ),
                         ],
                       ),
                     ),
@@ -294,7 +346,7 @@ class _AgentRegistrationScreenState extends State<AgentRegistrationScreen> {
                       inputType: TextInputType.text,
                       hintText: "Distribution Channel",
                       controller: distribution,
-                      textStyle: TextStyle(
+                      textStyle: const TextStyle(
                         color: Colors.black,
                         fontSize: 16.0,
                       ),
@@ -311,7 +363,7 @@ class _AgentRegistrationScreenState extends State<AgentRegistrationScreen> {
                             inputType: TextInputType.text,
                             hintText: "Branch",
                             controller: branch,
-                            textStyle: TextStyle(
+                            textStyle: const TextStyle(
                               color: Colors.black,
                               fontSize: 16.0,
                             ),
@@ -324,7 +376,7 @@ class _AgentRegistrationScreenState extends State<AgentRegistrationScreen> {
                             inputType: TextInputType.text,
                             hintText: "Area Code",
                             controller: area,
-                            textStyle: TextStyle(
+                            textStyle: const TextStyle(
                               color: Colors.black,
                               fontSize: 16.0,
                             ),
@@ -340,7 +392,7 @@ class _AgentRegistrationScreenState extends State<AgentRegistrationScreen> {
                       inputType: TextInputType.text,
                       hintText: "Agent Type",
                       controller: agentType,
-                      textStyle: TextStyle(
+                      textStyle: const TextStyle(
                         color: Colors.black,
                         fontSize: 16.0,
                       ),
@@ -353,7 +405,7 @@ class _AgentRegistrationScreenState extends State<AgentRegistrationScreen> {
                       inputType: TextInputType.text,
                       hintText: "Reporting To",
                       controller: reportingTo,
-                      textStyle: TextStyle(
+                      textStyle: const TextStyle(
                         color: Colors.black,
                         fontSize: 16.0,
                       ),
@@ -370,7 +422,7 @@ class _AgentRegistrationScreenState extends State<AgentRegistrationScreen> {
                             inputType: TextInputType.text,
                             hintText: "Pay Method",
                             controller: payMethod,
-                            textStyle: TextStyle(
+                            textStyle: const TextStyle(
                               color: Colors.black,
                               fontSize: 16.0,
                             ),
@@ -383,7 +435,7 @@ class _AgentRegistrationScreenState extends State<AgentRegistrationScreen> {
                             inputType: TextInputType.text,
                             hintText: "Pay Frequency",
                             controller: payFrequency,
-                            textStyle: TextStyle(
+                            textStyle: const TextStyle(
                               color: Colors.black,
                               fontSize: 16.0,
                             ),
@@ -403,7 +455,7 @@ class _AgentRegistrationScreenState extends State<AgentRegistrationScreen> {
                             inputType: TextInputType.text,
                             hintText: "Currency Type",
                             controller: currency,
-                            textStyle: TextStyle(
+                            textStyle: const TextStyle(
                               color: Colors.black,
                               fontSize: 16.0,
                             ),
@@ -416,7 +468,7 @@ class _AgentRegistrationScreenState extends State<AgentRegistrationScreen> {
                             inputType: TextInputType.text,
                             hintText: "Min Amount",
                             controller: min,
-                            textStyle: TextStyle(
+                            textStyle: const TextStyle(
                               color: Colors.black,
                               fontSize: 16.0,
                             ),
@@ -436,7 +488,7 @@ class _AgentRegistrationScreenState extends State<AgentRegistrationScreen> {
                             inputType: TextInputType.text,
                             hintText: "Bonus Allocation",
                             controller: bonus,
-                            textStyle: TextStyle(
+                            textStyle: const TextStyle(
                               color: Colors.black,
                               fontSize: 16.0,
                             ),
@@ -449,7 +501,7 @@ class _AgentRegistrationScreenState extends State<AgentRegistrationScreen> {
                             inputType: TextInputType.text,
                             hintText: "Basic Commission",
                             controller: basic,
-                            textStyle: TextStyle(
+                            textStyle: const TextStyle(
                               color: Colors.black,
                               fontSize: 16.0,
                             ),
@@ -469,7 +521,7 @@ class _AgentRegistrationScreenState extends State<AgentRegistrationScreen> {
                             inputType: TextInputType.text,
                             hintText: "Renewal Comission",
                             controller: renewal,
-                            textStyle: TextStyle(
+                            textStyle: const TextStyle(
                               color: Colors.black,
                               fontSize: 16.0,
                             ),
@@ -482,7 +534,7 @@ class _AgentRegistrationScreenState extends State<AgentRegistrationScreen> {
                             inputType: TextInputType.text,
                             hintText: "Servicing Commission",
                             controller: servicing,
-                            textStyle: TextStyle(
+                            textStyle: const TextStyle(
                               color: Colors.black,
                               fontSize: 16.0,
                             ),
@@ -498,99 +550,14 @@ class _AgentRegistrationScreenState extends State<AgentRegistrationScreen> {
                       inputType: TextInputType.text,
                       hintText: "Commission Class",
                       controller: commission,
-                      textStyle: TextStyle(
+                      textStyle: const TextStyle(
                         color: Colors.black,
                         fontSize: 16.0,
                       ),
                       focusNode: myFocusNode15,
                       cornerRadius: BorderRadius.circular(14.0),
                     ),
-                    FutureBuilder(
-                      builder: (BuildContext context,
-                          AsyncSnapshot<dynamic> snapshot) {
-                        if (snapshot.hasData) {
-                          List<ClientData> clientList = snapshot.data;
-                          List<String> clName = [];
-                          List<int> indx = [];
-                          for(var e in clientList){
-                            clName.add(e.givenName.toString()+ " " +e.surName.toString());
-                            indx.add(int.parse(e.id.toString()));
-                          }
-                          return Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              SizedBox(
-                                width: 300,
-                                height: 70,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: DropdownButton(
-                                    value: selectedClient,
-                                    isExpanded: true,
-                                    hint: const Text(
-                                      'Client',
-                                      style: TextStyle(fontSize: 14),
-                                    ),
-                                    icon: const Icon(
-                                      Icons.arrow_drop_down,
-                                      color: Colors.black45,
-                                    ),
-                                    items: clName
-                                        .map(( value) =>
-                                        DropdownMenuItem(
-                                          value: value,
-                                          child: Text(
-                                            value
-                                                .toString(),
-                                            style: const TextStyle(
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                        ))
-                                        .toList(),
-                                    onChanged: (value) {
-                                      int idx = clName.indexOf(value.toString());
-                                      setState(() {
-                                        selectedClient = value.toString();
-                                        clientID = indx[idx];
-                                      });
-                                      print(clientID.toString());
-                                    },
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                  decoration: BoxDecoration(
-                                      color: const Color(0xffbe61565),
-                                      border: Border.all(
-                                        color: Colors.black,
-                                      ),
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(20))),
-                                  child: IconButton(
-                                      onPressed: () {
-                                        Navigator.push(
-                                            context,
-                                            PageTransition(
-                                                type: PageTransitionType
-                                                    .leftToRight,
-                                                child:
-                                                const ClientRegistrationScreen()));
-                                      },
-                                      icon: const Icon(
-                                        Icons.add,
-                                        color: Colors.white,
-                                      )))
-                            ],
-                          );
-                        }
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      },
-                      future: api.getClient(),
-                    ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                   ],

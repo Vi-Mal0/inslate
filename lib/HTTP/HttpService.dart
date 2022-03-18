@@ -265,6 +265,8 @@ class HttpService {
         'givenName': client.givenName,
         'salutation': client.salutation,
         'gender': client.gender,
+        'addressid':client.addressid,
+        'bankId':client.bankId,
         'marritalStatus': client.marritalStatus,
         'address': client.address,
         'mobileNumber': client.mobileNumber,
