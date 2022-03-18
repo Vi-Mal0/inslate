@@ -333,6 +333,18 @@ class HttpService {
     return Agent.fromJson(jsonDecode(response.body));
   }
 
+  Future<Agent> getAgentById(id) async {
+    Response res =
+    await get(Uri.parse('http://192.168.0.104:8080/agent/$id'));
+
+    if (res.statusCode == 200) {
+      var body = jsonDecode(res.body);
+      Agent agent = Agent.fromJson(body);
+      return agent;
+    }
+    throw Exception('Failed to load candidate');
+  }
+
   Future<Agent> updateAgent(id, Agent agent) async {
     final response = await http.patch(
       Uri.parse('http://192.168.0.104:8080/agent/$id'),
@@ -477,7 +489,7 @@ class HttpService {
     if (res.statusCode == 200) {
       List<dynamic> body = jsonDecode(res.body);
       List<BankAccount> candidates =
-          body.map((dynamic item) => BankAccount.fromJson(item)).toList();
+          body.map((item) => BankAccount.fromJson(item)).toList();
       return candidates;
     }
     throw Exception('Failed to load candidate');
@@ -516,6 +528,18 @@ class HttpService {
       }),
     );
     return BankAccount.fromJson(jsonDecode(response.body));
+  }
+
+  Future<BankAccount> getBankById(id)
+  async {
+    Response res = await get(Uri.parse("http://192.168.0.104:8080/bank/$id"));
+    print(res.statusCode);
+    if (res.statusCode == 200) {
+      var body = jsonDecode(res.body);
+      BankAccount quants = BankAccount.fromJson(body);
+      return quants;
+    }
+    throw Exception("Data not found");
   }
 
   // Event

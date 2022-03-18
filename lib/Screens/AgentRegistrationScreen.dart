@@ -1,7 +1,8 @@
 import 'dart:convert';
 
 import 'package:animated_textformfields/animated_textformfield/animated_textformfield.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:date_time_picker/date_time_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -97,8 +98,25 @@ class _AgentRegistrationScreenState extends State<AgentRegistrationScreen> {
 
   final _formKey = GlobalKey<FormState>();
 
+  String? selectedClient;
+
+  bool previousAgent =false;
+
   @override
   Widget build(BuildContext context) {
+
+    Color getColor(Set<MaterialState> states) {
+      const Set<MaterialState> interactiveStates = <MaterialState>{
+        MaterialState.pressed,
+        MaterialState.hovered,
+        MaterialState.focused,
+      };
+      if (states.any(interactiveStates.contains)) {
+        return Colors.blue;
+      }
+      return Colors.red;
+    }
+
     return RefreshIndicator(
       onRefresh: _refreshData,
       child: Scaffold(
@@ -131,30 +149,15 @@ class _AgentRegistrationScreenState extends State<AgentRegistrationScreen> {
                         onPressed: () async {
                           if(_formKey.currentState!.validate()){
                             Navigator.pop(context);
-                            String a;
-                            String b;
-                            String c;
-                            a = (date.text.substring(0, 4));
-                            b = (date.text.substring(5, 7));
-                            c = (date.text.substring(8, 10));
-                            String a1;
-                            String b1;
-                            String c1;
-                            a1 = (date2.text.substring(0, 4));
-                            b1 = (date2.text.substring(5, 7));
-                            c1 = (date2.text.substring(8, 10));
-
-                            String fina = "$b" + "-" + "$c" + "-" + "$a";
-                            String fina2 = "$b1" + "-" + "$c1" + "-" + "$a1";
 
                             var headers = {'Content-Type': 'application/json'};
                             var request = http.Request('POST',
                                 Uri.parse('http://192.168.0.104:8080/agent/add'));
                             request.body = json.encode({
-                              "dateAppointed": fina,
+                              "dateAppointed": date.text,
                               "exclusive": exclusive.text,
-                              "previousAgent": previous.text,
-                              "prevDateOfTermination": fina2,
+                              "previousAgent": previousAgent,
+                              "prevDateOfTermination": date2.text,
                               "distributionChannel": distribution.text,
                               "branch": branch.text,
                               "areaCode": area.text,
@@ -189,28 +192,27 @@ class _AgentRegistrationScreenState extends State<AgentRegistrationScreen> {
                     child: ListView(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.all(25.0),
-                      child: TextFormField(
-                        controller: date,
-                        decoration: InputDecoration(
-                          focusedBorder: OutlineInputBorder(
-                            borderSide:
-                                const BorderSide(color: Colors.black, width: 5.0),
-                            borderRadius: BorderRadius.circular(25.0),
-                          ),
-                          hintText: "Date Appointed",
-                          labelText: "Date Appointed",
-                          prefixIcon: IconButton(
-                            icon: Icon(Icons.calendar_today_rounded),
-                            onPressed: () {
-                              setState(() {
-                                _selectDate(context);
-                              });
-                            },
-                          ),
-                          contentPadding:
-                              EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                        ),
+                      padding: const EdgeInsets.fromLTRB(30, 10, 30, 0),
+                      child: DateTimePicker(
+                        type: DateTimePickerType.date,
+                        dateMask: 'dd-MM-yyyy',
+                        firstDate: DateTime(1900),
+                        lastDate: DateTime(2100),
+                        icon: const Icon(Icons.event),
+                        dateLabelText: 'Appointed Date',
+                        timeLabelText: "Hour",
+                        onChanged: (val) {
+                          setState(() {
+                            date.text = DateFormat("MM-dd-yyyy")
+                                .format(DateTime.parse(val));
+                          });
+                        },
+                        onSaved: (val) {
+                          setState(() {
+                            date.text = DateFormat("MM-dd-yyyy")
+                                .format(DateTime.parse(val!));
+                          });
+                        },
                       ),
                     ),
                     Padding(
@@ -223,52 +225,67 @@ class _AgentRegistrationScreenState extends State<AgentRegistrationScreen> {
                             inputType: TextInputType.text,
                             hintText: "Exclusive",
                             controller: exclusive,
-                            textStyle: TextStyle(
+                            textStyle: const TextStyle(
                               color: Colors.black,
                               fontSize: 16.0,
                             ),
                             focusNode: myFocusNode,
                             cornerRadius: BorderRadius.circular(14.0),
                           ),
-                          AnimatedTextFormField(
-                            width: 180,
-                            height: 48.0,
-                            inputType: TextInputType.text,
-                            hintText: "Previous Agent",
-                            controller: previous,
-                            textStyle: TextStyle(
-                              color: Colors.black,
-                              fontSize: 16.0,
-                            ),
-                            focusNode: myFocusNode1,
-                            cornerRadius: BorderRadius.circular(14.0),
+                          Row(
+                            children: [
+                              Checkbox(
+                                checkColor: Colors.white,
+                                fillColor: MaterialStateProperty.resolveWith(
+                                    getColor),
+                                value: previousAgent,
+                                onChanged: (bool? value) {
+                                  setState(() {
+                                    previousAgent = value!;
+                                  });
+                                },
+                              ),
+                              const Text("Previous Agent")
+                            ],
                           ),
+                          // AnimatedTextFormField(
+                          //   width: 180,
+                          //   height: 48.0,
+                          //   inputType: TextInputType.text,
+                          //   hintText: "Previous Agent",
+                          //   controller: previous,
+                          //   textStyle: TextStyle(
+                          //     color: Colors.black,
+                          //     fontSize: 16.0,
+                          //   ),
+                          //   focusNode: myFocusNode1,
+                          //   cornerRadius: BorderRadius.circular(14.0),
+                          // ),
                         ],
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(25.0),
-                      child: TextFormField(
-                        controller: date2,
-                        decoration: InputDecoration(
-                          focusedBorder: OutlineInputBorder(
-                            borderSide:
-                                const BorderSide(color: Colors.black, width: 5.0),
-                            borderRadius: BorderRadius.circular(25.0),
-                          ),
-                          hintText: "Date of Termination",
-                          labelText: "Date of Termination",
-                          prefixIcon: IconButton(
-                            icon: Icon(Icons.calendar_today_rounded),
-                            onPressed: () {
-                              setState(() {
-                                _selectDate2(context);
-                              });
-                            },
-                          ),
-                          contentPadding:
-                              EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                        ),
+                      padding: const EdgeInsets.fromLTRB(30, 10, 30, 0),
+                      child: DateTimePicker(
+                        type: DateTimePickerType.date,
+                        dateMask: 'dd-MM-yyyy',
+                        firstDate: DateTime(1900),
+                        lastDate: DateTime(2100),
+                        icon: const Icon(Icons.event),
+                        dateLabelText: 'Date of termination',
+                        timeLabelText: "Hour",
+                        onChanged: (val) {
+                          setState(() {
+                            date2.text = DateFormat("MM-dd-yyyy")
+                                .format(DateTime.parse(val));
+                          });
+                        },
+                        onSaved: (val) {
+                          setState(() {
+                            date2.text = DateFormat("MM-dd-yyyy")
+                                .format(DateTime.parse(val!));
+                          });
+                        },
                       ),
                     ),
                     AnimatedTextFormField(
@@ -491,11 +508,14 @@ class _AgentRegistrationScreenState extends State<AgentRegistrationScreen> {
                     FutureBuilder(
                       builder: (BuildContext context,
                           AsyncSnapshot<dynamic> snapshot) {
-                        List<ClientData> clientList = [];
                         if (snapshot.hasData) {
-                          clientList.clear();
-                          clientList = snapshot.data;
-                          int indexofbank = 0;
+                          List<ClientData> clientList = snapshot.data;
+                          List<String> clName = [];
+                          List<int> indx = [];
+                          for(var e in clientList){
+                            clName.add(e.givenName.toString()+ " " +e.surName.toString());
+                            indx.add(int.parse(e.id.toString()));
+                          }
                           return Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
@@ -504,8 +524,8 @@ class _AgentRegistrationScreenState extends State<AgentRegistrationScreen> {
                                 height: 70,
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: DropdownButtonFormField2(
-                                    value: clientList.isNotEmpty ? clientList[indexofbank] : "empty",
+                                  child: DropdownButton(
+                                    value: selectedClient,
                                     isExpanded: true,
                                     hint: const Text(
                                       'Client',
@@ -515,12 +535,12 @@ class _AgentRegistrationScreenState extends State<AgentRegistrationScreen> {
                                       Icons.arrow_drop_down,
                                       color: Colors.black45,
                                     ),
-                                    items: clientList
-                                        .map((ClientData value) =>
-                                        DropdownMenuItem<ClientData>(
+                                    items: clName
+                                        .map(( value) =>
+                                        DropdownMenuItem(
                                           value: value,
                                           child: Text(
-                                            value.givenName
+                                            value
                                                 .toString(),
                                             style: const TextStyle(
                                               fontSize: 14,
@@ -529,18 +549,12 @@ class _AgentRegistrationScreenState extends State<AgentRegistrationScreen> {
                                         ))
                                         .toList(),
                                     onChanged: (value) {
-                                      ClientData addresspre = value as ClientData;
+                                      int idx = clName.indexOf(value.toString());
                                       setState(() {
-                                        indexofbank = clientList.indexOf(value);
-                                        clientID = addresspre.id;
+                                        selectedClient = value.toString();
+                                        clientID = indx[idx];
                                       });
-                                    },
-                                    onSaved: (value) {
-                                      ClientData addresspre = value as ClientData;
-                                      setState(() {
-                                        indexofbank = clientList.indexOf(value);
-                                        clientID = addresspre.id;
-                                      });
+                                      print(clientID.toString());
                                     },
                                   ),
                                 ),

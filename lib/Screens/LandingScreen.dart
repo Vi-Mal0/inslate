@@ -2,13 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_profile_picture/flutter_profile_picture.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:insuranceprototype/Screens/AddressListScreen.dart';
 import 'package:insuranceprototype/Screens/AgentListScreen.dart';
 import 'package:insuranceprototype/Screens/AgentRegistrationScreen.dart';
+import 'package:insuranceprototype/Screens/BankListScreen.dart';
 import 'package:insuranceprototype/Screens/Bucket.dart';
 import 'package:insuranceprototype/Screens/ClientListScreen.dart';
 import 'package:insuranceprototype/Screens/ClientRegistrationScreen.dart';
 import 'package:insuranceprototype/Screens/Dashboard.dart';
 import 'package:insuranceprototype/Screens/EventLogList.dart';
+import 'package:insuranceprototype/Screens/ProofList.dart';
 import 'package:insuranceprototype/Screens/RegistrationScreen.dart';
 import 'package:page_transition/page_transition.dart';
 
@@ -208,6 +211,81 @@ class _LandingScreenState extends State<LandingScreen> {
                                 width: 10,
                               ),
                               Text("Agent List"),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          PageTransition(
+                              type: PageTransitionType.rightToLeft,
+                              child: const Display()));
+                    },
+                    child: SizedBox(
+                      height: 70,
+                      child: Card(
+                        child: Center(
+                          child: Row(
+                            children: const [
+                              Icon(Icons.people),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text("Bank List"),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          PageTransition(
+                              type: PageTransitionType.rightToLeft,
+                              child: const Home()));
+                    },
+                    child: SizedBox(
+                      height: 70,
+                      child: Card(
+                        child: Center(
+                          child: Row(
+                            children: const [
+                              Icon(Icons.people),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text("Address List"),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          PageTransition(
+                              type: PageTransitionType.rightToLeft,
+                              child: const ProofView()));
+                    },
+                    child: SizedBox(
+                      height: 70,
+                      child: Card(
+                        child: Center(
+                          child: Row(
+                            children: const [
+                              Icon(Icons.people),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text("Proof List"),
                             ],
                           ),
                         ),

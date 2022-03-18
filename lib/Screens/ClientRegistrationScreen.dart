@@ -55,9 +55,13 @@ class _ClientRegistrationScreenState extends State<ClientRegistrationScreen> {
   Address selectedAD = Address();
 
   int indexofadd = 0;
+  String? selectedBank;
+  String? selectedAddress;
 
   @override
   Widget build(BuildContext context) {
+
+
     Color getColor(Set<MaterialState> states) {
       const Set<MaterialState> interactiveStates = <MaterialState>{
         MaterialState.pressed,
@@ -501,6 +505,7 @@ class _ClientRegistrationScreenState extends State<ClientRegistrationScreen> {
                                 isDense: true,
                                 contentPadding: EdgeInsets.zero,
                                 border: OutlineInputBorder(
+
                                   borderRadius: BorderRadius.circular(15),
                                 ),
                               ),
@@ -810,10 +815,15 @@ class _ClientRegistrationScreenState extends State<ClientRegistrationScreen> {
                       FutureBuilder(
                         builder: (BuildContext context,
                             AsyncSnapshot<dynamic> snapshot) {
-                          List<Address> addressList = [];
                           if (snapshot.hasData) {
-                            addressList.clear();
-                            addressList = snapshot.data;
+                            List<Address> addressList = snapshot.data;
+                            List<String> bankli = [];
+                            List<int> indx = [];
+                            for(var e in addressList){
+                                bankli.add(e.toAddress.toString());
+                                indx.add(int.parse(e.id.toString()));
+                            }
+
                             return Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
@@ -822,10 +832,8 @@ class _ClientRegistrationScreenState extends State<ClientRegistrationScreen> {
                                   height: 70,
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: DropdownButtonFormField2(
-                                      value: addressList.isEmpty
-                                          ? "empty"
-                                          : addressList[indexofadd],
+                                    child: DropdownButton(
+                                      value: selectedAddress,
                                       isExpanded: true,
                                       hint: const Text(
                                         'Address',
@@ -835,12 +843,12 @@ class _ClientRegistrationScreenState extends State<ClientRegistrationScreen> {
                                         Icons.arrow_drop_down,
                                         color: Colors.black45,
                                       ),
-                                      items: addressList
-                                          .map((Address value) =>
-                                              DropdownMenuItem<Address>(
+                                      items: bankli
+                                          .map((value) =>
+                                              DropdownMenuItem(
                                                 value: value,
                                                 child: Text(
-                                                  value.toAddress.toString(),
+                                                  value.toString(),
                                                   style: const TextStyle(
                                                     fontSize: 14,
                                                   ),
@@ -848,12 +856,12 @@ class _ClientRegistrationScreenState extends State<ClientRegistrationScreen> {
                                               ))
                                           .toList(),
                                       onChanged: (value) {
-                                        Address addresspre = value as Address;
+                                        int idx = bankli.indexOf(value.toString());
                                         setState(() {
-                                          indexofadd =
-                                              addressList.indexOf(value);
-                                          address = addresspre.id;
+                                          selectedAddress = value.toString();
+                                          address = indx[idx];
                                         });
+                                        print(address.toString());
                                       },
                                     ),
                                   ),
@@ -874,7 +882,7 @@ class _ClientRegistrationScreenState extends State<ClientRegistrationScreen> {
                                                   type: PageTransitionType
                                                       .leftToRight,
                                                   child:
-                                                      const AddressRegistrationScreen()));
+                                                      const AddressRegistrationScreen())).then((_) => _refreshData());
                                         },
                                         icon: const Icon(
                                           Icons.add,
@@ -892,11 +900,14 @@ class _ClientRegistrationScreenState extends State<ClientRegistrationScreen> {
                       FutureBuilder(
                         builder: (BuildContext context,
                             AsyncSnapshot<dynamic> snapshot) {
-                          List<BankAccount> bankList = [];
                           if (snapshot.hasData) {
-                            bankList.clear();
-                            bankList = snapshot.data;
-                            int indexofbank = 0;
+                            List<BankAccount> bankList = snapshot.data;
+                            List<int> indx = [];
+                            List<String> bankli =[];
+                            for(var e in bankList){
+                                bankli.add(e.accountHolderName.toString());
+                                indx.add(int.parse(e.id.toString()));
+                            }
                             return Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
@@ -905,8 +916,8 @@ class _ClientRegistrationScreenState extends State<ClientRegistrationScreen> {
                                   height: 70,
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: DropdownButtonFormField2(
-                                      value: bankList.isNotEmpty ?bankList[indexofbank] : "cannot load",
+                                    child: DropdownButton(
+                                      value: selectedBank,
                                       isExpanded: true,
                                       hint: const Text(
                                         'Bank',
@@ -916,13 +927,12 @@ class _ClientRegistrationScreenState extends State<ClientRegistrationScreen> {
                                         Icons.arrow_drop_down,
                                         color: Colors.black45,
                                       ),
-                                      items: bankList
-                                          .map((BankAccount value) =>
-                                              DropdownMenuItem<BankAccount>(
+                                      items: bankli
+                                          .map((value) =>
+                                              DropdownMenuItem(
                                                 value: value,
                                                 child: Text(
-                                                  value.accountHolderName
-                                                      .toString(),
+                                                  value,
                                                   style: const TextStyle(
                                                     fontSize: 14,
                                                   ),
@@ -930,20 +940,12 @@ class _ClientRegistrationScreenState extends State<ClientRegistrationScreen> {
                                               ))
                                           .toList(),
                                       onChanged: (value) {
-                                        BankAccount addresspre =
-                                            value as BankAccount;
+                                        int idx = bankli.indexOf(value.toString());
                                         setState(() {
-                                          indexofbank = bankList.indexOf(value);
-                                          bank = addresspre.id;
+                                          selectedBank = value.toString();
+                                          bank = indx[idx];
                                         });
-                                      },
-                                      onSaved: (value) {
-                                        BankAccount addresspre =
-                                            value as BankAccount;
-                                        setState(() {
-                                          indexofbank = bankList.indexOf(value);
-                                          address = addresspre.id;
-                                        });
+                                        print(bank.toString());
                                       },
                                     ),
                                   ),
@@ -964,7 +966,7 @@ class _ClientRegistrationScreenState extends State<ClientRegistrationScreen> {
                                                   type: PageTransitionType
                                                       .leftToRight,
                                                   child:
-                                                      const BankRegistrationScreen()));
+                                                      const BankRegistrationScreen())).then((_) => _refreshData());
                                         },
                                         icon: const Icon(
                                           Icons.add,

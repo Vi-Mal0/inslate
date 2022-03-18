@@ -1,23 +1,52 @@
+import 'package:date_time_picker/date_time_picker.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
+import 'package:insuranceprototype/Screens/AddressRegistrationScreen.dart';
+import 'package:intl/intl.dart';
+import 'package:insuranceprototype/HTTP/HttpService.dart';
+import 'package:insuranceprototype/Model/ClientData.dart';
+import 'package:page_transition/page_transition.dart';
 
-import '../HTTP/HttpService.dart';
+import '../Model/Address.dart';
+import '../Model/Bank.dart';
+import 'BankRegisterScreen.dart';
 
 class ClientEdit extends StatefulWidget {
   int id;
   ClientEdit({Key? key, required this.id}) : super(key: key);
 
   @override
-  State<ClientEdit> createState() => _ClientEditState();
+  State<ClientEdit> createState() =>
+      _ClientEditState();
 }
 
 class _ClientEditState extends State<ClientEdit> {
   HttpService api = HttpService();
-  bool isChecked = false;
+
+  final _formKey = GlobalKey<FormState>();
+
+  Future<void> _refreshData() async {
+    setState(() {});
+  }
+
+  bool companyDoctor = false;
+  var address,
+      bank,
+      birthDate,
+      salutation,
+      gender,
+      marritalStatus,
+      addressid,
+      occupation,
+      bankId,
+      proofList;
 
   @override
   Widget build(BuildContext context) {
+
+
     Color getColor(Set<MaterialState> states) {
       const Set<MaterialState> interactiveStates = <MaterialState>{
         MaterialState.pressed,
@@ -31,219 +60,457 @@ class _ClientEditState extends State<ClientEdit> {
     }
 
     return Scaffold(
-        body: FutureBuilder(
-      future: api.getClientbyId(widget.id),
-      builder: (BuildContext context, AsyncSnapshot<dynamic> apival) {
-        if (apival.hasData) {
-          TextEditingController surName =
-              TextEditingController(text: apival.data.surName);
-          TextEditingController givenName =
-              TextEditingController(text: apival.data.givenName);
-          TextEditingController mobileNumber =
-              TextEditingController(text: apival.data.mobileNumber);
-          TextEditingController postalCode =
-              TextEditingController(text: apival.data.postalCode);
-          TextEditingController country =
-              TextEditingController(text: apival.data.country);
-          TextEditingController nationality =
-              TextEditingController(text: apival.data.nationality);
-          TextEditingController birthPlace =
-              TextEditingController(text: apival.data.birthPlace);
-          TextEditingController language =
-              TextEditingController(text: apival.data.language);
-          TextEditingController category =
-              TextEditingController(text: apival.data.category);
-          return SingleChildScrollView(
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 40,
-                ),
-                Row(
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: FutureBuilder(
+          future: api.getClientbyId(widget.id),
+          builder: (BuildContext context, AsyncSnapshot<ClientData> snapshot) {
+            if(snapshot.hasData){
+              ClientData? clientData = snapshot.data;
+
+              String? selectedBank = clientData?.bankAccount?.accountHolderName;
+              String? selectedAddress =clientData?.address?.toAddress;
+              salutation = clientData?.salutation;
+              gender = clientData?.gender;
+              marritalStatus = clientData?.marritalStatus;
+              occupation = clientData?.occupation;
+
+              TextEditingController surName = TextEditingController(text: clientData?.surName);
+              TextEditingController givenName = TextEditingController(text: clientData?.givenName);
+              TextEditingController mobileNumber = TextEditingController(text: clientData?.mobileNumber);
+              TextEditingController postalCode = TextEditingController(text: clientData?.postalCode);
+              TextEditingController country = TextEditingController(text: clientData?.country);
+              TextEditingController nationality = TextEditingController(text: clientData?.nationality);
+              TextEditingController birthPlace = TextEditingController(text: clientData?.birthPlace);
+              TextEditingController language = TextEditingController(text: clientData?.language);
+              TextEditingController category = TextEditingController(text: clientData?.category);
+              TextEditingController datectl = TextEditingController(text: clientData?.birthDate);
+              return Form(
+                key: _formKey,
+                child: Column(
                   children: [
-                    FutureBuilder(
-                      builder: (BuildContext context,
-                          AsyncSnapshot<dynamic> snapshot) {
-                        if (snapshot.hasData) {
-                          List<String> a = snapshot.data;
-                          return Padding(
-                            padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                            child: SizedBox(
-                              width: 150,
-                              height: 70,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: DropdownButtonFormField2(
-                                  value: apival.data.salutation,
-                                  decoration: InputDecoration(
-                                    isDense: true,
-                                    contentPadding: EdgeInsets.zero,
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
-                                  ),
-                                  isExpanded: true,
-                                  hint: const Text(
-                                    'Salutation',
-                                    style: TextStyle(fontSize: 14),
-                                  ),
-                                  icon: const Icon(
-                                    Icons.arrow_drop_down,
-                                    color: Colors.black45,
-                                  ),
-                                  iconSize: 30,
-                                  buttonHeight: 60,
-                                  buttonPadding: const EdgeInsets.only(
-                                      left: 20, right: 10),
-                                  dropdownDecoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  items: a
-                                      .map((item) => DropdownMenuItem<String>(
-                                            value: item,
-                                            child: Text(
-                                              item,
-                                              style: const TextStyle(
-                                                fontSize: 14,
+                    Container(
+                        color: Colors.white,
+                        height: 50,
+                        child: ListTile(
+                          leading: IconButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(
+                              Icons.arrow_back,
+                              color: Colors.black,
+                              size: 30,
+                            ),
+                          ),
+                          title: const Text(
+                            "Edit Client",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 20),
+                          ),
+                          trailing: IconButton(
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                Navigator.pop(context);
+                                api.updateClient(widget.id,ClientData(
+                                  surName: surName.text,
+                                  givenName: givenName.text,
+                                  salutation: salutation,
+                                  gender: gender,
+                                  marritalStatus: marritalStatus,
+                                  addressid: address,
+                                  mobileNumber: mobileNumber.text,
+                                  postalCode: postalCode.text,
+                                  country: country.text,
+                                  nationality: nationality.text,
+                                  companyDoctor: companyDoctor,
+                                  birthDate: datectl.text,
+                                  birthPlace: birthPlace.text,
+                                  language: language.text,
+                                  category: category.text,
+                                  occupation: occupation,
+                                  bankId: bank,
+                                ));
+                              }
+                            },
+                            icon: const Icon(Icons.done),
+                          ),
+                        )),
+                    Expanded(
+                      child: ListView(
+                        children: [
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            children: [
+                              FutureBuilder(
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<dynamic> snapshot) {
+                                  List<String> a = ["cannot load.."];
+                                  if (snapshot.hasData) {
+                                    a.clear();
+                                    a = snapshot.data;
+                                    return Padding(
+                                      padding:
+                                      const EdgeInsets.fromLTRB(20, 0, 0, 0),
+                                      child: SizedBox(
+                                        width: 140,
+                                        height: 70,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: DropdownButtonFormField2(
+                                            value: salutation,
+                                            decoration: InputDecoration(
+                                              isDense: true,
+                                              contentPadding: EdgeInsets.zero,
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                BorderRadius.circular(15),
                                               ),
                                             ),
-                                          ))
-                                      .toList(),
-                                  onChanged: (value) {
-                                    setState(() {});
-                                  },
+                                            isExpanded: true,
+                                            hint: const Text(
+                                              'Salutation',
+                                              style: TextStyle(fontSize: 14),
+                                            ),
+                                            icon: const Icon(
+                                              Icons.arrow_drop_down,
+                                              color: Colors.black45,
+                                            ),
+                                            iconSize: 30,
+                                            buttonHeight: 60,
+                                            buttonPadding: const EdgeInsets.only(
+                                                left: 20, right: 10),
+                                            dropdownDecoration: BoxDecoration(
+                                              borderRadius:
+                                              BorderRadius.circular(15),
+                                            ),
+                                            items: a
+                                                .map((item) =>
+                                                DropdownMenuItem<String>(
+                                                  value: item,
+                                                  child: Text(
+                                                    item,
+                                                    style: const TextStyle(
+                                                      fontSize: 14,
+                                                    ),
+                                                  ),
+                                                ))
+                                                .toList(),
+                                            onChanged: (value) {
+                                              setState(() {
+                                                salutation = value.toString();
+                                              });
+                                            },
+                                            onSaved: (value) {
+                                              setState(() {
+                                                salutation = value.toString();
+                                              });
+                                            },
+                                            validator: (value) => value == null
+                                                ? 'please select'
+                                                : null,
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                  return Padding(
+                                    padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+                                    child: SizedBox(
+                                      width: 140,
+                                      height: 70,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: DropdownButtonFormField2(
+                                          decoration: InputDecoration(
+                                            isDense: true,
+                                            contentPadding: EdgeInsets.zero,
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                              BorderRadius.circular(15),
+                                            ),
+                                          ),
+                                          isExpanded: true,
+                                          hint: const Text(
+                                            'Salutation',
+                                            style: TextStyle(fontSize: 14),
+                                          ),
+                                          icon: const Icon(
+                                            Icons.arrow_drop_down,
+                                            color: Colors.black45,
+                                          ),
+                                          iconSize: 30,
+                                          buttonHeight: 60,
+                                          buttonPadding: const EdgeInsets.only(
+                                              left: 20, right: 10),
+                                          dropdownDecoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(15),
+                                          ),
+                                          items: a
+                                              .map((item) =>
+                                              DropdownMenuItem<String>(
+                                                value: item,
+                                                child: Text(
+                                                  item,
+                                                  style: const TextStyle(
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                              ))
+                                              .toList(),
+                                          onChanged: (value) {},
+                                          onSaved: (value) {},
+                                          validator: (value) => value == null
+                                              ? 'please select'
+                                              : null,
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                                future: api.getParam('G0002'),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                child: SizedBox(
+                                  width: 250,
+                                  child: TextFormField(
+                                    controller: surName,
+                                    decoration: InputDecoration(
+                                        border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(15),
+                                        ),
+                                        labelText: "Surname"),
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'enter your surname';
+                                      }
+                                      return null;
+                                    },
+                                  ),
                                 ),
                               ),
-                            ),
-                          );
-                        }
-                        return const CircularProgressIndicator();
-                      },
-                      future: api.getParam('G0002'),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                      child: SizedBox(
-                        width: 250,
-                        child: TextFormField(
-                          controller: surName,
-                          decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              labelText: "Surname"),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'cannot be empty';
-                            }
-                            return null;
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    FutureBuilder(
-                      builder: (BuildContext context,
-                          AsyncSnapshot<dynamic> snapshot) {
-                        if (snapshot.hasData) {
-                          List<String> a = snapshot.data;
-                          return Padding(
-                            padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                            child: SizedBox(
-                              width: 150,
-                              height: 70,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: DropdownButtonFormField2(
-                                  value: apival.data.gender,
-                                  decoration: InputDecoration(
-                                    isDense: true,
-                                    contentPadding: EdgeInsets.zero,
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
-                                  ),
-                                  isExpanded: true,
-                                  hint: const Text(
-                                    'gender',
-                                    style: TextStyle(fontSize: 14),
-                                  ),
-                                  icon: const Icon(
-                                    Icons.arrow_drop_down,
-                                    color: Colors.black45,
-                                  ),
-                                  iconSize: 30,
-                                  buttonHeight: 60,
-                                  buttonPadding: const EdgeInsets.only(
-                                      left: 20, right: 10),
-                                  dropdownDecoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  items: a
-                                      .map((item) => DropdownMenuItem<String>(
-                                            value: item,
-                                            child: Text(
-                                              item,
-                                              style: const TextStyle(
-                                                fontSize: 14,
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              FutureBuilder(
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<dynamic> snapshot) {
+                                  List<String> a = ["cannot load.."];
+                                  if (snapshot.hasData) {
+                                    a.clear();
+                                    a = snapshot.data;
+                                    return Padding(
+                                      padding:
+                                      const EdgeInsets.fromLTRB(20, 0, 0, 0),
+                                      child: SizedBox(
+                                        width: 140,
+                                        height: 70,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: DropdownButtonFormField2(
+                                            value: gender,
+                                            decoration: InputDecoration(
+                                              isDense: true,
+                                              contentPadding: EdgeInsets.zero,
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                BorderRadius.circular(15),
                                               ),
                                             ),
-                                          ))
-                                      .toList(),
-                                  onChanged: (value) {
-                                    setState(() {});
-                                  },
+                                            isExpanded: true,
+                                            hint: const Text(
+                                              'gender',
+                                              style: TextStyle(fontSize: 14),
+                                            ),
+                                            icon: const Icon(
+                                              Icons.arrow_drop_down,
+                                              color: Colors.black45,
+                                            ),
+                                            iconSize: 30,
+                                            buttonHeight: 60,
+                                            buttonPadding: const EdgeInsets.only(
+                                                left: 20, right: 10),
+                                            dropdownDecoration: BoxDecoration(
+                                              borderRadius:
+                                              BorderRadius.circular(15),
+                                            ),
+                                            items: a
+                                                .map((item) =>
+                                                DropdownMenuItem<String>(
+                                                  value: item,
+                                                  child: Text(
+                                                    item,
+                                                    style: const TextStyle(
+                                                      fontSize: 14,
+                                                    ),
+                                                  ),
+                                                ))
+                                                .toList(),
+                                            onChanged: (value) {
+                                              setState(() {
+                                                gender = value.toString();
+                                              });
+                                            },
+                                            onSaved: (value) {
+                                              setState(() {
+                                                gender = value.toString();
+                                              });
+                                            },
+                                            validator: (value) => value == null
+                                                ? 'please select'
+                                                : null,
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                  return Padding(
+                                    padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+                                    child: SizedBox(
+                                      width: 140,
+                                      height: 70,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: DropdownButtonFormField2(
+                                          decoration: InputDecoration(
+                                            isDense: true,
+                                            contentPadding: EdgeInsets.zero,
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                              BorderRadius.circular(15),
+                                            ),
+                                          ),
+                                          isExpanded: true,
+                                          hint: const Text(
+                                            'gender',
+                                            style: TextStyle(fontSize: 14),
+                                          ),
+                                          icon: const Icon(
+                                            Icons.arrow_drop_down,
+                                            color: Colors.black45,
+                                          ),
+                                          iconSize: 30,
+                                          buttonHeight: 60,
+                                          buttonPadding: const EdgeInsets.only(
+                                              left: 20, right: 10),
+                                          dropdownDecoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(15),
+                                          ),
+                                          items: a
+                                              .map((item) =>
+                                              DropdownMenuItem<String>(
+                                                value: item,
+                                                child: Text(
+                                                  item,
+                                                  style: const TextStyle(
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                              ))
+                                              .toList(),
+                                          onChanged: (value) {},
+                                          onSaved: (value) {},
+                                          validator: (value) => value == null
+                                              ? 'please select'
+                                              : null,
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                                future: api.getParam('G0001'),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                child: SizedBox(
+                                  width: 250,
+                                  child: TextFormField(
+                                    controller: givenName,
+                                    decoration: InputDecoration(
+                                        border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(15),
+                                        ),
+                                        labelText: "Givenname"),
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'enter your givenname';
+                                      }
+                                      return null;
+                                    },
+                                  ),
                                 ),
                               ),
-                            ),
-                          );
-                        }
-                        return const CircularProgressIndicator();
-                      },
-                      future: api.getParam('G0001'),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                      child: SizedBox(
-                        width: 250,
-                        child: TextFormField(
-                          controller: givenName,
-                          decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              labelText: "Givenname"),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'cannot be empty';
-                            }
-                            return null;
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    FutureBuilder(
-                      builder: (BuildContext context,
-                          AsyncSnapshot<dynamic> snapshot) {
-                        print(snapshot.hasData);
-                        if (snapshot.hasData) {
-                          List<String> a = snapshot.data;
-                          return Padding(
-                            padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                            child: SizedBox(
-                              width: 200,
-                              height: 70,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: DropdownButtonFormField2(
-                                  value: apival.data.marritalStatus,
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(30, 10, 30, 0),
+                            child: FutureBuilder(
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<dynamic> snapshot) {
+                                List<String> a = ["cannot load.."];
+                                if (snapshot.hasData) {
+                                  a.clear();
+                                  a = snapshot.data;
+                                  return DropdownButtonFormField2(
+                                    value: marritalStatus,
+                                    decoration: InputDecoration(
+                                      isDense: true,
+                                      contentPadding: EdgeInsets.zero,
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                    ),
+                                    isExpanded: true,
+                                    hint: const Text(
+                                      'maritial status',
+                                      style: TextStyle(fontSize: 14),
+                                    ),
+                                    icon: const Icon(
+                                      Icons.arrow_drop_down,
+                                      color: Colors.black45,
+                                    ),
+                                    iconSize: 30,
+                                    buttonHeight: 60,
+                                    buttonPadding:
+                                    const EdgeInsets.only(left: 20, right: 10),
+                                    dropdownDecoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    items: a
+                                        .map((item) => DropdownMenuItem<String>(
+                                      value: item,
+                                      child: Text(
+                                        item,
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    ))
+                                        .toList(),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        marritalStatus = value.toString();
+                                      });
+                                    },
+                                    onSaved: (value) {
+                                      setState(() {
+                                        marritalStatus = value.toString();
+                                      });
+                                    },
+                                    validator: (value) =>
+                                    value == null ? 'please select' : null,
+                                  );
+                                }
+                                return DropdownButtonFormField2(
                                   decoration: InputDecoration(
                                     isDense: true,
                                     contentPadding: EdgeInsets.zero,
                                     border: OutlineInputBorder(
+
                                       borderRadius: BorderRadius.circular(15),
                                     ),
                                   ),
@@ -258,48 +525,89 @@ class _ClientEditState extends State<ClientEdit> {
                                   ),
                                   iconSize: 30,
                                   buttonHeight: 60,
-                                  buttonPadding: const EdgeInsets.only(
-                                      left: 20, right: 10),
+                                  buttonPadding:
+                                  const EdgeInsets.only(left: 20, right: 10),
                                   dropdownDecoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(15),
                                   ),
                                   items: a
                                       .map((item) => DropdownMenuItem<String>(
-                                            value: item,
-                                            child: Text(
-                                              item,
-                                              style: const TextStyle(
-                                                fontSize: 14,
-                                              ),
-                                            ),
-                                          ))
+                                    value: item,
+                                    child: Text(
+                                      item,
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ))
                                       .toList(),
-                                  onChanged: (value) {
-                                    setState(() {});
-                                  },
-                                ),
-                              ),
+                                  onChanged: (value) {},
+                                  onSaved: (value) {},
+                                  validator: (value) =>
+                                  value == null ? 'please select' : null,
+                                );
+                              },
+                              future: api.getParam('R0001'),
                             ),
-                          );
-                        }
-                        return const CircularProgressIndicator();
-                      },
-                      future: api.getParam('R0001'),
-                    ),
-                    FutureBuilder(
-                      builder: (BuildContext context,
-                          AsyncSnapshot<dynamic> snapshot) {
-                        if (snapshot.hasData) {
-                          List<String> a = snapshot.data;
-                          return Padding(
-                            padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                            child: SizedBox(
-                              width: 200,
-                              height: 70,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: DropdownButtonFormField2(
-                                  value: apival.data.occupation,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(30, 10, 30, 0),
+                            child: FutureBuilder(
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<dynamic> snapshot) {
+                                List<String> a = ["cannot load.."];
+                                if (snapshot.hasData) {
+                                  a.clear();
+                                  a = snapshot.data;
+                                  return DropdownButtonFormField2(
+                                    value: occupation,
+                                    decoration: InputDecoration(
+                                      isDense: true,
+                                      contentPadding: EdgeInsets.zero,
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                    ),
+                                    isExpanded: true,
+                                    hint: const Text(
+                                      'occupation',
+                                      style: TextStyle(fontSize: 14),
+                                    ),
+                                    icon: const Icon(
+                                      Icons.arrow_drop_down,
+                                      color: Colors.black45,
+                                    ),
+                                    iconSize: 30,
+                                    buttonHeight: 60,
+                                    buttonPadding:
+                                    const EdgeInsets.only(left: 20, right: 10),
+                                    dropdownDecoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    items: a
+                                        .map((item) => DropdownMenuItem<String>(
+                                      value: item,
+                                      child: Text(
+                                        item,
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    ))
+                                        .toList(),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        occupation = value.toString();
+                                      });
+                                    },
+                                    onSaved: (value) {
+                                      occupation = value.toString();
+                                    },
+                                    validator: (value) =>
+                                    value == null ? 'please select' : null,
+                                  );
+                                }
+                                return DropdownButtonFormField2(
                                   decoration: InputDecoration(
                                     isDense: true,
                                     contentPadding: EdgeInsets.zero,
@@ -318,347 +626,378 @@ class _ClientEditState extends State<ClientEdit> {
                                   ),
                                   iconSize: 30,
                                   buttonHeight: 60,
-                                  buttonPadding: const EdgeInsets.only(
-                                      left: 20, right: 10),
+                                  buttonPadding:
+                                  const EdgeInsets.only(left: 20, right: 10),
                                   dropdownDecoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(15),
                                   ),
                                   items: a
                                       .map((item) => DropdownMenuItem<String>(
-                                            value: item,
-                                            child: Text(
-                                              item,
-                                              style: const TextStyle(
-                                                fontSize: 14,
-                                              ),
-                                            ),
-                                          ))
+                                    value: item,
+                                    child: Text(
+                                      item,
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ))
                                       .toList(),
-                                  onChanged: (value) {
-                                    setState(() {});
-                                  },
-                                ),
-                              ),
+                                  onChanged: (value) {},
+                                  onSaved: (value) {},
+                                  validator: (value) =>
+                                  value == null ? 'please select' : null,
+                                );
+                              },
+                              future: api.getParam('W0001'),
                             ),
-                          );
-                        }
-                        return const CircularProgressIndicator();
-                      },
-                      future: api.getParam('W0001'),
-                    ),
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(30, 10, 30, 0),
-                  child: TextFormField(
-                    controller: mobileNumber,
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: "Mobilenumber"),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'cannot be empty';
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(30, 10, 30, 0),
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        width: 200,
-                        child: TextFormField(
-                          controller: postalCode,
-                          decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              labelText: "Postalcode"),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'cannot be empty';
-                            }
-                            return null;
-                          },
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          Checkbox(
-                            checkColor: Colors.white,
-                            fillColor:
-                                MaterialStateProperty.resolveWith(getColor),
-                            value: isChecked,
-                            onChanged: (bool? value) {
-                              setState(() {
-                                isChecked = value!;
-                              });
-                            },
                           ),
-                          const Text("Company Doctor")
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(30, 10, 30, 0),
+                            child: TextFormField(
+                              controller: mobileNumber,
+                              decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  labelText: "Mobilenumber"),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'enter your mobile number';
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(30, 10, 30, 0),
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 200,
+                                  child: TextFormField(
+                                    controller: postalCode,
+                                    decoration: InputDecoration(
+                                        border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(15),
+                                        ),
+                                        labelText: "Postalcode"),
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'enter your postalcode';
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                ),
+                                Row(
+                                  children: [
+                                    Checkbox(
+                                      checkColor: Colors.white,
+                                      fillColor: MaterialStateProperty.resolveWith(
+                                          getColor),
+                                      value: clientData?.companyDoctor as bool,
+                                      onChanged: (bool? value) {
+                                        setState(() {
+                                          companyDoctor = value!;
+                                        });
+                                      },
+                                    ),
+                                    const Text("Company Doctor")
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(30, 10, 30, 0),
+                            child: TextFormField(
+                              controller: country,
+                              decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  labelText: "Country"),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'enter your country';
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(30, 10, 30, 0),
+                            child: TextFormField(
+                              controller: nationality,
+                              decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  labelText: "Nationality"),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'enter your nationality';
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(30, 10, 30, 0),
+                            child: DateTimePicker(
+                              initialValue: datectl.text,
+                              type: DateTimePickerType.date,
+                              dateMask: 'MM-dd-yyyy',
+                              firstDate: DateTime(1900),
+                              lastDate: DateTime(2100),
+                              icon: const Icon(Icons.event),
+                              dateLabelText: 'Date',
+                              timeLabelText: "Hour",
+                              onChanged: (val) {
+                                setState(() {
+                                  datectl.text = DateFormat("MM-dd-yyyy")
+                                      .format(DateTime.parse(val));
+                                });
+                              },
+                              onSaved: (val) {
+                                setState(() {
+                                  datectl.text = DateFormat("MM-dd-yyyy")
+                                      .format(DateTime.parse(val!));
+                                });
+                              },
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(30, 10, 30, 0),
+                            child: TextFormField(
+                              controller: birthPlace,
+                              decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  labelText: "Birthplace"),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'enter your birthplace';
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(30, 10, 30, 0),
+                            child: TextFormField(
+                              controller: language,
+                              decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  labelText: "language"),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'enter your language';
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
+                            child: TextFormField(
+                              controller: category,
+                              decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  labelText: "Category"),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'cannot be empty';
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                          FutureBuilder(
+                            builder: (BuildContext context,
+                                AsyncSnapshot<dynamic> snapshot) {
+                              if (snapshot.hasData) {
+                                List<Address> addressList = snapshot.data;
+                                List<String> bankli = [];
+                                List<int> indx = [];
+                                for(var e in addressList){
+                                  bankli.add(e.toAddress.toString());
+                                  indx.add(int.parse(e.id.toString()));
+                                }
+
+                                return Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  children: [
+                                    SizedBox(
+                                      width: 300,
+                                      height: 70,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: DropdownButton(
+                                          value: selectedAddress,
+                                          isExpanded: true,
+                                          hint: const Text(
+                                            'Address',
+                                            style: TextStyle(fontSize: 14),
+                                          ),
+                                          icon: const Icon(
+                                            Icons.arrow_drop_down,
+                                            color: Colors.black45,
+                                          ),
+                                          items: bankli
+                                              .map((value) =>
+                                              DropdownMenuItem(
+                                                value: value,
+                                                child: Text(
+                                                  value.toString(),
+                                                  style: const TextStyle(
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                              ))
+                                              .toList(),
+                                          onChanged: (value) {
+                                            int idx = bankli.indexOf(value.toString());
+                                            setState(() {
+                                              selectedAddress = value.toString();
+                                              address = indx[idx];
+                                            });
+                                            print(address.toString());
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                        decoration: BoxDecoration(
+                                            color: const Color(0xffbe61565),
+                                            border: Border.all(
+                                              color: Colors.black,
+                                            ),
+                                            borderRadius: const BorderRadius.all(
+                                                Radius.circular(20))),
+                                        child: IconButton(
+                                            onPressed: () {
+                                              Navigator.push(
+                                                  context,
+                                                  PageTransition(
+                                                      type: PageTransitionType
+                                                          .leftToRight,
+                                                      child:
+                                                      const AddressRegistrationScreen())).then((_) => _refreshData());
+                                            },
+                                            icon: const Icon(
+                                              Icons.add,
+                                              color: Colors.white,
+                                            )))
+                                  ],
+                                );
+                              }
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            },
+                            future: api.getAddress(),
+                          ),
+                          FutureBuilder(
+                            builder: (BuildContext context,
+                                AsyncSnapshot<dynamic> snapshot) {
+                              if (snapshot.hasData) {
+                                List<BankAccount> bankList = snapshot.data;
+                                List<int> indx = [];
+                                List<String> bankli =[];
+                                for(var e in bankList){
+                                  bankli.add(e.accountHolderName.toString());
+                                  indx.add(int.parse(e.id.toString()));
+                                }
+                                return Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  children: [
+                                    SizedBox(
+                                      width: 300,
+                                      height: 70,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: DropdownButton(
+                                          value: selectedBank,
+                                          isExpanded: true,
+                                          hint: const Text(
+                                            'Bank',
+                                            style: TextStyle(fontSize: 14),
+                                          ),
+                                          icon: const Icon(
+                                            Icons.arrow_drop_down,
+                                            color: Colors.black45,
+                                          ),
+                                          items: bankli
+                                              .map((value) =>
+                                              DropdownMenuItem(
+                                                value: value,
+                                                child: Text(
+                                                  value,
+                                                  style: const TextStyle(
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                              ))
+                                              .toList(),
+                                          onChanged: (value) {
+                                            int idx = bankli.indexOf(value.toString());
+                                            setState(() {
+                                              selectedBank = value.toString();
+                                              bank = indx[idx];
+                                            });
+                                            print(bank.toString());
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                        decoration: BoxDecoration(
+                                            color: const Color(0xffbe61565),
+                                            border: Border.all(
+                                              color: Colors.black,
+                                            ),
+                                            borderRadius: const BorderRadius.all(
+                                                Radius.circular(20))),
+                                        child: IconButton(
+                                            onPressed: () {
+                                              Navigator.push(
+                                                  context,
+                                                  PageTransition(
+                                                      type: PageTransitionType
+                                                          .leftToRight,
+                                                      child:
+                                                      const BankRegistrationScreen())).then((_) => _refreshData());
+                                            },
+                                            icon: const Icon(
+                                              Icons.add,
+                                              color: Colors.white,
+                                            )))
+                                  ],
+                                );
+                              }
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            },
+                            future: api.getBank(),
+                          ),
                         ],
                       ),
-                    ],
-                  ),
+                    )
+                  ],
                 ),
-
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(30, 10, 30, 0),
-                  child: TextFormField(
-                    controller: country,
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(), labelText: "Country"),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'cannot be empty';
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(30, 10, 30, 0),
-                  child: TextFormField(
-                    controller: nationality,
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(), labelText: "Nationality"),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'cannot be empty';
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(30, 10, 30, 0),
-                  child: TextFormField(
-                    controller: birthPlace,
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(), labelText: "Birthplace"),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'cannot be empty';
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(30, 10, 30, 0),
-                  child: TextFormField(
-                    controller: language,
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(), labelText: "language"),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'cannot be empty';
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(30, 10, 30, 0),
-                  child: TextFormField(
-                    controller: category,
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(), labelText: "Category"),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'cannot be empty';
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                // FutureBuilder(
-                //   builder:
-                //       (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                //     if (snapshot.hasData) {
-                //       List<String> a = snapshot.data;
-                //       return Padding(
-                //         padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                //         child: Row(
-                //           mainAxisAlignment: MainAxisAlignment.spaceAround,
-                //           children: [
-                //             SizedBox(
-                //               width: 300,
-                //               height: 70,
-                //               child: Padding(
-                //                 padding: const EdgeInsets.all(8.0),
-                //                 child: DropdownButtonFormField2(
-                //                   decoration: InputDecoration(
-                //                     isDense: true,
-                //                     contentPadding: EdgeInsets.zero,
-                //                     border: OutlineInputBorder(
-                //                       borderRadius: BorderRadius.circular(15),
-                //                     ),
-                //                   ),
-                //                   isExpanded: true,
-                //                   hint: const Text(
-                //                     'address type',
-                //                     style: TextStyle(fontSize: 14),
-                //                   ),
-                //                   icon: const Icon(
-                //                     Icons.arrow_drop_down,
-                //                     color: Colors.black45,
-                //                   ),
-                //                   iconSize: 30,
-                //                   buttonHeight: 60,
-                //                   buttonPadding:
-                //                       const EdgeInsets.only(left: 20, right: 10),
-                //                   dropdownDecoration: BoxDecoration(
-                //                     borderRadius: BorderRadius.circular(15),
-                //                   ),
-                //                   items: a
-                //                       .map((item) => DropdownMenuItem<String>(
-                //                             value: item,
-                //                             child: Text(
-                //                               item,
-                //                               style: const TextStyle(
-                //                                 fontSize: 14,
-                //                               ),
-                //                             ),
-                //                           ))
-                //                       .toList(),
-                //                   onChanged: (value) {
-                //                     setState(() {
-                //                       result = value.toString();
-                //                     });
-                //                   },
-                //                 ),
-                //               ),
-                //             ),
-                //             Container(
-                //                 decoration: BoxDecoration(
-                //                     color: Colors.amber,
-                //                     border: Border.all(
-                //                       color: Colors.black,
-                //                     ),
-                //                     borderRadius:
-                //                         BorderRadius.all(Radius.circular(20))),
-                //                 child: IconButton(
-                //                     onPressed: () {
-                //                       Navigator.pop(context, true);
-                //                     },
-                //                     icon: const Icon(Icons.done)))
-                //           ],
-                //         ),
-                //       );
-                //     }
-                //     return const CircularProgressIndicator();
-                //   },
-                //   future: api.getParam('AT001'),
-                // ),
-                // FutureBuilder(
-                //   builder:
-                //       (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                //     if (snapshot.hasData) {
-                //       List<String> a = snapshot.data;
-                //       return Padding(
-                //         padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                //         child: Row(
-                //           mainAxisAlignment: MainAxisAlignment.spaceAround,
-                //           children: [
-                //             SizedBox(
-                //               width: 300,
-                //               height: 70,
-                //               child: Padding(
-                //                 padding: const EdgeInsets.all(8.0),
-                //                 child: DropdownButtonFormField2(
-                //                   decoration: InputDecoration(
-                //                     isDense: true,
-                //                     contentPadding: EdgeInsets.zero,
-                //                     border: OutlineInputBorder(
-                //                       borderRadius: BorderRadius.circular(15),
-                //                     ),
-                //                   ),
-                //                   isExpanded: true,
-                //                   hint: const Text(
-                //                     'bankaccount type',
-                //                     style: TextStyle(fontSize: 14),
-                //                   ),
-                //                   icon: const Icon(
-                //                     Icons.arrow_drop_down,
-                //                     color: Colors.black45,
-                //                   ),
-                //                   iconSize: 30,
-                //                   buttonHeight: 60,
-                //                   buttonPadding:
-                //                       const EdgeInsets.only(left: 20, right: 10),
-                //                   dropdownDecoration: BoxDecoration(
-                //                     borderRadius: BorderRadius.circular(15),
-                //                   ),
-                //                   items: a
-                //                       .map((item) => DropdownMenuItem<String>(
-                //                             value: item,
-                //                             child: Text(
-                //                               item,
-                //                               style: const TextStyle(
-                //                                 fontSize: 14,
-                //                               ),
-                //                             ),
-                //                           ))
-                //                       .toList(),
-                //                   onChanged: (value) {
-                //                     setState(() {
-                //                       result = value.toString();
-                //                     });
-                //                   },
-                //                 ),
-                //               ),
-                //             ),
-                //             Container(
-                //                 decoration: BoxDecoration(
-                //                     color: Colors.amber,
-                //                     border: Border.all(
-                //                       color: Colors.black,
-                //                     ),
-                //                     borderRadius:
-                //                         BorderRadius.all(Radius.circular(20))),
-                //                 child: IconButton(
-                //                     onPressed: () {
-                //                       Navigator.pop(context, true);
-                //                     },
-                //                     icon: const Icon(Icons.done)))
-                //           ],
-                //         ),
-                //       );
-                //     }
-                //     return const CircularProgressIndicator();
-                //   },
-                //   future: api.getParam('S002'),
-                // ),
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      height: 70,
-                      width: 300,
-                      child: const Card(
-                        color: Color(0xffbe61565),
-                        child: Center(
-                            child: Text(
-                          "update",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 26,
-                              fontWeight: FontWeight.bold),
-                        )),
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            ),
-          );
-        }
-        return Center(
-          child: CircularProgressIndicator(),
-        );
-      },
-    ));
+              );
+            }
+            return Center(child: CircularProgressIndicator(),);
+          },
+        ),
+      ),
+    );
   }
 }
