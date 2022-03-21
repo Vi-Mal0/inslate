@@ -352,57 +352,58 @@ class _DashboardState extends State<Dashboard> {
                       builder: (BuildContext context,
                           AsyncSnapshot todayData) {
                         if (snapshot.hasData) {
+                          List<Candidate> tdlist = todayData.data;
                           return ListView.builder(
                             padding: const EdgeInsets.fromLTRB(15,0,15,0),
-                            itemCount: todayData.data.length,
-                            itemBuilder: (BuildContext context, index) {
+                            itemCount: tdlist.length, itemBuilder: (BuildContext context, int index) {
                               return Card(
-                                color: index % 2 == 0 ? Colors.white : Colors.grey[200],
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
+                            color: index % 2 == 0 ? Colors.white : Colors.grey[200],
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                SizedBox(height: 5,),
+                                Row(
                                   children: [
-                                    SizedBox(height: 5,),
-                                    Row(
-                                      children: [
-                                        const Icon(Icons.badge),
-                                        Text(
-                                            "  ${todayData.data[index].name}"),
-                                      ],
+                                    const Icon(Icons.badge),
+                                    Text(
+                                        "  ${todayData.data[index].name}"),
+                                  ],
+                                ),
+                                SizedBox(height: 5,),
+                                Row(
+                                  children: [
+                                    const Icon(Icons.email_outlined),
+                                    const SizedBox(
+                                      width: 2,
                                     ),
-                                    SizedBox(height: 5,),
-                                    Row(
-                                      children: [
-                                        const Icon(Icons.email_outlined),
-                                        const SizedBox(
-                                          width: 2,
-                                        ),
-                                        Text(
-                                          "  ${todayData.data[index].email}",
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(height: 5,),
-                                    Row(
-                                      children: [
-                                        const Icon(Icons.phone),
-                                        const SizedBox(
-                                          width: 5,
-                                        ),
-                                        Text(
-                                          "  ${todayData.data[index].mobileNumber}",
-                                        ),
-                                      ],
+                                    Text(
+                                      "  ${todayData.data[index].email}",
+                                      overflow: TextOverflow.ellipsis,
                                     ),
                                   ],
                                 ),
-                              );
-                            },
+                                SizedBox(height: 5,),
+                                Row(
+                                  children: [
+                                    const Icon(Icons.phone),
+                                    const SizedBox(
+                                      width: 5,
+                                    ),
+                                    Text(
+                                      "  ${todayData.data[index].mobileNumber}",
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          );
+                              },
+
                           );
                         }
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
+                        else{
+                          return Center(child: CircularProgressIndicator(),);
+                        }
                       },
                     ),
                   ),
