@@ -90,51 +90,7 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
                                 const TextStyle(fontSize: 24, letterSpacing: 2),
                           ),
                         ),
-                        // const SizedBox(
-                        //   height: 10,
-                        // ),
-                        // Text(client.gender.toString()),
-                        // const SizedBox(
-                        //   height: 10,
-                        // ),
-                        // Text(client.marritalStatus.toString()),
-                        // const SizedBox(
-                        //   height: 10,
-                        // ),
-                        // Text(client.mobileNumber.toString()),
-                        // Text(client.country.toString()),
-                        // Text(client.nationality.toString()),
-                        // const SizedBox(
-                        //   height: 10,
-                        // ),
-                        // const Text("Address Details"),
-                        // Text(
-                        //     " ${client.address?.addressLine1.toString()} \n ${client.address?.addressLine2.toString()} "),
-                        // Text(
-                        //     " ${client.address?.city.toString()} \n ${client.address?.pincode.toString()} "),
-                        // Text(
-                        //     " ${client.address?.state.toString()} \n ${client.address?.country.toString()} "),
-                        // const SizedBox(
-                        //   height: 10,
-                        // ),
-                        // Text(
-                        //   " ${client.birthPlace.toString()} ",
-                        // ),
-                        // Text(" ${client.birthDate.toString()} "),
-                        // Text(" ${client.category.toString()} "),
-                        // Text(" ${client.occupation.toString()} "),
-                        // const SizedBox(
-                        //   height: 10,
-                        // ),
-                        // const Text("Bank Account Details"),
-                        // Text(
-                        //     " ${client.bankAccount?.accountNumber.toString()} \n ${client.bankAccount?.accountHolderName.toString()} "),
-                        // Text(" ${client.bankAccount?.ifscCode.toString()}"),
-                        // Text(
-                        //     " ${client.bankAccount?.bankName.toString()}\n ${client.bankAccount?.bankBranch.toString()}"),
-                        // const SizedBox(
-                        //   height: 10,
-                        // ),
+
                       ],
                     ))
                   ],

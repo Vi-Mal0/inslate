@@ -23,9 +23,6 @@ class _DashboardState extends State<Dashboard> {
   bool todaytask = true;
   bool isUpcoming = true;
 
-  List<Candidate> todays = [];
-  List<Candidate> upcoming = [];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,21 +34,6 @@ class _DashboardState extends State<Dashboard> {
           future: http.getEmployeeByID(widget.id),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.hasData) {
-              todays.clear();
-              upcoming.clear();
-              for (var e in snapshot.data.assignedCandidates) {
-                if (e.availableDateAndTime.toString().split(" ")[0] ==
-                        DateFormat("dd-MM-yyyy").format(now) &&
-                    e.currentStatus == "Assigned") {
-                  todays.add(e);
-                }
-                if (e.currentStatus != "Passed" &&
-                    e.availableDateAndTime.toString().split(" ")[0] !=
-                        DateFormat("dd-MM-yyyy").format(now) &&
-                    e.currentStatus != "Failed") {
-                  upcoming.add(e);
-                }
-              }
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -102,7 +84,8 @@ class _DashboardState extends State<Dashboard> {
                                             width: 50,
                                           ),
                                           Text(
-                                            DateFormat.yMMMMd('en_US').format(now),
+                                            DateFormat.yMMMMd('en_US')
+                                                .format(now),
                                             style: const TextStyle(
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.w300),
@@ -362,39 +345,69 @@ class _DashboardState extends State<Dashboard> {
                           child: const Text("See All")),
                     ),
                   ),
-                  if (todays.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(15, 0, 10, 0),
-                      child: SizedBox(
-                        height: 150,
-                        width: MediaQuery.of(context).size.width,
-                        child: ListView.builder(
-                          itemCount: todays.length,
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (context, index) {
-                            return SizedBox(
-                              height: 150,
-                              width: 200,
-                              child: Card(
-                                elevation: 3,
+                  Expanded(
+                    flex: 1,
+                    child: FutureBuilder(
+                      future: http.gettoday(widget.id),
+                      builder: (BuildContext context,
+                          AsyncSnapshot todayData) {
+                        if (snapshot.hasData) {
+                          return ListView.builder(
+                            padding: const EdgeInsets.fromLTRB(15,0,15,0),
+                            itemCount: todayData.data.length,
+                            itemBuilder: (BuildContext context, index) {
+                              return Card(
+                                color: index % 2 == 0 ? Colors.white : Colors.grey[200],
                                 child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    Text(todays[index].id.toString()),
-                                    Text(todays[index].name.toString()),
-                                    Text(todays[index]
-                                        .highestQualification
-                                        .toString()),
+                                    SizedBox(height: 5,),
+                                    Row(
+                                      children: [
+                                        const Icon(Icons.badge),
+                                        Text(
+                                            "  ${todayData.data[index].name}"),
+                                      ],
+                                    ),
+                                    SizedBox(height: 5,),
+                                    Row(
+                                      children: [
+                                        const Icon(Icons.email_outlined),
+                                        const SizedBox(
+                                          width: 2,
+                                        ),
+                                        Text(
+                                          "  ${todayData.data[index].email}",
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 5,),
+                                    Row(
+                                      children: [
+                                        const Icon(Icons.phone),
+                                        const SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text(
+                                          "  ${todayData.data[index].mobileNumber}",
+                                        ),
+                                      ],
+                                    ),
                                   ],
                                 ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
+                              );
+                            },
+                          );
+                        }
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      },
                     ),
+                  ),
                   const SizedBox(
-                    height: 20,
+                    height: 10,
                   ),
                   Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -415,124 +428,70 @@ class _DashboardState extends State<Dashboard> {
                             },
                             child: const Text("See All")),
                       )),
-                    Expanded(
-                      child: FutureBuilder(
-                        future: http.getupcoming(widget.id),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<dynamic> upcom) {
-                          if(upcom.hasData){
-                            return ListView.builder(
-                              padding: const EdgeInsets.only(top: 0.0),
-                              itemCount: upcom.data.length,
-                              itemBuilder: (context, index) {
-                                retColor() {
-                                  var clr = upcom.data[index].currentStatus;
-                                  if (clr == "Assigned") {
-                                    return Colors.cyan;
-                                  }
-                                  if (clr == "Captured") {
-                                    return Colors.yellow;
-                                  }
-                                  if (clr == "Passed") {
-                                    return Colors.green;
-                                  }
-                                  if (clr == "Failed") {
-                                    return Colors.red;
-                                  }
-                                }
-
-                                return SizedBox(
-                                  height: 160,
-                                  width: 100,
-                                  child: Padding(
-                                    padding: const EdgeInsets.fromLTRB(15, 0, 10, 0),
-                                    child: Card(
-                                      elevation: 3,
-                                      color: (Theme.of(context).brightness ==
-                                          Brightness.dark)
-                                          ? Colors.grey[700]
-                                          : Colors.white,
-                                      child: Column(
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Text("name : ${upcom.data[index].name}"),
-                                                Container(
-                                                  width: 100,
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                    BorderRadius.circular(10),
-                                                    color: retColor(),
-                                                  ),
-                                                  child: Text(
-                                                    upcom.data[index].currentStatus,
-                                                    style: const TextStyle(
-                                                        fontSize: 14,
-                                                        color: Colors.black),
-                                                    textAlign: TextAlign.center,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Row(
-                                              children: [
-                                                SizedBox(
-                                                    width: 210,
-                                                    child: Text(
-                                                      "email : ${upcom.data[index].email}",
-                                                    )),
-                                                const SizedBox(
-                                                  width: 50,
-                                                ),
-                                                Text(
-                                                    "Phone : ${upcom.data[index].mobileNumber}"),
-                                              ],
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Row(
-                                              children: [
-                                                Text(
-                                                    "Qualification : ${upcom.data[index].highestQualification}"),
-                                              ],
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Row(
-                                              children: [
-                                                Text(
-                                                    "Interview Schedule : ${upcom.data[index].availableDateAndTime}"),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                  Expanded(
+                    flex: 2,
+                    child: FutureBuilder(
+                      future: http.getupcoming(widget.id),
+                      builder: (BuildContext context,
+                          AsyncSnapshot upcomingData) {
+                        if (snapshot.hasData) {
+                          return ListView.builder(
+                            padding: const EdgeInsets.fromLTRB(15,0,15,0),
+                            itemCount: upcomingData.data.length,
+                            itemBuilder: (context, index) {
+                              return Card(
+                                color: index % 2 == 0 ? Colors.white : Colors.grey[200],
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    SizedBox(height: 5,),
+                                    Row(
+                                      children: [
+                                        const Icon(Icons.badge),
+                                        Text(
+                                            "  ${upcomingData.data[index].name}"),
+                                      ],
                                     ),
-                                  ),
-                                );
-                              },
-                            );
-                          }
-                          return Center(child: CircularProgressIndicator());
-                        },
-                      ),
+                                    SizedBox(height: 5,),
+                                    Row(
+                                      children: [
+                                        const Icon(Icons.email_outlined),
+                                        const SizedBox(
+                                          width: 2,
+                                        ),
+                                        Text(
+                                          "  ${upcomingData.data[index].email}",
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 5,),
+                                    Row(
+                                      children: [
+                                        const Icon(Icons.phone),
+                                        const SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text(
+                                          "  ${upcomingData.data[index].mobileNumber}",
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          );
+                        }
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      },
                     ),
+                  ),
                 ],
               );
-            } else if (snapshot.hasError) {
-              return const Center(
-                child: Icon(Icons.error),
-              );
-            } else {
+            }else {
               return const Center(
                 child: CircularProgressIndicator(),
               );

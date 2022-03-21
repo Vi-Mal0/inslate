@@ -135,97 +135,15 @@ class _TodaysinterviewState extends State<Todaysinterview> {
                                   .then((_) => _refreshData());
                             },
                             child: SizedBox(
-                              height: 100,
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  ProfilePicture(
+                              height: 60,
+                              child: Center(
+                                child: ListTile(
+                                  leading: ProfilePicture(
                                     name: e?[index].name,
-                                    radius: 31,
-                                    fontsize: 21,
                                   ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        "${e?[index].name}",
-                                        style: const TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text(
-                                        "${e?[index].email}",
-                                        style: const TextStyle(fontSize: 16),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ],
-                                  ),
-                                  if (e?[index].currentStatus ==
-                                      "Assigned") ...[
-                                    Container(
-                                      width: 100,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: Colors.cyan,
-                                      ),
-                                      child: Text(
-                                        e?[index].currentStatus,
-                                        style: const TextStyle(
-                                            fontSize: 14, color: Colors.black),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    )
-                                  ] else if (e?[index].currentStatus ==
-                                      "Captured") ...[
-                                    Container(
-                                      width: 100,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: Colors.yellow,
-                                      ),
-                                      child: Text(
-                                        e?[index].currentStatus,
-                                        style: const TextStyle(
-                                            fontSize: 14, color: Colors.black),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    )
-                                  ] else if (e?[index].currentStatus ==
-                                      "Passed") ...[
-                                    Container(
-                                      width: 100,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: Colors.green,
-                                      ),
-                                      child: Text(
-                                        e?[index].currentStatus,
-                                        style: const TextStyle(
-                                            fontSize: 14, color: Colors.black),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    )
-                                  ] else if (e?[index].currentStatus ==
-                                      "Failed") ...[
-                                    Container(
-                                      width: 100,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: Colors.red,
-                                      ),
-                                      child: Text(
-                                        e?[index].currentStatus,
-                                        style: const TextStyle(
-                                            fontSize: 14, color: Colors.black),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    )
-                                  ]
-                                ],
-                              ),
+                                  title:Text("${e?[index].name}") ,
+                                ),
+                              )
                             ),
                           );
                         },

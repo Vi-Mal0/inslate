@@ -273,15 +273,6 @@ class _BucketState extends State<Bucket> {
                           itemBuilder: (context, index) {
                             e = snapshot.data.assignedCandidates;
 
-                            retColor() {
-                              var clr = snapshot
-                                  .data.assignedCandidates[index].currentStatus;
-                              if (clr == "Assigned") return Colors.cyan;
-                              if (clr == "Captured") return Colors.yellow;
-                              if (clr == "Passed") return Colors.green;
-                              if (clr == "Failed") return Colors.red;
-                            }
-
                             return Slidable(
                               key: UniqueKey(),
                               endActionPane: ActionPane(
@@ -368,16 +359,12 @@ class _BucketState extends State<Bucket> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceAround,
                                       children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                  "Name :  ${snapshot.data.assignedCandidates[index].name}"),
-                                            ],
-                                          ),
+                                        Row(
+                                          children: [
+                                            const Icon(Icons.badge),
+                                            Text(
+                                                "  ${snapshot.data.assignedCandidates[index].name}"),
+                                          ],
                                         ),
                                         Row(
                                           children: [

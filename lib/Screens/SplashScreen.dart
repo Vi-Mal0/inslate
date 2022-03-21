@@ -22,6 +22,7 @@ class _SplashHome extends State<SplashHome> {
   }
 
   void navigateUser() async {
+
     // Navigator.of(context).pushReplacement(MaterialPageRoute(
     //     builder: (BuildContext context) => LoginScreen()));
 

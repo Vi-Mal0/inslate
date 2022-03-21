@@ -203,7 +203,7 @@ class _CandidateProfileState extends State<CandidateProfile> {
                         const SizedBox(
                           height: 10,
                         ),
-                        Text("Crrentstatus : ${snapshot.data.result}"),
+                        Text("result : ${snapshot.data.result}"),
                       ],
                     ))
                   ],
