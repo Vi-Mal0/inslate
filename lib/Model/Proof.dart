@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 class Proof {
   int? id;
   String? proofName;

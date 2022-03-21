@@ -86,19 +86,23 @@ class _DashboardState extends State<Dashboard> {
                                     children: [
                                       Row(
                                         children: [
-                                          Text(
-                                            snapshot.data.employeeName
-                                                .toString(),
-                                            style: const TextStyle(
-                                                letterSpacing: 1,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 20),
+                                          SizedBox(
+                                            width: 150,
+                                            child: Text(
+                                              snapshot.data.employeeName
+                                                  .toString(),
+                                              style: const TextStyle(
+                                                  letterSpacing: 1,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 20),
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
                                           ),
                                           const SizedBox(
-                                            width: 145,
+                                            width: 50,
                                           ),
                                           Text(
-                                            "${DateFormat.yMMMMd('en_US').format(now)}",
+                                            DateFormat.yMMMMd('en_US').format(now),
                                             style: const TextStyle(
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.w300),
@@ -201,7 +205,7 @@ class _DashboardState extends State<Dashboard> {
                                                   : Colors.white),
                                           child: Center(
                                               child: Text(
-                                            "3",
+                                            "0",
                                             style: TextStyle(
                                                 color: (Theme.of(context)
                                                             .brightness ==
@@ -250,7 +254,7 @@ class _DashboardState extends State<Dashboard> {
                                                   : Colors.white),
                                           child: Center(
                                               child: Text(
-                                            "3",
+                                            "0",
                                             style: TextStyle(
                                                 color: (Theme.of(context)
                                                             .brightness ==

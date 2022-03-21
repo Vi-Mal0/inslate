@@ -74,8 +74,8 @@ class _HomeState extends State<Home> {
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: FutureBuilder(
-                    builder:
-                        (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                    builder: (BuildContext context,
+                        AsyncSnapshot<dynamic> snapshot) {
                       if (snapshot.hasData) {
                         return ListView.builder(
                           itemCount: snapshot.data.length,
@@ -87,7 +87,8 @@ class _HomeState extends State<Home> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Column(
-                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
                                       children: [
                                         Text(
                                             "Name: ${snapshot.data[index].toAddress}"),
@@ -113,7 +114,8 @@ class _HomeState extends State<Home> {
                                                 false, // user must tap button!
                                             builder: (BuildContext context) {
                                               return AlertDialog(
-                                                title: Text('AlertDialog Title'),
+                                                title:
+                                                    Text('AlertDialog Title'),
                                                 content: SingleChildScrollView(
                                                   child: ListBody(
                                                     children: <Widget>[
@@ -248,7 +250,7 @@ class _HomeState extends State<Home> {
                                                               "Address Type",
                                                         ),
                                                       ),
-                                                      SizedBox(height: 10),
+                                                      const SizedBox(height: 10),
                                                       // Checkbox(
                                                       //   checkColor: Colors.white,
                                                       //   value: isChecked,
@@ -274,7 +276,8 @@ class _HomeState extends State<Home> {
                                                       Navigator.pop(context);
 
                                                       serviceapi.updateAddress(
-                                                          snapshot.data[index].id,
+                                                          snapshot
+                                                              .data[index].id,
                                                           Address(
                                                             toAddress: to,
                                                             addressLine1: al1,
@@ -283,7 +286,8 @@ class _HomeState extends State<Home> {
                                                             state: sta,
                                                             country: count,
                                                             pincode: pin,
-                                                            addressType: addtype,
+                                                            addressType:
+                                                                addtype,
                                                             isPresentAddress:
                                                                 isChecked,
                                                           ));
@@ -292,7 +296,8 @@ class _HomeState extends State<Home> {
                                                 ],
                                               );
                                             },
-                                          ).then((_) => _refreshData());
+                                          );
+                                          _refreshData();
                                         },
                                         icon: const Icon(Icons.edit)),
                                   ],

@@ -663,15 +663,15 @@ class _ClientEditState extends State<ClientEdit> {
                                 //         });
                                 //       },
                                 //     ),
-                                //     // Checkbox(
-                                //     //   checkColor: Colors.white,
-                                //     //   value: companyDoctor,
-                                //     //   onChanged: (bool? value) {
-                                //     //     setState(() {
-                                //     //       companyDoctor = value;
-                                //     //     });
-                                //     //   },
-                                //     // ),
+                                    // Checkbox(
+                                    //   checkColor: Colors.white,
+                                    //   value: companyDoctor,
+                                    //   onChanged: (bool? value) {
+                                    //     setState(() {
+                                    //       companyDoctor = value;
+                                    //     });
+                                    //   },
+                                    // ),
                                 //     const Text("Company Doctor")
                                 //   ],
                                 // ),

@@ -26,6 +26,10 @@ class _CandidateProfileState extends State<CandidateProfile> {
       emplist = value;
     });
 
+    Future<void> _refreshData() async {
+      setState(() {});
+    }
+
     _showMyDialog() {
       return showDialog<void>(
         context: context,
@@ -117,7 +121,8 @@ class _CandidateProfileState extends State<CandidateProfile> {
                       ),
                       trailing: IconButton(
                         onPressed: () {
-                          _showMyDialog();
+                          _showMyDialog();_refreshData();
+
                         },
                         icon: const Icon(Icons.add),
                       ),
@@ -195,6 +200,10 @@ class _CandidateProfileState extends State<CandidateProfile> {
                           height: 10,
                         ),
                         Text("Crrentstatus : ${snapshot.data.currentStatus}"),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text("Crrentstatus : ${snapshot.data.result}"),
                       ],
                     ))
                   ],

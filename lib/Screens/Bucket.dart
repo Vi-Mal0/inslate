@@ -23,12 +23,6 @@ class _BucketState extends State<Bucket> {
 
   var studid, numerical, verbal, coding, logical, result, res, e;
 
-  @override
-  void initState() {
-    super.initState();
-    _refreshData();
-  }
-
   _openBottomSheet(data) {
     return showModalBottomSheet(
       shape: RoundedRectangleBorder(
@@ -220,6 +214,7 @@ class _BucketState extends State<Bucket> {
                             child: IconButton(
                                 onPressed: () {
                                   Navigator.pop(context, true);
+                                  _refreshData();
 
                                   http.updateCandidate(
                                       studid, Candidate(currentStatus: result));
@@ -242,7 +237,7 @@ class _BucketState extends State<Bucket> {
                 }
                 return const CircularProgressIndicator();
               },
-              future: http.getParam('S002'),
+              future: http.getParam('S0002'),
             ),
           ],
         );
@@ -256,6 +251,7 @@ class _BucketState extends State<Bucket> {
 
   @override
   Widget build(BuildContext context) {
+    _refreshData();
     return Scaffold(
       body: RefreshIndicator(
         onRefresh: _refreshData,
@@ -267,6 +263,7 @@ class _BucketState extends State<Bucket> {
             future: http.getEmployeeByID(widget.id.toString()),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.hasData) {
+                _refreshData();
                 return Column(
                   children: [
                     Expanded(
@@ -290,8 +287,14 @@ class _BucketState extends State<Bucket> {
                               endActionPane: ActionPane(
                                 dismissible: DismissiblePane(
                                   onDismissed: () {
-                                    _openBottomSheet(
-                                        snapshot.data.assignedCandidates[index]);
+                                    _refreshData();
+                                    setState(() {
+
+                                      _openBottomSheet(
+                                          snapshot.data.assignedCandidates[index]);
+                                      _refreshData();
+                                    });
+
 
                                     setState(() {
                                       studid = snapshot
@@ -305,14 +308,20 @@ class _BucketState extends State<Bucket> {
                                 children: [
                                   CustomSlidableAction(
                                     onPressed: (_) {
-                                      _openBottomSheet(snapshot
-                                          .data.assignedCandidates[index]);
+                                      _refreshData();
+                                      setState(() {
+                                        _openBottomSheet(snapshot
+                                            .data.assignedCandidates[index]);
+                                        _refreshData();
+                                      });
+                                      _refreshData();
 
                                       setState(() {
                                         studid = snapshot
                                             .data.assignedCandidates[index].id;
                                         res = snapshot.data
                                             .assignedCandidates[index].quants;
+                                        _refreshData();
                                       });
                                     },
                                     child: const SingleChildScrollView(
@@ -354,6 +363,7 @@ class _BucketState extends State<Bucket> {
                                   height: 120,
                                   padding: const EdgeInsets.fromLTRB(15, 0, 10, 0),
                                   child: Card(
+                                    color: index % 2 == 0 ? Colors.white : Colors.grey[200],
                                     child: Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceAround,
@@ -366,21 +376,6 @@ class _BucketState extends State<Bucket> {
                                             children: [
                                               Text(
                                                   "Name :  ${snapshot.data.assignedCandidates[index].name}"),
-                                              Container(
-                                                width: 100,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                  color: retColor(),
-                                                ),
-                                                child: Text(
-                                                  e?[index].currentStatus,
-                                                  style: const TextStyle(
-                                                      fontSize: 14,
-                                                      color: Colors.black),
-                                                  textAlign: TextAlign.center,
-                                                ),
-                                              ),
                                             ],
                                           ),
                                         ),

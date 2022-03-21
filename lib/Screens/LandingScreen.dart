@@ -32,11 +32,6 @@ class _LandingScreenState extends State<LandingScreen> {
   int _pageIndex = 0;
   PageController _pageController = PageController();
 
-  List<Widget> tabPages = [
-    Dashboard("51"),
-    Bucket(int.parse("51")),
-  ];
-
   @override
   void initState() {
     super.initState();
@@ -53,6 +48,8 @@ class _LandingScreenState extends State<LandingScreen> {
   int backCount = 0;
 
   Future<bool> showExitPopup() async {
+
+
     return await showDialog(
           context: context,
           builder: (context) => AlertDialog(
@@ -83,6 +80,11 @@ class _LandingScreenState extends State<LandingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> tabPages = [
+      Dashboard(widget.id),
+      Bucket(int.parse(widget.id)),
+    ];
+
     return WillPopScope(
       onWillPop: showExitPopup,
       child: Scaffold(
@@ -123,7 +125,7 @@ class _LandingScreenState extends State<LandingScreen> {
                       Navigator.push(
                           context,
                           PageTransition(
-                              type: PageTransitionType.rightToLeft,
+                              type: PageTransitionType.leftToRight,
                               child: const ClientRegistrationScreen()));
                     },
                     child: SizedBox(
@@ -148,7 +150,7 @@ class _LandingScreenState extends State<LandingScreen> {
                       Navigator.push(
                           context,
                           PageTransition(
-                              type: PageTransitionType.rightToLeft,
+                              type: PageTransitionType.leftToRight,
                               child: const ClientListScreen()));
                     },
                     child: SizedBox(
@@ -173,7 +175,7 @@ class _LandingScreenState extends State<LandingScreen> {
                       Navigator.push(
                           context,
                           PageTransition(
-                              type: PageTransitionType.rightToLeft,
+                              type: PageTransitionType.leftToRight,
                               child: const AgentRegistrationScreen()));
                     },
                     child: SizedBox(
@@ -198,7 +200,7 @@ class _LandingScreenState extends State<LandingScreen> {
                       Navigator.push(
                           context,
                           PageTransition(
-                              type: PageTransitionType.rightToLeft,
+                              type: PageTransitionType.leftToRight,
                               child: const AgentListScreen()));
                     },
                     child: SizedBox(
@@ -223,7 +225,7 @@ class _LandingScreenState extends State<LandingScreen> {
                       Navigator.push(
                           context,
                           PageTransition(
-                              type: PageTransitionType.rightToLeft,
+                              type: PageTransitionType.leftToRight,
                               child: const Display()));
                     },
                     child: SizedBox(
@@ -248,7 +250,7 @@ class _LandingScreenState extends State<LandingScreen> {
                       Navigator.push(
                           context,
                           PageTransition(
-                              type: PageTransitionType.rightToLeft,
+                              type: PageTransitionType.leftToRight,
                               child: const Home()));
                     },
                     child: SizedBox(
@@ -273,7 +275,7 @@ class _LandingScreenState extends State<LandingScreen> {
                       Navigator.push(
                           context,
                           PageTransition(
-                              type: PageTransitionType.rightToLeft,
+                              type: PageTransitionType.leftToRight,
                               child: const ProofView()));
                     },
                     child: SizedBox(
@@ -377,12 +379,12 @@ class _LandingScreenState extends State<LandingScreen> {
 
   void onPageChanged(int page) {
     setState(() {
-      this._pageIndex = page;
+      _pageIndex = page;
     });
   }
 
   void onTabTapped(int index) {
-    this._pageController.animateToPage(index,
+    _pageController.animateToPage(index,
         duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
   }
 }

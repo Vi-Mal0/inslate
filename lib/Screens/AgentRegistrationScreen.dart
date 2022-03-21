@@ -220,6 +220,7 @@ class _AgentRegistrationScreenState extends State<AgentRegistrationScreen> {
                                       if (kDebugMode) {
                                         print(clientID.toString());
                                       }
+                                      _refreshData();
                                     },
                                   ),
                                 ),
@@ -238,9 +239,9 @@ class _AgentRegistrationScreenState extends State<AgentRegistrationScreen> {
                                             context,
                                             PageTransition(
                                                 type: PageTransitionType
-                                                    .leftToRight,
+                                                    .rightToLeft,
                                                 child:
-                                                const ClientRegistrationScreen()));
+                                                const ClientRegistrationScreen())).then((_) => _refreshData());
                                       },
                                       icon: const Icon(
                                         Icons.add,

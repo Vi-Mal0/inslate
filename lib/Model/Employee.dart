@@ -6,8 +6,7 @@ class Employee {
       this.employeeId, 
       this.employeeName, 
       this.employeeEmail, 
-      this.employeeDesignation, 
-      this.password, 
+      this.employeeDesignation,
       this.assignedCandidates,});
 
   Employee.fromJson(dynamic json) {
@@ -16,7 +15,6 @@ class Employee {
     employeeName = json['employeeName'];
     employeeEmail = json['employeeEmail'];
     employeeDesignation = json['employeeDesignation'];
-    password = json['password'];
     if (json['assignedCandidates'] != null) {
       assignedCandidates = [];
       json['assignedCandidates'].forEach((v) {
@@ -30,7 +28,6 @@ class Employee {
   String? employeeName;
   String? employeeEmail;
   String? employeeDesignation;
-  String? password;
   List<Candidate>? assignedCandidates;
 
   Map<String, dynamic> toJson() {
@@ -40,7 +37,6 @@ class Employee {
     map['employeeName'] = employeeName;
     map['employeeEmail'] = employeeEmail;
     map['employeeDesignation'] = employeeDesignation;
-    map['password'] = password;
     if (assignedCandidates != null) {
       map['assignedCandidates'] = assignedCandidates?.map((v) => v.toJson()).toList();
     }
@@ -49,6 +45,6 @@ class Employee {
 
   @override
   String toString() {
-    return 'Employee{id: $id, employeeId: $employeeId, employeeName: $employeeName, employeeEmail: $employeeEmail, employeeDesignation: $employeeDesignation, password: $password, assignedCandidates: $assignedCandidates}';
+    return 'Employee{id: $id, employeeId: $employeeId, employeeName: $employeeName, employeeEmail: $employeeEmail, employeeDesignation: $employeeDesignation, assignedCandidates: $assignedCandidates}';
   }
 }

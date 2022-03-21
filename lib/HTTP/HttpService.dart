@@ -12,11 +12,15 @@ import 'package:insuranceprototype/Model/Proof.dart';
 import 'package:insuranceprototype/Model/Quans.dart';
 
 class HttpService {
+
+  var ip = "192.168.0.108";
+  var port = "8090";
+
   // Candidate
 
   Future<List<Candidate>> getCandidate() async {
     Response res =
-        await get(Uri.parse('http://192.168.0.104:8080/candidates/getall'));
+        await get(Uri.parse('http://$ip:$port/candidates/getallDetails'));
     if (res.statusCode == 200) {
       List<dynamic> body = jsonDecode(res.body);
       List<Candidate> candidates =
@@ -28,7 +32,7 @@ class HttpService {
 
   Future<Candidate> getCandidateByID(id) async {
     Response res =
-        await get(Uri.parse('http://192.168.0.104:8080/candidates/get/$id'));
+        await get(Uri.parse('http://$ip:$port/candidates/get/$id'));
 
     if (res.statusCode == 200) {
       var body = jsonDecode(res.body);
@@ -40,7 +44,7 @@ class HttpService {
 
   Future<List<Candidate>> searchCandidate(String keyword) async {
     Response res = await get(
-        Uri.parse('http://192.168.0.104:8080/candidates/search/$keyword'));
+        Uri.parse('http://$ip:$port/candidates/search/$keyword'));
     if (res.statusCode == 200) {
       List<dynamic> body = jsonDecode(res.body);
       List<Candidate> candidates =
@@ -52,7 +56,7 @@ class HttpService {
 
   Future<Candidate> updateCandidate(id, Candidate candidate) async {
     final response = await http.patch(
-      Uri.parse('http://192.168.0.104:8080/candidates/update/$id'),
+      Uri.parse('http://$ip:$port/candidates/update/$id'),
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -76,7 +80,7 @@ class HttpService {
 
   Future<Candidate> createCandidate(Candidate candidate) async {
     final response = await http.post(
-      Uri.parse('http://192.168.0.104:8080/candidates/savedetails'),
+      Uri.parse('http://$ip:$port/candidates/savedetails'),
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -102,7 +106,7 @@ class HttpService {
 
   Future<List<String>> getParam(String id) async {
     Response res =
-        await get(Uri.parse('http://192.168.0.104:8080/param/' + id));
+        await get(Uri.parse('http://$ip:$port/param/'+id));
     if (res.statusCode == 200) {
       List<String> body = List<String>.from(jsonDecode(res.body) as List);
       return body;
@@ -113,8 +117,10 @@ class HttpService {
   // Employee
 
   Future<List<Employee>> getEmployee() async {
+    print("employee");
     Response res =
-        await get(Uri.parse('http://192.168.0.104:8080/employee/getall'));
+        await get(Uri.parse('http://$ip:$port/employee/getall'));
+    print(res.statusCode);
     if (res.statusCode == 200) {
       List<dynamic> body = jsonDecode(res.body);
       List<Employee> candidates =
@@ -126,7 +132,7 @@ class HttpService {
 
   Future<List<Candidate>> gettoday(id) async {
     Response res =
-        await get(Uri.parse('http://192.168.0.104:8080/employee/today/$id'));
+        await get(Uri.parse('http://$ip:$port/employee/today/$id'));
     if (res.statusCode == 200) {
       List<dynamic> body = jsonDecode(res.body);
       List<Candidate> candidates =
@@ -138,7 +144,7 @@ class HttpService {
 
   Future<List<Candidate>> getupcoming(id) async {
     Response res =
-        await get(Uri.parse('http://192.168.0.104:8080/employee/upcoming/$id'));
+        await get(Uri.parse('http://$ip:$port/employee/upcoming/$id'));
     if (res.statusCode == 200) {
       List<dynamic> body = jsonDecode(res.body);
       List<Candidate> candidates =
@@ -148,9 +154,27 @@ class HttpService {
     throw Exception('Failed to load candidate');
   }
 
+  Future<int> passedCandidates(id) async {
+    Response res =
+    await get(Uri.parse('http://$ip:$port/employee/getpassed/$id'));
+    if (res.statusCode == 200) {
+      return jsonDecode(res.body);
+    }
+    throw Exception('Failed to load data');
+  }
+
+  Future<int> failedCandidates(id) async {
+    Response res =
+    await get(Uri.parse('http://$ip:$port/employee/getfailed/$id'));
+    if (res.statusCode == 200) {
+      return jsonDecode(res.body);
+    }
+    throw Exception('Failed to load data');
+  }
+
   Future<Employee> getEmployeeByID(id) async {
     Response res =
-        await get(Uri.parse('http://192.168.0.104:8080/employee/$id'));
+        await get(Uri.parse('http://$ip:$port/employee/$id'));
     if (res.statusCode == 200) {
       var body = jsonDecode(res.body);
       Employee candidates = Employee.fromJson(body);
@@ -159,25 +183,11 @@ class HttpService {
     throw Exception('Failed to load candidate');
   }
 
-  Future<Employee> login(Employee employee) async {
-    final response = await http.post(
-      Uri.parse('http://192.168.0.104:8080/employee/login'),
-      headers: {
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode({
-        'employeeEmail': employee.employeeEmail,
-        'password': employee.password
-      }),
-    );
-    return Employee.fromJson(jsonDecode(response.body));
-  }
-
   // Quantitative Table
 
   Future<Quans> createQuans(Quans quans) async {
     final response = await http.post(
-      Uri.parse('http://192.168.0.104:8080/quants/save'),
+      Uri.parse('http://$ip:$port/quants/save'),
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -202,7 +212,7 @@ class HttpService {
 
   Future<List<ClientData>> getClient() async {
     Response res =
-        await get(Uri.parse('http://192.168.0.104:8080/client/getall'));
+        await get(Uri.parse('http://$ip:$port/client/getall'));
     if (res.statusCode == 200) {
       List<dynamic> body = jsonDecode(res.body);
       List<ClientData> client =
@@ -213,7 +223,7 @@ class HttpService {
   }
 
   Future<ClientData> getClientbyId(id) async {
-    Response res = await get(Uri.parse('http://192.168.0.104:8080/client/$id'));
+    Response res = await get(Uri.parse('http://$ip:$port/client/$id'));
     if (res.statusCode == 200) {
       var body = jsonDecode(res.body);
       ClientData client = ClientData.fromJson(body);
@@ -224,7 +234,7 @@ class HttpService {
 
   Future<ClientData> createClient(ClientData client) async {
     final response = await http.post(
-      Uri.parse('http://192.168.0.104:8080/client/add'),
+      Uri.parse('http://$ip:$port/client/add'),
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -256,7 +266,7 @@ class HttpService {
 
   Future<ClientData> updateClient(id, ClientData client) async {
     final response = await http.patch(
-      Uri.parse('http://192.168.0.104:8080/client/$id'),
+      Uri.parse('http://$ip:$port/client/$id'),
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -292,7 +302,7 @@ class HttpService {
 
   Future<List<Agent>> getAgent() async {
     Response res =
-        await get(Uri.parse('http://192.168.0.104:8080/agent/getall'));
+        await get(Uri.parse('http://$ip:$port/agent/getall'));
     print(res.statusCode);
     if (res.statusCode == 200) {
       List<dynamic> body = jsonDecode(res.body);
@@ -305,7 +315,7 @@ class HttpService {
 
   Future<Agent> createAgent(Agent agent) async {
     final response = await http.post(
-      Uri.parse('http://192.168.0.104:8080/agent/add'),
+      Uri.parse('http://$ip:$port/agent/add'),
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -337,7 +347,7 @@ class HttpService {
 
   Future<Agent> getAgentById(id) async {
     Response res =
-    await get(Uri.parse('http://192.168.0.104:8080/agent/$id'));
+    await get(Uri.parse('http://$ip:$port/agent/$id'));
 
     if (res.statusCode == 200) {
       var body = jsonDecode(res.body);
@@ -349,7 +359,7 @@ class HttpService {
 
   Future<Agent> updateAgent(id, Agent agent) async {
     final response = await http.patch(
-      Uri.parse('http://192.168.0.104:8080/agent/$id'),
+      Uri.parse('http://$ip:$port/agent/$id'),
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -383,7 +393,7 @@ class HttpService {
 
   Future<List<Proof>> getProof() async {
     Response res =
-        await get(Uri.parse('http://192.168.0.104:8080/proof/getActive'));
+        await get(Uri.parse('http://$ip:$port/proof/getActive'));
     if (res.statusCode == 200) {
       List<dynamic> body = jsonDecode(res.body);
       List<Proof> candidates =
@@ -395,7 +405,7 @@ class HttpService {
 
   Future<Proof> createProof(Proof proof) async {
     final response = await http.post(
-      Uri.parse('http://192.168.0.104:8080/proof/add'),
+      Uri.parse('http://$ip:$port/proof/add'),
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -412,7 +422,7 @@ class HttpService {
 
   Future<Proof> updateProof(id, Proof proof) async {
     final response = await http.patch(
-      Uri.parse('http://192.168.0.104:8080/proof/update/$id'),
+      Uri.parse('http://$ip:$port/proof/update/$id'),
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -431,7 +441,7 @@ class HttpService {
 
   Future<List<Address>> getAddress() async {
     Response res =
-        await get(Uri.parse('http://192.168.0.104:8080/address/getall'));
+        await get(Uri.parse('http://$ip:$port/address/getall'));
     if (res.statusCode == 200) {
       List<dynamic> body = jsonDecode(res.body);
       List<Address> candidates =
@@ -443,7 +453,7 @@ class HttpService {
 
   Future<Address> createAddress(Address address) async {
     final response = await http.post(
-      Uri.parse('http://192.168.0.104:8080/address/add'),
+      Uri.parse('http://$ip:$port/address/add'),
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -464,7 +474,7 @@ class HttpService {
 
   Future<Address> updateAddress(id, Address address) async {
     final response = await http.patch(
-      Uri.parse('http://192.168.0.104:8080/address/$id'),
+      Uri.parse('http://$ip:$port/address/$id'),
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -487,7 +497,7 @@ class HttpService {
 
   Future<List<BankAccount>> getBank() async {
     Response res =
-        await get(Uri.parse('http://192.168.0.104:8080/bank/getall'));
+        await get(Uri.parse('http://$ip:$port/bank/getall'));
     if (res.statusCode == 200) {
       List<dynamic> body = jsonDecode(res.body);
       List<BankAccount> candidates =
@@ -499,7 +509,7 @@ class HttpService {
 
   Future<BankAccount> createBank(BankAccount bankAccount) async {
     final response = await http.post(
-      Uri.parse('http://192.168.0.104:8080/bank/add'),
+      Uri.parse('http://$ip:$port/bank/add'),
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -517,7 +527,7 @@ class HttpService {
 
   Future<BankAccount> updateBank(id, BankAccount bankAccount) async {
     final response = await http.patch(
-      Uri.parse('http://192.168.0.104:8080/bank/$id'),
+      Uri.parse('http://$ip:$port/bank/$id'),
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -532,9 +542,8 @@ class HttpService {
     return BankAccount.fromJson(jsonDecode(response.body));
   }
 
-  Future<BankAccount> getBankById(id)
-  async {
-    Response res = await get(Uri.parse("http://192.168.0.104:8080/bank/$id"));
+  Future<BankAccount> getBankById(id) async {
+    Response res = await get(Uri.parse("http://$ip:$port/bank/$id"));
     print(res.statusCode);
     if (res.statusCode == 200) {
       var body = jsonDecode(res.body);
@@ -548,7 +557,7 @@ class HttpService {
 
   Future<List<Event>> getEventLogByEmployeeId(id) async {
     Response res = await get(
-        Uri.parse("http://192.168.0.104:8080/notification/employee/$id"));
+        Uri.parse("http://$ip:$port/notification/employee/$id"));
     if (res.statusCode == 200) {
       List<dynamic> body = jsonDecode(res.body);
       List<Event> events =
@@ -557,4 +566,5 @@ class HttpService {
     }
     throw Exception("Data not found");
   }
+
 }

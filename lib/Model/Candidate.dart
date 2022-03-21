@@ -12,7 +12,8 @@ class Candidate {
       this.availableDateAndTime, 
       this.employee, 
       this.currentStatus, 
-      this.quants,});
+      this.quants,
+      this.result});
 
   Candidate.fromJson(dynamic json) {
     id = json['id'];
@@ -28,6 +29,7 @@ class Candidate {
     employee = json['employee'];
     currentStatus = json['currentStatus'];
     quants = json['quants'];
+    result = json['result'];
   }
 
   var id;
@@ -43,6 +45,7 @@ class Candidate {
   var employee;
   var currentStatus;
   var quants;
+  var result;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -59,6 +62,7 @@ class Candidate {
     map['employee'] = employee;
     map['currentStatus'] = currentStatus;
     map['quants'] = quants;
+    map['result'] = result;
     return map;
   }
 
