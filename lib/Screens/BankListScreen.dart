@@ -83,6 +83,15 @@ class _DisplayState extends State<Display> {
                                           IconButton(onPressed: () {
                                             Navigator.push(context, MaterialPageRoute(builder: (context) => EditPage(id: snapshot.data[index].id)));
                                           }, icon: Icon(Icons.edit)
+
+                                          ),
+                                          IconButton(onPressed: () {
+                                            serviceApi.deleteBank(bankAccount.id);
+                                            setState(() {
+                                            });
+
+                                          }, icon: Icon(Icons.delete)
+
                                           ),
                                         ],
                                       ),

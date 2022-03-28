@@ -250,7 +250,8 @@ class _HomeState extends State<Home> {
                                                               "Address Type",
                                                         ),
                                                       ),
-                                                      const SizedBox(height: 10),
+                                                      const SizedBox(
+                                                          height: 10),
                                                       // Checkbox(
                                                       //   checkColor: Colors.white,
                                                       //   value: isChecked,
@@ -267,7 +268,8 @@ class _HomeState extends State<Home> {
                                                   TextButton(
                                                     child: const Text('Cancel'),
                                                     onPressed: () {
-                                                      Navigator.of(context).pop();
+                                                      Navigator.of(context)
+                                                          .pop();
                                                     },
                                                   ),
                                                   TextButton(
@@ -300,6 +302,14 @@ class _HomeState extends State<Home> {
                                           _refreshData();
                                         },
                                         icon: const Icon(Icons.edit)),
+                                    IconButton(
+                                        onPressed: () {
+                                          serviceapi.deleteAddress(snapshot.data[index].id);
+                                          setState(() {
+                                          });
+
+                                        },
+                                        icon: Icon(Icons.delete))
                                   ],
                                 ),
                               ),

@@ -17,7 +17,6 @@ class ClientListScreen extends StatefulWidget {
 }
 
 class _ClientListScreenState extends State<ClientListScreen> {
-
   HttpService api = HttpService();
 
   Future<void> _refreshData() async {
@@ -48,40 +47,50 @@ class _ClientListScreenState extends State<ClientListScreen> {
                       ),
                     ),
                     title: const Text(
-                      "Client Registration",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                      "Client List",
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                     ),
                   )),
               Expanded(
                   child: FutureBuilder(
                 future: api.getClient(),
-                builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                builder:
+                    (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                   List<ClientData> client = snapshot.data;
-                  if(snapshot.hasData){
+                  if (snapshot.hasData) {
                     return ListView.builder(
                       itemCount: client.length,
                       itemBuilder: (BuildContext context, int index) {
                         return GestureDetector(
-                          onTap: (){
+                          onTap: () {
                             Navigator.push(
                                 context,
                                 PageTransition(
                                     type: PageTransitionType.rightToLeft,
-                                    child: ClientProfileScreen(id: int.parse(client[index].id.toString()),)))
-                                .then((_) => _refreshData());
+                                    child: ClientProfileScreen(
+                                      id: int.parse(
+                                          client[index].id.toString()),
+                                    ))).then((_){setState(() { });});
                           },
                           child: Card(
                             child: ListTile(
-                              leading: ProfilePicture(name: client[index].givenName,),
-                              title: Text("${client[index].givenName}  ${client[index].surName}"),
+                              leading: ProfilePicture(
+                                name: client[index].givenName,
+                              ),
+                              title: Text(
+                                  "${client[index].givenName}  ${client[index].surName}"),
                               trailing: IconButton(
-                                onPressed: (){
-                                  Navigator.push(
-                                      context,
-                                      PageTransition(
-                                          type: PageTransitionType.rightToLeft,
-                                          child: ClientEdit(id: int.parse(client[index].id.toString()),)))
-                                      .then((_) => _refreshData());
+                                onPressed: () async {
+                                  var result = await Navigator.push(context, MaterialPageRoute(builder: (context) {
+                                    return ClientEdit(
+                                      id: int.parse(
+                                          client[index].id.toString()),
+                                    );
+                                  }));
+                                  if (result != null) {
+                                    setState(() {});
+                                  }
                                 },
                                 icon: const Icon(Icons.edit),
                               ),

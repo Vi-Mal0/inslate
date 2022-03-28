@@ -349,61 +349,66 @@ class _DashboardState extends State<Dashboard> {
                     flex: 1,
                     child: FutureBuilder(
                       future: http.gettoday(widget.id),
-                      builder: (BuildContext context,
-                          AsyncSnapshot todayData) {
+                      builder: (BuildContext context, AsyncSnapshot todayData) {
                         if (snapshot.hasData) {
-                          List<Candidate> tdlist = todayData.data;
                           return ListView.builder(
-                            padding: const EdgeInsets.fromLTRB(15,0,15,0),
-                            itemCount: tdlist.length, itemBuilder: (BuildContext context, int index) {
+                            padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                            itemCount: todayData.data.length,
+                            itemBuilder: (BuildContext context, int index) {
                               return Card(
-                            color: index % 2 == 0 ? Colors.white : Colors.grey[200],
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                SizedBox(height: 5,),
-                                Row(
+                                color: index % 2 == 0
+                                    ? Colors.white
+                                    : Colors.grey[200],
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    const Icon(Icons.badge),
-                                    Text(
-                                        "  ${todayData.data[index].name}"),
-                                  ],
-                                ),
-                                SizedBox(height: 5,),
-                                Row(
-                                  children: [
-                                    const Icon(Icons.email_outlined),
                                     const SizedBox(
-                                      width: 2,
+                                      height: 5,
                                     ),
-                                    Text(
-                                      "  ${todayData.data[index].email}",
-                                      overflow: TextOverflow.ellipsis,
+                                    Row(
+                                      children: [
+                                        const Icon(Icons.badge),
+                                        Text("  ${todayData.data[index].name}"),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Row(
+                                      children: [
+                                        const Icon(Icons.email_outlined),
+                                        const SizedBox(
+                                          width: 2,
+                                        ),
+                                        Text(
+                                          "  ${todayData.data[index].email}",
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Row(
+                                      children: [
+                                        const Icon(Icons.phone),
+                                        const SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text(
+                                          "  ${todayData.data[index].mobileNumber}",
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
-                                SizedBox(height: 5,),
-                                Row(
-                                  children: [
-                                    const Icon(Icons.phone),
-                                    const SizedBox(
-                                      width: 5,
-                                    ),
-                                    Text(
-                                      "  ${todayData.data[index].mobileNumber}",
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          );
-                              },
-
+                              );
+                            },
                           );
                         }
-                        else{
-                          return Center(child: CircularProgressIndicator(),);
-                        }
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
                       },
                     ),
                   ),
@@ -433,19 +438,23 @@ class _DashboardState extends State<Dashboard> {
                     flex: 2,
                     child: FutureBuilder(
                       future: http.getupcoming(widget.id),
-                      builder: (BuildContext context,
-                          AsyncSnapshot upcomingData) {
+                      builder:
+                          (BuildContext context, AsyncSnapshot upcomingData) {
                         if (snapshot.hasData) {
                           return ListView.builder(
-                            padding: const EdgeInsets.fromLTRB(15,0,15,0),
+                            padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                             itemCount: upcomingData.data.length,
                             itemBuilder: (context, index) {
                               return Card(
-                                color: index % 2 == 0 ? Colors.white : Colors.grey[200],
+                                color: index % 2 == 0
+                                    ? Colors.white
+                                    : Colors.grey[200],
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    SizedBox(height: 5,),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
                                     Row(
                                       children: [
                                         const Icon(Icons.badge),
@@ -453,7 +462,9 @@ class _DashboardState extends State<Dashboard> {
                                             "  ${upcomingData.data[index].name}"),
                                       ],
                                     ),
-                                    SizedBox(height: 5,),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
                                     Row(
                                       children: [
                                         const Icon(Icons.email_outlined),
@@ -466,7 +477,9 @@ class _DashboardState extends State<Dashboard> {
                                         ),
                                       ],
                                     ),
-                                    SizedBox(height: 5,),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
                                     Row(
                                       children: [
                                         const Icon(Icons.phone),
@@ -492,7 +505,7 @@ class _DashboardState extends State<Dashboard> {
                   ),
                 ],
               );
-            }else {
+            } else {
               return const Center(
                 child: CircularProgressIndicator(),
               );

@@ -12,7 +12,6 @@ import 'package:insuranceprototype/Model/Proof.dart';
 import 'package:insuranceprototype/Model/Quans.dart';
 
 class HttpService {
-
   var ip = "192.168.0.108";
   var port = "8090";
 
@@ -31,8 +30,7 @@ class HttpService {
   }
 
   Future<Candidate> getCandidateByID(id) async {
-    Response res =
-        await get(Uri.parse('http://$ip:$port/candidates/get/$id'));
+    Response res = await get(Uri.parse('http://$ip:$port/candidates/get/$id'));
 
     if (res.statusCode == 200) {
       var body = jsonDecode(res.body);
@@ -43,8 +41,8 @@ class HttpService {
   }
 
   Future<List<Candidate>> searchCandidate(String keyword) async {
-    Response res = await get(
-        Uri.parse('http://$ip:$port/candidates/search/$keyword'));
+    Response res =
+        await get(Uri.parse('http://$ip:$port/candidates/search/$keyword'));
     if (res.statusCode == 200) {
       List<dynamic> body = jsonDecode(res.body);
       List<Candidate> candidates =
@@ -105,8 +103,7 @@ class HttpService {
   // Parameter
 
   Future<List<String>> getParam(String id) async {
-    Response res =
-        await get(Uri.parse('http://$ip:$port/param/'+id));
+    Response res = await get(Uri.parse('http://$ip:$port/param/' + id));
     if (res.statusCode == 200) {
       List<String> body = List<String>.from(jsonDecode(res.body) as List);
       return body;
@@ -118,8 +115,7 @@ class HttpService {
 
   Future<List<Employee>> getEmployee() async {
     print("employee");
-    Response res =
-        await get(Uri.parse('http://$ip:$port/employee/getall'));
+    Response res = await get(Uri.parse('http://$ip:$port/employee/getall'));
     print(res.statusCode);
     if (res.statusCode == 200) {
       List<dynamic> body = jsonDecode(res.body);
@@ -131,8 +127,7 @@ class HttpService {
   }
 
   Future<List<Candidate>> gettoday(id) async {
-    Response res =
-        await get(Uri.parse('http://$ip:$port/employee/today/$id'));
+    Response res = await get(Uri.parse('http://$ip:$port/employee/today/$id'));
     if (res.statusCode == 200) {
       List<dynamic> body = jsonDecode(res.body);
       List<Candidate> candidates =
@@ -156,7 +151,7 @@ class HttpService {
 
   Future<int> passedCandidates(id) async {
     Response res =
-    await get(Uri.parse('http://$ip:$port/employee/getpassed/$id'));
+        await get(Uri.parse('http://$ip:$port/employee/getpassed/$id'));
     if (res.statusCode == 200) {
       return jsonDecode(res.body);
     }
@@ -165,7 +160,7 @@ class HttpService {
 
   Future<int> failedCandidates(id) async {
     Response res =
-    await get(Uri.parse('http://$ip:$port/employee/getfailed/$id'));
+        await get(Uri.parse('http://$ip:$port/employee/getfailed/$id'));
     if (res.statusCode == 200) {
       return jsonDecode(res.body);
     }
@@ -173,8 +168,7 @@ class HttpService {
   }
 
   Future<Employee> getEmployeeByID(id) async {
-    Response res =
-        await get(Uri.parse('http://$ip:$port/employee/$id'));
+    Response res = await get(Uri.parse('http://$ip:$port/employee/$id'));
     if (res.statusCode == 200) {
       var body = jsonDecode(res.body);
       Employee candidates = Employee.fromJson(body);
@@ -211,8 +205,7 @@ class HttpService {
   // Client
 
   Future<List<ClientData>> getClient() async {
-    Response res =
-        await get(Uri.parse('http://$ip:$port/client/getall'));
+    Response res = await get(Uri.parse('http://$ip:$port/client/getall'));
     if (res.statusCode == 200) {
       List<dynamic> body = jsonDecode(res.body);
       List<ClientData> client =
@@ -243,8 +236,8 @@ class HttpService {
         'givenName': client.givenName,
         'salutation': client.salutation,
         'gender': client.gender,
-        'addressid':client.addressid,
-        'bankId':client.bankId,
+        'addressid': client.addressid,
+        'bankId': client.bankId,
         'marritalStatus': client.marritalStatus,
         'mobileNumber': client.mobileNumber,
         'postalCode': client.postalCode,
@@ -275,8 +268,8 @@ class HttpService {
         'givenName': client.givenName,
         'salutation': client.salutation,
         'gender': client.gender,
-        'addressid':client.addressid,
-        'bankId':client.bankId,
+        'addressid': client.addressid,
+        'bankId': client.bankId,
         'marritalStatus': client.marritalStatus,
         'address': client.address,
         'mobileNumber': client.mobileNumber,
@@ -298,11 +291,28 @@ class HttpService {
     return ClientData.fromJson(jsonDecode(response.body));
   }
 
+  deleteClient(id) async {
+    await http.patch(
+      Uri.parse('http://$ip:$port/client/del/$id'),
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+  }
+
+  deleteAgent(id) async {
+    await http.patch(
+      Uri.parse('http://$ip:$port/agent/delete/$id'),
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+  }
+
   // Agent
 
   Future<List<Agent>> getAgent() async {
-    Response res =
-        await get(Uri.parse('http://$ip:$port/agent/getall'));
+    Response res = await get(Uri.parse('http://$ip:$port/agent/getall'));
     print(res.statusCode);
     if (res.statusCode == 200) {
       List<dynamic> body = jsonDecode(res.body);
@@ -346,8 +356,7 @@ class HttpService {
   }
 
   Future<Agent> getAgentById(id) async {
-    Response res =
-    await get(Uri.parse('http://$ip:$port/agent/$id'));
+    Response res = await get(Uri.parse('http://$ip:$port/agent/$id'));
 
     if (res.statusCode == 200) {
       var body = jsonDecode(res.body);
@@ -392,8 +401,7 @@ class HttpService {
   // Proof
 
   Future<List<Proof>> getProof() async {
-    Response res =
-        await get(Uri.parse('http://$ip:$port/proof/getActive'));
+    Response res = await get(Uri.parse('http://$ip:$port/proof/getActive'));
     if (res.statusCode == 200) {
       List<dynamic> body = jsonDecode(res.body);
       List<Proof> candidates =
@@ -431,7 +439,7 @@ class HttpService {
         'proofID': proof.proofID,
         'proofPurpose': proof.proofPurpose,
         'proofFile': proof.proofFile,
-        'clientID' : proof.clientID
+        'clientID': proof.clientID
       }),
     );
     return Proof.fromJson(jsonDecode(response.body));
@@ -440,8 +448,7 @@ class HttpService {
   // Address
 
   Future<List<Address>> getAddress() async {
-    Response res =
-        await get(Uri.parse('http://$ip:$port/address/getall'));
+    Response res = await get(Uri.parse('http://$ip:$port/address/getall'));
     if (res.statusCode == 200) {
       List<dynamic> body = jsonDecode(res.body);
       List<Address> candidates =
@@ -496,8 +503,7 @@ class HttpService {
   //  Bank
 
   Future<List<BankAccount>> getBank() async {
-    Response res =
-        await get(Uri.parse('http://$ip:$port/bank/getall'));
+    Response res = await get(Uri.parse('http://$ip:$port/bank/getall'));
     if (res.statusCode == 200) {
       List<dynamic> body = jsonDecode(res.body);
       List<BankAccount> candidates =
@@ -553,11 +559,38 @@ class HttpService {
     throw Exception("Data not found");
   }
 
+  deleteBank(id) async {
+    await http.patch(
+      Uri.parse('http://$ip:$port/bank/delete/$id'),
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+  }
+
+  deleteAddress(id) async {
+    await http.patch(
+      Uri.parse('http://$ip:$port/address/delete/$id'),
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+  }
+
+  deleteProof(id) async {
+    await http.patch(
+      Uri.parse('http://$ip:$port/proof/delete/$id'),
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+  }
+
   // Event
 
   Future<List<Event>> getEventLogByEmployeeId(id) async {
-    Response res = await get(
-        Uri.parse("http://$ip:$port/notification/employee/$id"));
+    Response res =
+        await get(Uri.parse("http://$ip:$port/notification/employee/$id"));
     if (res.statusCode == 200) {
       List<dynamic> body = jsonDecode(res.body);
       List<Event> events =
@@ -566,5 +599,4 @@ class HttpService {
     }
     throw Exception("Data not found");
   }
-
 }

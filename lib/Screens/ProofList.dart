@@ -299,6 +299,11 @@ class _ProofViewState extends State<ProofView> {
                                                 icon:
                                                 const Icon(Icons.edit_note_outlined)),
                                           ),
+                                          IconButton(onPressed: (){
+                                            serviceApi.deleteProof(snapshot.data[index].id);
+                                            setState(() {
+                                            });
+                                            }, icon: Icon(Icons.delete))
                                         ],
                                       ),
                                     ],

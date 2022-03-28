@@ -96,6 +96,8 @@ class _CandidateListState extends State<CandidateList> {
                           return InkWell(
                             onTap: (){
                               navigatorPush(snapshot.data[index].id);
+                              setState(() {
+                              });
                             },
                             child:Container(
                               color: index % 2 == 0 ? Colors.white : Colors.grey[200],

@@ -9,6 +9,9 @@ import 'package:page_transition/page_transition.dart';
 
 import '../Model/ClientData.dart';
 
+final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey<ScaffoldState>();
+
+
 class ClientProfileScreen extends StatefulWidget {
   int id;
   ClientProfileScreen({Key? key, required this.id}) : super(key: key);
@@ -26,8 +29,8 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    _refreshData();
     return Scaffold(
+      key: _scaffoldState,
       backgroundColor: Colors.white,
       body: SafeArea(
         child: RefreshIndicator(
@@ -51,19 +54,39 @@ class _ClientProfileScreenState extends State<ClientProfileScreen> {
                             ),
                           ),
                           title: Text("Client Profile"),
-                          trailing: IconButton(
-                            onPressed: () {
-                              Navigator.push(
-                                      context,
-                                      PageTransition(
-                                          type: PageTransitionType.rightToLeft,
-                                          child: ProofAdd(id: widget.id)))
-                                  .then((value) => _refreshData());
-                              _refreshData();
-                            },
-                            icon: const Icon(
-                              Icons.add,
-                            ),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                          context,
+                                          PageTransition(
+                                              type: PageTransitionType.rightToLeft,
+                                              child: ProofAdd(id: widget.id)))
+                                      .then((value) => _refreshData());
+                                  _refreshData();
+                                },
+                                icon: const Icon(
+                                  Icons.add,
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  http.deleteClient(widget.id).then((isSuccess) {
+                                    if (isSuccess) {
+
+                                    } else {
+                                      Scaffold.of(this.context)
+                                          .showSnackBar(SnackBar(content: Text("Delete data failed")));
+                                    }
+                                  });
+                                },
+                                icon: const Icon(
+                                  Icons.delete,
+                                ),
+                              ),
+                            ],
                           ),
                         )),
                     const SizedBox(

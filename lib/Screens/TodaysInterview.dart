@@ -68,47 +68,8 @@ class _TodaysinterviewState extends State<Todaysinterview> {
                         onChanged: onSearchTextChanged,
                       ),
                     ),
-                    PopupMenuButton(
-                      color: Colors.white,
-                      itemBuilder: (context) => [
-                        const PopupMenuItem<int>(
-                          value: 0,
-                          child: SizedBox(
-                              width: 100,
-                              child: Text(
-                                "Setting ",
-                                style: TextStyle(color: Colors.black),
-                              )),
-                        ),
-                        const PopupMenuItem<int>(
-                          value: 1,
-                          child: SizedBox(
-                              width: 100,
-                              child: Text(
-                                "About ",
-                                style: TextStyle(color: Colors.black),
-                              )),
-                        ),
-                        const PopupMenuItem<int>(
-                          value: 2,
-                          child: SizedBox(
-                              width: 100,
-                              child: Text(
-                                "Exit ",
-                                style: TextStyle(color: Colors.black),
-                              )),
-                        ),
-                      ],
-                      onSelected: (item) => {print(item)},
-                    ),
                   ],
                 ),
-              ),
-              const Divider(
-                color: Colors.black38,
-                thickness: 1,
-                indent: 10,
-                endIndent: 10,
               ),
               Expanded(
                 child: FutureBuilder(

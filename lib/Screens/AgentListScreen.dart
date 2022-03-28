@@ -134,7 +134,19 @@ class _AgentListScreenState extends State<AgentListScreen> {
                                               type: PageTransitionType.rightToLeft,
                                               child: EditAgentPage(id:e?[index].id)))
                                           .then(onGoBack);
-                                    }); }, icon: Icon(Icons.edit),), // icon-2
+                                    }); }, icon: Icon(Icons.edit),),
+                                    IconButton(
+                                      onPressed: () {
+                                        http.deleteAgent(e?[index].id);
+                                        setState(() {
+                                        });
+                                      },
+                                      icon: const Icon(
+                                        Icons.delete,
+                                        color: Colors.black,
+                                        size: 30,
+                                      ),
+                                    ),
                                   ],
                                 ),
 
