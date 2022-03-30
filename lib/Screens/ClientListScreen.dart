@@ -82,15 +82,15 @@ class _ClientListScreenState extends State<ClientListScreen> {
                                   "${client[index].givenName}  ${client[index].surName}"),
                               trailing: IconButton(
                                 onPressed: () async {
-                                  var result = await Navigator.push(context, MaterialPageRoute(builder: (context) {
+                                  await Navigator.push(context, MaterialPageRoute(builder: (context) {
                                     return ClientEdit(
                                       id: int.parse(
                                           client[index].id.toString()),
                                     );
                                   }));
-                                  if (result != null) {
-                                    setState(() {});
-                                  }
+                                  setState(() {
+
+                                  });
                                 },
                                 icon: const Icon(Icons.edit),
                               ),
